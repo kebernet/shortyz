@@ -1,0 +1,812 @@
+<html>
+<style>
+* { font-family: Roboto, sans-serif; color:black; }
+body { background: #eeeeee; height: 100%; margin: 0px; }
+</style>
+<body>
+<img src="play-graphic.png" width="100%" />
+<div style="margin: 8px;">
+<div style="float:right; text-align: center; vertical-align: middle;">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="get" target="_blank">
+<input type="hidden" name="cmd" value="_xclick">
+<input type="hidden" name="business" value="kebernet@gmail.com">
+<input type="hidden" name="no_shipping" value="2">
+<input type="hidden" name="no_note" value="1">
+<input type="hidden" name="currency_code" value="USD">
+<input type="hidden" name="tax" value="0">
+<input type="hidden" name="bn" value="PP-DonationsBF">
+<a href="https://plus.google.com/b/112662859624418565027" target="_blank"><img src="gplus-32.png" style="border: none; display:inline;" /></a>
+<br />
+<input style="display:inline; float:right;" type="image" src="donate.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+</form>
+<a style="font-size:10px; float:right; width:60px; text-align: center" href="#donations">Huh?</a>
+</div>
+
+<h3>4.0.7</h3>
+
+<p>Just updating around crash bugs this release.</p>
+
+<p>Look forward to a version with a keyboard option next weekend.</p>
+
+<h2>4.0.5</h2>
+
+<p>First, thanks everyone for bearing with my while I get through all this stuff. Shortyz has been in
+maintenance mode since Android 3.0/Google TV came out, and there are just a lot of things about
+making it a "modern" Android app it is missing. Shortyz isn't backed by a company, so it gets tested
+on my collection of devices. Sometimes I miss things and inflict it on you, my loyal user. As always,
+if you are having problems <b>please complain</b>. </p>
+
+<p>Second, aside through just fixing issues, this version is a lot of fine tuning. You can expect:
+    <ul>
+        <li>ActionMode: You can now delete or archive multiple puzzles at time on long-press. Long-press
+        one puzzle then you can tap-select others and take bulk delete (trash) or archive (x) actions.</li>
+        <li>After much gnashing of teeth, the interactions between the ripple effect, swiping, tapping,
+        and long-pressing puzzles has been fine tuned.</li>
+        <li>Sub-menus are now legibile on Gingerbread again.</li>
+        <li>There are preferences in the settings screen to (a) disable swipe on the puzzle list
+            and (b) make swipe archive rather than delete.</li>
+        <li>Hopefully, the crash issues have been corrected. If you have one, please email me.</li>
+    </ul>
+
+</p>
+
+<p>Finally, as always, please don't be offended if you don't get a response from me to your issue, but do
+email me.</p>
+
+<h3>Previously: The Reckoning: 4.0.2</h3>
+
+<p>First of all, thanks to everyone for complaining. As you can imagine there were a number of really
+annoying problems with this big change that came from various combinations of Android and hardware.</p>
+
+<p>Secondly, I know unfrozen caveman users <b>HATE CHANGE</b>. I honestly expected a lot of hate, and
+I got about what I expected. :P The number 1 complaint, however, seems to be people feel the keyboard
+is too bright and will wake up their significant other. I will look into adding the option for a dark
+keyboard, but that isn't something I can do in a day. Honestly, it took me quite a long time just to
+try and get the keyboard looking kind of like the Lollipop/Android 5 keyboard.</p>
+
+<p>Thirdly, please don't be offended if you didn't get a personal reply from me. I kind of have to
+triage my inbox around Shortyz and a lot of times if your email was about something I am already
+aware of, I might just move on. I do try and read everyone's emails, though.</p>
+
+<p>Fixes for a lot of small issues related to the last release.
+    <ul>
+        <li>Date picker on Lollipop Phones should be working correctly.</li>
+        <li>Download dialog on Lollipop generally fixed. Historical puzzles should work now.</li>
+        <li>LongPress on puzzle list, and Swipe to delete restore on all platforms.</li>
+        <li>Problem with the Download button intermittently not working fixed.</li>
+        <li>Context menu will stop popping on the playboard with hardware keyboard.</li>
+    </ul>
+</p>
+
+
+<h3>Previously: Four Point Oh</h3>
+
+<p>This is the first big overhaul of Shortyz in a long time!</p>
+<p>Notable changes:
+    <ul>
+        <li>The UI has been reworked to be more inline with Google's "Material Design" for Android 5.0</li>
+        <li>In a big change of policy, Shortyz will now have the same look and feel across all Android version.
+        For people on Gingerbread and accustomed to Android looking like a GB app, this could be a bit of a shock.</li>
+        <li>Improved support for people using the native keyboard.</li>
+    </ul>
+</p>
+
+<h3>Previously: 3.3.15</h3>
+
+<p>Sorry everyone. This is just a quick patch to fix everyone's Gingerbread problems. Big new
+    release coming sooooon.</p>
+
+<h3>Previously 3.3.14</h3>
+
+<p>
+    Just a couple of quick fixes here. First a number of people have written to me about the WSJ
+    puzzle. It seems the place these have been getting downloaded from has become flaky of late --
+    most of the time I have been able to download the puzzle, but only the next day. Anyway, I have
+    changed the download URL to a new location that should be more reliable. Secondly, MANY MANY of
+    you noted that the NYT puzzle stopped working the other day. This seems to be a problem with
+    their web site configuration more than the application itself. At any rate, I was able to work
+    around this problem, and service should be restored.
+</p>
+
+<h3>Previously 3.3.13</h3>
+<p>
+    First of all, thanks to everyone who emailed me about the NYT issue. I was taking a no-screen holiday
+    this weekend and would not have noticed this one. In short, the NYT changed their URL format for getting
+    puzzles. The <b>good</b> news is, they changed it to something *completely sane* this time, so I expect
+    Shortyz and their official app are downloading puzzles from the same place now, so it is unlikely to
+    change again.
+</p>
+<p>
+    There are also some improvements to the zoom/autofit behavior on newer, high density devices. Thanks
+    to Eric Cloninger for submitting some of these improvements for tablets. I have also tweaked some the
+    behavior on phones. There is still an outstanding issue with tabletish devices not honoring the clue
+    size pref I will fix later, but I wanted to get the NYT fix out.
+</p>
+<p>
+    Some of you have complained about the lack of updates to the open source project with the last couple of
+    releases. Let me explain. I moved the project to the new Android Studio/Gradle build system, and it now
+    has a whole new directory structure. This has meant basically a new project. TL;DR Once I get this rev
+    published, I will update the open source project, but a *lot* (read, almost all you care about) files
+    are going to lose most or all of their version history. Sorry about that.
+</p>
+<p> Some Fun Stats from Google Play Games:
+    <ul>
+        <li>69% of you have completed a puzzle.</li>
+        <li>20% of you have completed FIFTY puzzles.</li>
+        <li>3% of you have completed 100 puzzles with no hints. ("Are you Will Shortz")</li>
+        <li><b>Nobody</b> has completed 50 puzzles in under 5 minutes without cheats.</li>
+    </ul>
+</p>
+
+
+<h3>Previously... on Battlestar Galactica: 3.3.13</h3>
+<p>
+    Sorry for spamming everyone with updates, but I am making a concerted effort to spend some time
+    on Shortyz this week. Much like the last update, this one has some "resurrections"! <b>The Washington
+    Post</b> puzzle <b>The Los Angeles Times Sunday Calendar</b> (by Googler! Merle Reagle). The
+    Philadelphia Inquirer, like Newsday has changed formats, but the new format is a little wierd, so
+    I need to spend some time fixing it.
+</p>
+
+<p>
+    The other big news is the first pass at integrating with Google Play Services is complete. You
+    should now start earning achievements as you play! The basic puzzle count achievements assume you
+    get at least 80% of the boxes without getting hints from "Show Errors".
+</p>
+
+<h3>Previously: 3.3.0</h3>
+
+<p>
+    Welcome back. After a number of crash fixes, this one <b>restores downloads</b> for <b>The Los
+    Angeles Times</b> and <b>Newsday</b>. I will look into fixing the download URLs for more sources
+    as I go.
+</p>
+
+<p> This version also includes a sign in for Google Play Games. It doesn't do much right now, but
+    this is a placeholder for future Achievements and Leaderboards based on your solving skillz.</p>
+<p> Also, thanks to <a href="http://www.flickr.com/photos/kategeraets/">Kate Geraets</a> for the
+    Creative Commons BY-SA image I am using for the new promo art.</p>
+
+<h3>Previously 3.2.9</h3>
+
+<p>Hey everyone!</p>
+
+<p>So as you have likely noticed, I haven't been doing a lot of work on Shortyz lately. I 
+got several months ago at Bettercloud and it has been pretty demanding. This release is 
+basically just a crash-fix release, and some pruning of the puzzle sources.</p>
+
+<p>Sheffer and Joseph crosswords are not available anymore from King Features Syndicate's 
+web site. They have worked up a new thing where they are partnering with their print partners
+to include those in their custom apps, so you might look around for those.</p>
+
+<p>Also, you might have noticed the new Shortyz copies on the app store. Frankly, I am kind of
+pissed about these. Shortyz is open source under the GNU Public License. This means people
+are free to reuse my code as long as they make their code available. There are Shortyz
+forks on the Amazon Kindle store that I am generally OK with, just because I am not going 
+to pay Amazon for the right to make something I make no money from available on their store.
+The stuff on the Play store, though, irks me. However, if you like these, feel free to use them.</p>
+
+<p>On a final note, if you are still hard up for puzzles, check out <a href="http://www.puzzlexpress.com/" target="_blank">
+Puzzle Express</a> They sell bundles of puzzles in JPZ format. You can purchase these and put
+the files in your /crosswords/ folder on your phone and Shortyz will find them.</p>
+
+<p>Thanks to everyone using
+
+<h3>Previously: 3.2.7</h3>
+
+The quest to shake down this thing continues. Again, I am sorry for the continued problems.
+<ul>
+<li>The following of the cursor issue has been fixed. Sorry about that, I broke it trying to clean up
+UI issues in JellyBean.</li>
+<li>I think the flashing issue in Jelly Bean is *finally* gone. I haven't seen it at all with this build</li>
+<li>Max and min zoom limiting finally work as they should. Actually because of this, the cursor following
+actually works better now than it did before I broke it. :P</li>
+</ul>
+<p>
+Lastly, some of you have asked about the fit-to-screen on Honeycomb+. Honestly, the way it was working,
+where everyone with a HC+ device got a puzzle scale the first time they entered the play screen, was
+never my intent, but it got left in there with the Google TV code, and a lot of you became accustomed to
+it. Since most of these devices have larger screens anyway, it worked pretty well.
+</p><p>
+I haven't put it back as the default, but there is a preference you can set for it. 
+</p>
+
+Thanks
+
+<h3>Previously: 3.2.3</h3>
+
+<p>First of all, thanks for your patience. Long time users know that I am kind of scattershot on releases with new versions of Android.</p>
+
+<p>Seconds of all, I am sorry I can't get to everyone's emails anymore. Honestly, the emails that come in now that there are 
+400,000(!!!!) of you are overwhelming for one guy to get to. I try to triage them as best I can, but I just can't reply to 
+everyone anymore. I might suggest you <a href="https://plus.google.com/112662859624418565027/posts" target="_blank">circle Shortyz on Google+</a>. 
+I try to post the state there as often as I can.</p>
+
+<p>So some updates: I think I *finally* have the flicker issues in Jelly Bean worked out. Also, for
+people on "Large" format screens (read: 7" tablets, Google TV) the problem with using the "Native" keyboard option is sorted out,
+so you should be able to see the clues. Yes, I know that some of you don't like the clues below the puzzle, but I feel this is
+a better layout, and it will require some significant changes to make this an option. I will *try* to support using the 
+phone-style portrait layout on "large" screens again at some point in the future.</p>
+
+<p>Also, I have fixed the the Window Title issue on <=Gingerbread. Sorry about that. That was just an 
+oversight</p>
+
+<p>There are some more things coming. I wanted to get the two puzzle lists on tablets to sync properly, but 
+it turns out this is more complex than I thought. Also, now that I actually own two devices with NFC, I
+intend to support using Android Beam to move your puzzle state from your phone to your tablet and vice versa.
+Look for these soon.</p>
+
+<p>One last thing, because I don't want to shock people. Ben Tausig, the guy who makes the Inkwell and 
+Onion crosswords has asked me to help him set up a pay service for his puzzles, and I am going to oblige.
+These puzzle will still be available for free on the web, but Shortyz will require a subscription to keep 
+auto-downloading them. <b>I can assure you</b> the price Ben is wanting to charge is <b>incredibly reasonable</b>.
+I do Shortyz for fun, but Ben makes a living making crosswords. Shortyz has supported his puzzled to date because
+I don't make any money off of it, and Ben is a really nice guy. More on this to come, just a heads up.</p>
+
+
+<h3>Previously: 3.2.1</h3>
+
+<p>This release is mostly just cleanup for Google TV and JellyBean devices. If this doesn't affect you, you can ignore it.</p>
+<p>Google TV is hiding the ActionBar properly again. The Nexus 7 now uses the Google TV landscape view and the ICS 10" screen
+portrait view. All the downloader bugs in JB have been fixed.</p>
+
+<h3>Previously 3.1.5</h3>
+
+<p>First, there is a new option on the settings screen to suppress marking hinted squares on the playboard!</p>
+
+<p>Some bug fixes in this release, and updated to support GoogleTV.</p>
+
+
+<h3>Previously: 3.1.2</h3>
+
+<p>First, I have fixed some crash bugs that many of you have contacted me about. Thanks.</p>
+
+<p>Secondly, some of you have emailed me about the "Cheated" boxes. Some of you seem to have
+taken personal offense at the implication that you are "cheaters". To that end, I have changed the
+word "cheated" to "hinted". As to the nature of the change, let me explain...</p>
+
+<p>Lots of you play with the "Show Errors" feature on. This highlights your incorrect boxes as
+you fill in the puzzle. With the new change, boxes that have been highlighted as being in error
+are marked as red on the screen. Lots of people like to play this way as it makes the puzzles more
+approachable and can turn a puzzle that might take you an hour into something you can do on a 20 minute
+train ride. Previously, boxes were only marked as "Cheated" (with the pink indicator) if you used
+the "Reveal" function (and then the word cheated was what I called it internally, and was never 
+presented to the user). However, to have an Apples to Apples scoring system for the "Share" option
+(and some future features) it is necessary to take into account that having "Show Errors" reveal an 
+error is, functionally, the same as having the answer given to you, as you could just key every letter
+into the box until it showed as "Correct".</p>
+
+<p>If you don't care about the "show errors" lights, just keep playing as you have. The only difference
+in your play will be some slight pink hues behind letters you have corrected. If you do want to work
+on your solve time, <b>Press Menu -> Hide Errors</b> you can still make typos, change your answers, 
+whatever you want, and none of your overplays will not be counted as "hints".</p>
+
+
+<h3>Previously: 3.1.0</h3>
+
+<p>First, sorry to everyone who has emailed me recently. My life has been crazy and I have not been as good as I should
+about getting back to Shortyz users. I promise it will get better soon. :P</p>
+
+<p>Anyway, this version adds good support for Ice Cream Sandwich for y'all, who like me, are chomping at the bit to
+get your hands on the Galaxy Nexus. There is also a new Puzzle Completion dialog that includes the option to
+share your information on via your social networking clients, email, etc. Also a fix so that broken
+puzzle URLs like the People puzzle from this week (they messed up on their end) don't linger around. Also,
+boxes that you have flagged with "Show Errors" now show as "Cheated" persistently.</p>
+
+
+<h3>Previously: 3.0.7</h3>
+
+<p>Quick changes to adapt to the NYTimes changing their site and changing the source of the LATimes crossword puzzle.</p>
+
+
+<h3>Previously: 3.0.4</h3>
+
+<p>Quick update: Sorry about the People Magazine problems. They don't publish their
+answers electronically. The app will no longer show you the incorrect values.</p>
+
+<p>New Puzzles! People Magazine and Victor Fleming's "I Swear" puzzles have been
+added to the downloaders. Also the WaPo overwriting issue is corrected.</p>
+
+
+
+<h3>Previously: 3.0.3</h3>
+
+<p>As some of you long-time users will remember, at the request of LitSoft, the people who provided crossword software to
+CrosSynergy (The syndicators of the Washington Post/Houston Chronicle puzzle) requested that those puzzles be removed from
+the application a while ago. I included a link in the release notes where those puzzles could be downloaded for free 
+from the chron.com web site. Well, CrosSynergy is no longer using LitSoft software to publish there puzzles, and I, therefore,
+no longer feel LitSoft has standing to request that those puzzles are excluded. Thanks to some new code from Jeff Davidson supporting
+the .JPZ puzzle format... <b>The Washington Post Daily Puzzle</b> is now supported again.
+</p>
+
+<p> Other news in this release.
+<ul>
+	<li>Fixed support for (I hope) Android 3.1. Seems this is being tested on
+	Xooms right now.</li>
+	<li><b>I don't know how well Shortyz is going to play on the 2.3.4 release announced yesterday, but Nexus users,
+	I promise I will get it updated ASAP if there are problems</b></li>
+	<li>Added a timeout trap of 150ms on non-character hardware keys for the 
+	Moto Droid 2's with picky keyboards</li>
+	<li>A number of small crash fixes</li>
+	<li>Corrected (hopefully) style issues in the HTMLView</li>
+</ul>
+</p>
+
+<p> Briefly, some things that are on-deck but not ready for release: Support for .jpz direct download and file access
+for JPZ files. This is the new standard for Crossword Compiler and a number of indy puzzles. 
+I hope that over the next few months this will let me support the Brit/Aussie puzzles
+everyone has been asking for -- presuming they upgrade from the old CCJ format to JPZ.</p>
+
+<h3>Previously: 3.0.1</h3>
+
+<p>First... <b>Shortyz in the News!</b></p>
+
+<p>In the lead up to the holidays, Shortyz got some nice press. It was listed on 
+<a href="http://www.gameinformer.com/b/features/archive/2010/12/24/fifteen-fun-android-games.aspx"><i>Game
+Informer's</i> first list of Android games</a>, and was also mentioned in the <i>New York Times</i> as
+a "<a href="http://www.nytimes.com/2010/12/23/technology/personaltech/23smart.html?_r=1">
+Top Picks for Apps to Help You While Away the Minutes</a>". As I have stated before, this is either a)
+a "scratch your own itch" Open Source project or b) a labor of love, depending on your preferred 
+terminology, so this kind of recognition is really gratifying. But mostly, you guys rock. </p>
+
+<p>As I noted many moons ago, the Shortyz user base has really been great. I have only gotten one
+nasty email, well, and the <a href="http://www.screaming-penguin.com/node/7775">Litsoft affair</a>.
+As always, feel free to email me with anything you want. I can't make categorical promises, but I 
+do read all email.</p>
+
+<p>Shortyz 3 now has new support for Android 3.0 Honeycomb! There are new screen layouts for large screens
+(Gingerbread tablets should see these too!) and it now takes full advantage of the new Action Bar.</p>
+
+<p> Other changes:
+<ul> 
+	<li>There is now an option to lock the orientation of the app in the preferences screen.</li>
+	<li>Some work has been done to prevent puzzle corruption if you exit the app suddenly</li>
+	<li>For Android 3.0 or higher, most puzzles now download using the Android "Download Manager." 
+		I am going to need to spend some time to make this work for 2.3.X users.</li>
+	<li>For 3.0.1: A small fix for people with older phones to prevent a crash</li>
+</ul>
+</p>
+
+<h3>Previously: 2.3.12</h3>
+
+<p>Just a quick fix to correct the problems with the new LAT site settings. Thanks to everyone 
+who reported this. As always, if you are having problems, please email.</p>
+
+<h3>Previosly: 2.3.11</h3>
+
+<p>2.3.<b>11</b> on 11/11. <a href="http://www.youtube.com/watch?v=F7IZZXQ89Oc">Happy Nigel Tufner Day</a>!</p>
+
+<p> This is just a quick fix for the NYT support. It will now give you a popup message if your password is 
+incorrect (something I should have done ages ago). There was also a bug where if you entered an incorrect password,
+and tried to download using the download dialog, and not the regular scheduled download, it wouldn't register
+your updated credentials.</p>
+
+<p>Big thanks to Michael Nash for helping me run this one down.</p>
+
+<h3>Previously: 2.3.10</h3>
+
+<p>Another sad one, but Brendan Emmet Quigley has asked that his puzzles be removed from the auto download feature since he has made an agreement with Standalone.</p>
+
+<p>As far as I know, his puzzles will still be available for free from <a href="http://www.brendanemmettquigley.com/">his blog.</a> Since this looks to become a 
+recurring theme, both his blog and <a href="http://www.chron.com/apps/games/xword/puzzles/">this page where you can get the Houston Chronicle/CrosSynergy/Washinton Post</a>
+are good pages to bookmark. I have added support for clicking puzzle links out of the browser to this version, so you may want to bookmark those pages.</p>
+
+<p>Why, you may ask, is clicking on them out of the browser different than Shortyz downloading them on its own? That, my friend, is a good question. But as I have said before,
+this is a hobby, I am not rich, and I don't want to pick a fight with anyone.</p>
+
+<h3>Previously: 2.3.9</h3>
+
+<p>This update has nothing for most of you. Sorry. If you play the NYTimes puzzle, or you are using a generic Chinese made
+Android Tablet, you might care.</p>
+
+<p>Many of you have noticed the NYTimes puzzles aren't updating. What happened is the NYT seems to have changed their policy on this
+and the FIRST download of an NYT puzzle will contain the correct answer key, so the update logic is no longer necessary.</p>
+
+<p>If you have a puzzle that "isn't updating", long press on it in the list screen and select "Mark as Updated", and you will see the new key.</p>
+
+<p>If you have a Brand-X Android tablet, and you aren't getting a keyboard popup, there is now a pref to force the keyboard onto the screen, no
+matter what the OS says about keyboard availability.</p>
+
+
+<h3>Previously: 2.3.8</h3>
+
+<p>Quick update. This will fix this weeks Onion AV Club puzzle, but you will need to delete
+and re download the puzzle. Also fixed a bug with the timer and the clues list screen.</p>
+
+<h3>Previously: 2.3.7</h3>
+
+<p>It is a sad day, but <a href="http://www.litsoft.com">Litsoft</a>, who, as I understand it, does online distribution 
+for CrossSynergy (the provider of the Houston Chronicle puzzle available in Shortyz) has requested that I remove the 
+puzzle from the list of puzzles that are downloaded.</p>
+
+<p>It is my personal position that Shortyz does not violate any copyrights of anyone, since I do not copy, store, or 
+duplicate any puzzles, but simply provide you, the user, with a means do directly download the puzzles onto your phone.
+However, because I do not wish to bring any litigation down on myself for a hobby project, I have complied.</p>
+
+<p>You can still get these puzzles for free from either the Houston Chronicle website, or the Washington Post website for
+free. Unfortunately, you will need to do this from a desktop/laptop computer, since their mobile sites do not expose the 
+crossword downloads. If you download the puzzles, you can store them in the "crosswords" folder on your phones SD Card and
+use them as usual (though the meta information in the menu will not be visible).</p>
+
+<h3>Previously: 2.3.4</h3>
+
+<p>Quick update:
+<ul>
+	<li>Cleanup unfinished "Never" is fixed. Sorry it took so long to get a fix out for this.</li>
+	<li>There is now an option to show the timer and percent complete at the top of the window.</li>
+	<li>There is now an option to run the main play screen "Full Screen"</li>
+	<li>I also removed download notifications on first run. This seems to freak people out.</li>
+</ul>
+</p>
+
+<p>Once again, if you have any problems feel free to email me. There is still a known issue with slower
+phones corrupting puzzles if you exit the app suddenly. I hope to offer some kind of solution to this soon,
+but for now, if you hit "Back" and go to the list screen before you leave the app, your puzzle will be 
+safe.</p>
+
+
+<h3>Previously: 2.3.0</h3>
+
+<p>I would like to thank Debi Dorman for helping me work through the issues on Droid w/2.1.
+Again, there were some crazy issues that were unforseeable and she <a href="mailto:kebernet@gmail.com">
+emailed me</a> and I was able to work out what the problems were.</p>
+
+<p>Also worth noting that during the last release cycle, Shortyz crossed the 50,000 downloads
+milestone, and is now the #1 crossword app in the market by Google's magic sort. Thanks so much
+guys. Again, I started this project as most good open source projects start: by scratching my own
+itch. It the history of this project, I have gotten one nasty email from a user. You guys are all
+great and helpful!</p>
+
+<p>That said, I am starting work on a new Android project, so Shortyz is going to go into hibernation
+for a bit. There will be more releases to fix bugs, etc, but I have no plans for major new features
+in the near term. All you people who think the app updates to frequently will now be happy. :)
+Anyway, look for my second Android app in the coming weeks.</p>
+
+<p>No big new features here but a number of bug fixes:
+<ul>
+	<li>Main list is rendered before auto-downloads file, preventing that one borked file from
+	appearing in the list</li>
+	<li>"Archive" changed to "Archives" in browse menu to match plurality with "Crosswords"</li>
+	<li>Fixed issue where Froyo on EVO was sending two finish events for multi-touch operations</li>
+	<li>Fixed a number of issues with the play timer. It should be reporting correct time now even
+	if you exit the app and come back to it</li>
+	<li>Changed the behavior of "Cleanup". You can now select a maximum age before unfinish puzzles
+	are archived/deleted (including "Never," for those of you who have asked). The deault is 2 days.</li>
+</ul></p>
+
+<h3>Previously: 2.2.17</h3>
+
+<p>Wow, so that last one had some problems. First thing: I would just like to ask everyone:
+<br /><br /><b>If you are having problems, <a href="mailto:kebernet@gmail.com">email</a> me!</b><br /><br />
+I don't own every phone in the world. Really just the one. If there is a problem like this
+one, your comments in the Market don't help me fix it at all. If you want to drop your rating
+of the app, feel free, but if you want the problem fixed, scroll down and hit that "Developer Email"
+button. :P</p>
+
+<p>Next, a bit of explanation: The problem here is that it seems that some phones from Moto and 
+Samsung, with certain versions of Android don't include the full set of character encodings
+from Java. Specifically, MacRoman (the Mac OS western alphabet), which is used for some of 
+the new puzzle sources. This was causing all kinds of havoc. The short version is this:
+<ul><li>If you are on some Samsung or Moto phones, you will not see non-English characters
+properly on some of the new puzzles</li></ul></p>
+
+<p>They should, however, now work most of the time. Again, I am sorry to anyone who had crash
+issues, and I am sorry for spamming everyone else who wasn't with updates. This was just 
+something that testing in the emulators wouldn't catch and didn't show up on my phone.</p>
+
+
+<h3>Previously: 2.2.12</h3>
+
+<p>First of all, I would like to officially welcome Jeff Davidson to the "team." He has made a number of big
+contributions to this release:
+
+<ul>
+   <li>Improved movement semantics, especially when you have skip filled and show errors on.</li>
+   <li>New sources, included the first non-AcrossLite format puzzles: Sheffer, Joseph Crosswords, 
+   Universal Crossword, USA Today, WaPo Sunday (other days the same as the Houston Chronicle), Newsday,
+   Jonesin' Crosswords, Premier Crosswords and the LA Times Sunday Calendar.</li>
+   <li>Download dialog now supports selecting a single puzzle source if you want.</li>
+   <li>Puzzles with circled clues (that are properly encoded) will show the circles on the playboard.
+   Please note: puzzles you have previously downloaded won't work unless you delete and redownload. 
+   New puzzles going forward should work fine, though.</li>
+   <li>Settings for puzzle sources re-orged.</li>
+</ul> 
+</p>
+
+<p>Wow. I feel like a wuss now. Thanks so much. In other news...
+<ul>
+   <li>New rendering code. Mostly you shouldn't notice it, but the Clues display and the Board now share 
+   rendering code, so the strange positioning on the Clues display is gone and show errors works propery.</li>
+   <li>Pinch zoom for Froyo (Android 2.2) is full on. Will properly center around the pinch, not the 0,0 position. Also the 
+   snap from re-rending now more closely matches the sizing of the scaled image. Also limits the scale range
+   so you shouldn't be able to hose the app by zooming to large or too small.</li>
+   <li>Lots of small bug fixes</li>
+</ul></p>
+
+<p>We have also both made a pass at the "Ensure Visible" code. I think it is much improved now but there will be
+a few differences. If you nav off the lower edge of the screen, you will snap down the a full screen to the new
+cursor position. When you nav off screen into a new word, you will get visibility on the side of the word your
+cursor is closest to -- the beginning or end of the word.</p>
+
+<p>From the "You can't please everyone" Department, Double Tap to toggle between default
+zoom and fit to screen is back. This time it is a setting that you can toggle. The 
+behavior of "Fit to Screen" in the zoom context menu is unchanged.</p>
+
+
+<h3>Previously: 2.2.9</h3>
+
+<p>OK, everyone but me seems to hate the double tap scale. Moved Fit to Screen to the Zoom menu
+and works like a standard zoom setting now.</p>
+
+<h3>Previously: 2.2.5</h3>
+<p>Doin' the quickie dance:
+<ul>
+	<li>"Use Native Keyboard" pref replaced with "Keyboard Style". Now includes a keyboard with a row of
+	arrow keys. If you are on a device without a ball/dpad (read:EVO, Droid<sup>X</sup>) and aren't 
+	using the native keyboard, this will come up by default. Might be good for Droid users too.</li>
+	<li>File Corruption on Exit: De-normalized IO code for speed. Hopefully this will help with file corruption issues on 
+	slower devices. <b>If this is happening to you, simply "Back" out to the list screen before 
+	you switch out of the app!</b></li>
+	<li>Double tap the playboard to fast-switch between "Fit to Screen" and whatever your normal
+	zoom level is.</li>
+	<li>Fixed the "Back" button issue coming back into the play screen from settings/clues</li>
+	<li>Icon changed to fit the official 
+	<a href="http://developer.android.com/guide/practices/ui_guidelines/icon_design.html">Android 
+	style guide</a>: Little smaller, has drop shadow.</li>
+	<li>NYT password masked</li>
+</ul>
+</p>
+
+<h3>Previously: 2.2.0</h3>
+<h4>A Brief Note (release info follows):</h4>
+<a name="donations" />
+<p>Shortyz is free and <a href="http://code.google.com/p/shortyz">open source</a>. No ads, no whatever. Honestly, I started working on it because
+last fall when I switched from the iPhone world to the Android world, there wasn't an app that
+would let me do the NYT puzzle easily on the train ride to work. A number of people have asked about 
+a paid version. Honestly, a paid version puts me into copyright issues territory, and I really
+don't want to get into that. This is not a business, and I don't want to give the appearance 
+I am reselling anyone else's property. I don't host or copy the puzzles you download in the app in any way; you 
+download them directly from their publicly available sources with the app.  
+</p>
+<p>
+So, I have added a donate button at the top of this screen. Want to buy me a beer? Feel free, 
+but don't feel obligated. You won't get anything more or less out of the app than anyone else.
+Also, if you feel like spreading the wealth, consider visiting 
+<a href="http://inkwellxwords.com/iwxbooks.html">Ink Well</a> and 
+<a href="http://www.brendanemmettquigley.com/">Brendan Emmett Quigley's site</a> and buying their 
+fine wares.
+</p>
+<p>End of speech. At any rate. What is up with this version? Lots of stuff!
+<ul>
+<li>
+I have been watching the new Android Market crash report tool. It only reports for version 
+2.1+, I believe. However, I think I have gotten all of the "crash to ground" issues in the app worked out now. 
+If you see a complete crash (and not a "Wait"), please <a href="mailto:kebernet@gmail.com">email me</a>.
+</li>
+<li>
+Automatic downloads will only be retried once every twelve hours. Yay!
+</li>
+<li>
+Brendan Emmett Quigley's blog scraper is promoted out of experimental. It seems to be working
+well.
+</li>
+<li>
+With "Show Errors" on, I now invert the text color on your highlight row, so there is a way to
+see incorrect squares without moving the cursor.
+</li>
+<li>
+Some minor changes to the playboard renderer to help with multitouch scaling on Froyo. Not 100% where it
+should be, but getting close.
+</li>
+<li>
+The "Search" button, if your device has one, will now skip you to the next clue in the 
+same direction as you are currently playing.
+</li>
+<li>
+There is now a confirmation on "Reveal Puzzle."
+</li>
+<li>
+Show Errors and Reveal will be disabled for NYT puzzles that have not updated the answer key.
+</li>
+<li>
+All un-updated NYT puzzles will have their answer key updated on the next download event.
+</li>
+<li>
+NYT Puzzles don't have an answer key have a red progress indicator.
+</li>
+<li>You also may have noticed in a previous silent version that non-US English characters now
+appear (hopefully) correctly in the clues. If you spot a puzzle where they don't, please email me the puzzle
+source. This is kind of a guessing game for me, since not all the puzzles seem to be created with
+the same characters set.
+</li>
+<li>There is a new preference option to make the number of characters in a clue appear at the end
+of the clue line. This isn't the default because some puzzles include this in the clue, separated
+with commas. So "OHGOON" might show as [2,2,2]. I can't synthesize the word breaks (Is that "Oh go on" or "Oh Goon?"), 
+but I can show you the total number of characters [6] if you want to see it.
+</li>
+<li>You can now embiggen the clue text. This is via the "Zoom" context menu (Long touch
+the playboard).
+</li>
+<li>
+There are some minor changes to the .shortyz data file format to support future features. 
+(I'm working on some cool stuff for Froyo) You shouldn't notice any difference.
+</li>
+<li>Now waits a moment before showing the busy dialog when rendering the browse view. Some people
+have complained about speed, but it hasn't actually changed. I honestly think seeing the busy dialog
+just gives that impression. So if I can render the list quickly, I don't show it at all. If this
+is actually taking more than a few seconds for you, consider using the "Cleanup" operation to 
+move your old and completed puzzles to the archive.
+</li>
+</ul>
+</p>
+
+<h3>Previously: 2.1.8</h3>
+<p>Quick update. Mostly bug fixes. Two noticeable changes:
+<ul>
+<li>
+New look for the puzzle browse screen
+</li>
+<li>
+Show Errors is now persistent.
+</li>
+<li>
+<b>2.1.7 to 2.1.8</b>: Quick fix to make "Show Errors" default to off. 
+	This was my mistake.
+</li>
+</ul>
+</p>
+
+
+
+<h3>Previously: 2.1.1</h3>
+
+<p>Some updates here most of you won't notice. A few bug fixes. However, if you are running
+Froyo (Android 2.2) you now have pinch zoom on the play board and Shortyz will install to external
+storage, saving you that whole 100K on your internal storage. :P</p>
+<p>There is also a new screen specifically to complain when the SDCard is unavailble. Hopefully
+this will reduce support issues for me.</p>
+
+
+<h3>Previously: 2.1.0</h3>
+
+<p>Sorry if you feel spammed the last few days with updates. I am using the holiday to try
+and get to all the feature requests and known bugs, so I am pumping them out. This time, though
+moving up a whole minor version number!</p>
+
+<p>Lots and Lots of Changes:
+<ul>
+	<li>New "Movement Style" Preference. You can set this to one of:
+	<ul>
+	<li>Next word in line (same as previous versions)</li>
+	<li>Stop at end (stops at the end of the word rather than move to a new one automatically)</li>
+	<li>Next clue in the same direction (moves you to the next across or down clue in order)</li>
+	<li>Next parallel clue (moves you to the next clue in the same direction parallel to the word
+	from the last box in the word)</li>
+	</ul>
+	</li>
+	<li>Toggle for Spacebar changing directions or wiping a square.</li>
+	<li>Toggle for Enter changing directions or moving to next clue (see above ; this doesn't impact 
+	the condensed keyboard at all)</li>
+	<li>Added the Chronicle of Higher Education puzzle as a source</li>
+	<li>Added the Kegler's Kryptics Archive as a scrape (read the help before you enable it)</li>
+	<li>The browse view no longer refreshes when you move back to it, improving performance and preserving
+	your place in a list</li>
+	<li>Some improvement on stray characters on the keyboard swipe</li>
+	<li>A number of small bug fixes</li>
+</ul>
+</p>
+<p>Special thanks the following people for suggestions/testing for this release (in no particular order):
+<ul>
+    <li>Brian Christopher</li>
+    <li>chemisus</li>
+    <li>Alicia Hartman</li>
+    <li>Dick Wall</li>
+    <li>Brian Gregory</li>
+    <li>Katherine Madeira</li>
+</ul>
+</p>
+
+
+<h3>Previously: 2.0.30</h3>
+
+<p>Fast update, but this is mostly just bug fixes.
+<ul>
+ <li>Fixed a crash bug on blank upper left boxes and the clue lie.</li>
+ <li>Fixed the chunky scrolling on long clue lists</li>
+ <li>For Droid users: You can now make a smooth swipe across the condensed keyboard
+     to simulate the DPad when the keyboard is closed.</li>
+ <li>Changed the condensed keyboard to be the default. I am satisfied it works well enough.</li>    
+</ul>
+</p>
+
+<h3>Previously: 2.0.26</h3>
+
+<p>Number of noticeable changes here, mostly just improvements to what is already there. Some 
+highlights:
+<ul>
+	<li>The puzzle list is now grouped and...</li>
+	<li>sortable with the new menu item on the browse screen.</li>
+	<li>Zoom level on the puzzle now persists as a preference</li>
+	<li><b>SWYPE USERS</b> (or anybody): There is now a condensed keyboard available
+	within Shortyz. It is smaller than the default Android keyboard so it can be better on
+	touch-only phones, and it will get around problems with third party keyboards. You 
+	can enable it in the settings by unchecking "Use Native Keyboard".</li>
+</ul>
+
+</p>
+
+
+
+<h3>Previously: 2.0.22</h3>
+
+<p>At long, long last the first character bug in the clue list view is fixed. Sorry this took
+so long, but that was actually a deep bug based on how the Android list view works.</p>
+
+<p>Cryptics! That's right Brits, there is now a cryptics source available. It is in the 
+experimental scrapers section. Please read the help there. It is not enabled by default, so you
+will need to go to the settings page.</p>
+
+<p>Number of other small bug fixes that only got one or two reports. Which brings me to</p>
+
+<p>Thanks so much to you guys. The Shortyz user base is great to work with. If you are having 
+problems or a suggestion, please email me at <a href="mailto:kebernet@gmail.com">kebernet@gmail.com</a>
+I can't make any promises, but I will do my best to address your issue/feature request.</p>
+
+
+
+<h3>Previously: 2.0.17</h3>
+
+<p>This version includes a number of small changes. There has been an upgrade to the playboard
+logic, so you should never end up with a focused empty square again.</p>
+<p>Next, there is the new "Web Scraping" downloaders. The first of these is from cruciverbalist
+and Shortyz user
+<a href="http://brendanemmettquigley.com/">Brendan Emmett Quigley</a>. This feature allows for
+the inclusion of puzzles that don't come as part of a regular puzzle feed. See the info in the 
+"Settings" screen for more information.</p>
+<p>The zoom steps on the board have been changed from 50% to 25%</p>
+<p>When "Skip Completed Letters" is on, typing over a completed square will not skip the next
+completed square. This should make correcting words easier.</p>
+<p>Application options have moved to the bottom of the settings screen, after the puzzle sources</p>
+<p>Finally, speaking of experimental, if you would like to try a web based version of Shortyz
+you can play on your desktop or laptop, try visiting 
+<a href="http://shortyz.kebernet.net">http://shortyz.kebernet.net</a>. This version is still 
+under heavy development, but is quite playable right now</a>.</p>
+
+
+
+<h3>Previously: 2.0.15</h3>
+
+<p>This is mostly work to address bugs that have been reported. If you are experiencing crashes, please
+install <a href="market://search?q=pname:org.l6n.sendlog">SendLog</a> and 
+<a href="mailto:kebernet@gmail.com"/>email me</a> your raw log files. This will help me diagnose and 
+fix your problems.</p>
+
+
+<h3>Previously: 2.0.8</h3>
+<p>Shortyz has been updated based on some feedback from the user community. Much
+of what is new in this version are options for changing the UI behavior under Settings.
+ These include:
+
+<ul>
+<li>Skill Filled Boxes: Skips over boxes with answers when you enter a new letter.</li>
+<li>Scroll To Clue: Scrolls the current clue to the top of the view when in clue mode. This
+can make working with the D-Pad/Trackball easier on this screen. (Works like Shortyz 1)</li>
+<li>No Download Messages: Prevents a notification from being sent for each new puzzle downloaded.</li>
+</ul>
+</p>
+
+<p>Other fixes: 
+<ul>
+<li>"Show Errors" now switches to "Hide Errors" when toggling. </li>
+<li>Taping a box in Clues list works, also the scroll position is reset when you move 
+from clue to clue, preventing long clues from "breaking" the display.</li>
+<li> When "re-downloading" a New York Times puzzle updates the answer key. </li>
+<li>Fixed problem of archived puzzles being 
+re-downloaded. </li>
+<li>Also, work has been done on managing the
+on-screen keyboard to make it feel more natural.</li>
+</ul>
+</p>
+</div>
+</body>
+</html>

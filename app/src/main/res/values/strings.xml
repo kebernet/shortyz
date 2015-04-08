@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Shortyz</string>
+    <string name="puzzle_select">Select a puzzle:</string>
+    <string name="title_activity_games_sign_in">Sign Into Play Games</string>
+    <string name="action_settings">Settings</string>
+</resources>

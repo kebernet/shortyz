@@ -1,0 +1,52 @@
+<resources>
+     <string-array name="movementStrategyLabels">
+       <item>Next word in line</item>
+       <item>Stop at the end</item>
+       <item>Next clue in same direction</item>
+       <item>Next parallel clue</item>
+     </string-array>
+     <string-array name="movementStrategyValues">
+       <item>MOVE_NEXT_ON_AXIS</item>
+       <item>STOP_ON_END</item>
+       <item>MOVE_NEXT_CLUE</item>
+       <item>MOVE_PARALLEL_WORD</item>
+     </string-array>
+     <string-array name="keyboardTypeLabels">
+       <item>Small</item>
+       <item>With Arrows</item>
+       <item>Native</item>
+     </string-array>
+     <string-array name="keyboardTypeValues">
+       <item>CONDENSED</item>
+       <item>CONDENSED_ARROWS</item>
+       <item>NATIVE</item>
+     </string-array>
+     <string-array name="cleanupAgeLabels">
+       <item>Two Days</item>
+       <item>One Week</item>
+       <item>Never</item>
+     </string-array>
+     <string-array name="cleanupAgeValues">
+       <item>2</item>
+       <item>7</item>
+       <item>-1</item>
+     </string-array>
+     <string-array name="orientationLockLabels">
+       <item>Unlocked</item>
+       <item>Portrait</item>
+       <item>Landscape</item>
+     </string-array>
+     <string-array name="orientationLockValues">
+       <item>UNLOCKED</item>
+       <item>PORT</item>
+       <item>LAND</item>
+     </string-array>
+    <string-array name="swipeActionLabels">
+        <item>Delete</item>
+        <item>Archive</item>
+    </string-array>
+    <string-array name="swipeActionValues">
+        <item>DELETE</item>
+        <item>ARCHIVE</item>
+    </string-array>
+</resources>

@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "Shortyz",
+    "description": "Extension name"
+  },
+  "appNotSupported": {
+    "message": "This app is incompatible with your device.",
+    "description": "Message displayed when the app is not supported."
+  }
+}

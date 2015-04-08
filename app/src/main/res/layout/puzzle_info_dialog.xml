@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:gravity="center_horizontal">
+  
+  <TextView 
+  android:id="@+id/puzzle_info_title"
+  android:textSize="30dp"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:text="Title of Puzzle"
+  android:gravity="center_horizontal"/>
+  
+  <TextView 
+  android:id="@+id/puzzle_info_author"
+  android:textSize="20dp"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:text="By Author"
+   android:gravity="center_horizontal"/>
+  
+  <TextView 
+  android:id="@+id/puzzle_info_copyright"
+  android:textSize="10dp"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:text="(c) 2010"
+  android:gravity="center_horizontal"/>
+  
+  
+   <TextView 
+  android:id="@+id/puzzle_info_time"
+  android:textSize="20dp"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:text="Elapsed Time: 3:15"
+  android:gravity="center_horizontal"/>
+  
+  <ProgressBar
+  		style="?android:attr/progressBarStyleHorizontal"
+  		android:layout_width="fill_parent"
+  		android:layout_height="5dp"
+  		android:max="100"
+  		android:progress="80"
+  		android:id="@+id/puzzle_info_progress"
+  		
+  		/>
+  
+</LinearLayout>

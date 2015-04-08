@@ -1,0 +1,48 @@
+{
+  "name": "__MSG_extName__",
+  "default_locale": "en",
+  "manifest_version": 2,
+  
+  "version": "0.@@versionCode@@",
+  "version_name": "@@versionName@@",
+  "offline_enabled": true,
+  "app": {
+    "background": {
+      "page": "app_main.html"
+    }
+  },
+  "icons": { "16": "icon16.png",
+             "48": "icon48.png",
+            "128": "icon128.png" },
+  "permissions": [
+    "alarms",
+    {"fileSystem": ["write"]},
+    {"socket": ["tcp-connect", "tcp-listen", "udp-bind", "udp-send-to", "resolve-host"]},
+    "unlimitedStorage",
+    "notifications",
+    "storage",
+    "clipboardRead",
+    "accessibilityFeatures.read",
+    "https://clients2.google.com/",
+    "clipboardWrite"]
+,
+  "requirements": {
+    "3D": {
+      "features": ["webgl"]
+    }
+  },
+  "import": [{"id": "mfaihdlpglflfgpfjcifdjdjcckigekc"}],
+  "file_handlers": {"arc.both.0": {"types": ["application/x-crossword"], "extensions": ["puz"]}},
+  
+  
+  "arc_metadata": {
+    "apkList": [
+      "app-release.apk"
+    ],
+    "enableExternalDirectory": false,
+    "formFactor": "tablet",
+    "name": "Shortyz",
+    "orientation": "landscape",
+    "packageName": "com.totsp.crossword.shortyz"
+  }
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:paddingLeft="10dp"
+  android:paddingRight="10dp"
+  android:minWidth="300dp"
+  android:background="@color/background_material_light">
+  
+  <TextView android:id="@+id/clueLine"
+  	android:textSize="14dp"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:layout_marginTop="3dp"
+  	android:gravity="center_horizontal" 
+  	android:textColor="@color/textColorPrimary"/>
+  
+  <TextView android:id="@+id/clueWord"
+  	android:textSize="8dp"
+  	android:typeface="monospace"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:layout_marginBottom="3dp"
+  	android:gravity="center_horizontal" 
+  	android:textColor="@color/textColorSecondary"/>
+  
+</LinearLayout>

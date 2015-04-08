@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+    <application>shortyz-xword</application>
+    <version>81</version>
+
+    <system-properties>
+        <!--property name="java.util.logging.config.file" value="WEB-INF/classes/logging.properties"/-->
+    </system-properties>
+
+    <sessions-enabled>true</sessions-enabled>
+    <static-files>
+        <include path="/basic/**" />
+        <include path="/gadget/**" />
+        <include path="/gwave/**" />
+        <include path="/favicon.ico" />
+        <!--include path="/debug/**" /-->
+        <include path="/static/**" />
+    </static-files>
+</appengine-web-app>

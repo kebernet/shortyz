@@ -1,0 +1,92 @@
+apply plugin: 'android'
+
+android {
+    Properties props = new Properties()
+    props.load(new FileInputStream(System.getProperty("user.home")+"/androidkeyinfo.properties"))
+    compileSdkVersion 21
+    buildToolsVersion '19.1.0'
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 21
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    }
+    signingConfigs {
+        debug {
+            storeFile file(System.getProperty("user.home")+"/androidkeystore")
+            storePassword props.getProperty("storePassword")
+            keyAlias "robert \"kebernet\" cooper"
+            keyPassword props.getProperty("keyPassword")
+
+        }
+
+        release {
+            storeFile file(System.getProperty("user.home")+"/androidkeystore")
+            storePassword props.getProperty("storePassword")
+            keyAlias "robert \"kebernet\" cooper"
+            keyPassword props.getProperty("keyPassword")
+        }
+    }
+
+    buildTypes {
+        release {
+             signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:21.0.+'
+    compile 'com.google.android.gms:play-services:4.0.30'
+    compile project(":puzlib")
+    compile 'com.shamanland:fab:0.0.5'
+        compile 'com.github.traex.rippleeffect:library:1.2.2'
+    compile 'com.nineoldandroids:library:2.4.0'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.1'
+}
+
+
+task prepareChrome << {
+    def slurp = new XmlSlurper().parse("src/main/AndroidManifest.xml")
+    def versionCode = slurp.'@android:versionCode'.text()
+    def versionName = slurp.'@android:versionName'.text()
+    copy {
+        from("src/main/chrome") {
+            include "**/*.json"
+            include "**/*.html"
+            filter {
+                it.replaceAll('@@versionCode@@', versionCode)
+                        .replace('@@versionName@@', versionName)
+            }
+        }
+        into "build/chrome"
+    }
+    copy {
+        from("src/main/chrome") {
+            exclude "**/*.json"
+            exclude "**/*.html"
+        }
+        into "build/chrome"
+    }
+}
+
+task assembleChrome << {
+    copy {
+        from "build/outputs/apk/app-release.apk"
+        into "build/chrome/vendor/chromium/crx"
+    }
+}
+tasks.assembleChrome.dependsOn prepareChrome
+tasks.assembleChrome.dependsOn assembleRelease
+
+task packageChrome(type:Zip){
+    from "build/chrome"
+    archiveName "shortyz-chrome.zip"
+
+}
+
+tasks.packageChrome.dependsOn assembleChrome
+
+tasks.build.dependsOn packageChrome
+
+

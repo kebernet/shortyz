@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="30dp"
+  android:layout_height="30dp"
+  android:background="#FFFFFF">
+  <TextView 
+  	android:id="@+id/letter"
+  	android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:gravity="bottom|center_horizontal"
+    android:background="#FFFFFF"
+    android:text="J"
+    android:textColor="#000000"
+    android:textSize="20dp"
+  ></TextView>
+  <TextView
+  	android:id="@+id/clueNumber"
+  	android:layout_width="wrap_content"
+  	android:layout_height="wrap_content"
+  	android:text="100"
+  	android:typeface="monospace"
+    android:textColor="#0C0C0C"
+  	android:textSize="10dp"
+  	/>
+  
+</AbsoluteLayout>

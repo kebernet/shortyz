@@ -1,0 +1,10 @@
+<extension
+    name="Shortyz Crosswords"
+    thumbnailUrl="http://shortyz.kebernet.net/static/screenshot.png"
+    description="Solve crosswords from around the Internet with your friends.">
+  <author name="Robert kebernet Cooper"/>
+  <menuHook location="toolbar" text="Add Crossword Gadget"
+      iconUrl="http://shortyz.kebernet.net/static/icon22.png">
+    <insertGadget url="http://shortyz.kebernet.net/gwave/com.totsp.crossword.web.wave.ShortyzWave.gadget.xml"/>
+  </menuHook>
+</extension>

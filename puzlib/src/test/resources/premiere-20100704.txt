@@ -1,0 +1,182 @@
+{ 1  2  3  4  5  6  7 -1  8  9 10 11 12 13 14 -1 15 16 17 18 19 |
+20 00 00 00 00 00 00 -1 21 00 00 00 00 00 00 -1 22 00 00 00 00 |
+23 00 00 00 00 00 00 24 00 00 00 00 00 00 00 -1 25 00 00 00 00 |
+-1 -1 -1 -1 26 00 00 00 -1 -1 27 00 00 -1 -1 28 00 00 00 00 00 |
+29 30 31 32 00 00 -1 33 34 35 00 00 00 36 37 00 00 00 00 00 00 |
+38 00 00 00 00 00 39 -1 40 00 00 00 -1 41 00 00 -1 42 00 00 00 |
+43 00 00 00 -1 -1 44 45 00 00 -1 -1 46 00 00 00 47 00 -1 -1 -1 |
+48 00 00 00 49 50 00 00 00 00 51 52 00 00 00 00 00 -1 53 54 55 |
+56 00 00 -1 57 00 00 00 00 -1 58 00 00 -1 -1 59 00 60 00 00 00 |
+-1 -1 -1 61 00 00 00 00 -1 62 00 00 00 63 64 -1 -1 65 00 00 00 |
+66 67 68 00 00 00 00 00 69 00 00 00 00 00 00 70 71 00 00 00 00 |
+72 00 00 00 -1 -1 73 00 00 00 00 00 -1 74 00 00 00 00 -1 -1 -1 |
+75 00 00 00 76 77 -1 -1 78 00 00 -1 79 00 00 00 00 -1 80 81 82 |
+83 00 00 -1 84 00 85 86 00 00 00 87 00 00 00 00 00 88 00 00 00 |
+-1 -1 -1 89 00 00 00 00 00 -1 -1 90 00 00 00 -1 -1 91 00 00 00 |
+92 93 94 00 -1 95 00 00 -1 96 97 00 00 -1 98 99 100 00 00 00 00 |
+101 00 00 00 102 00 00 00 103 00 00 00 00 104 -1 105 00 00 00 00 00 |
+106 00 00 00 00 00 -1 -1 107 00 00 -1 -1 108 109 00 00 -1 -1 -1 -1 |
+110 00 00 00 00 -1 111 112 00 00 00 113 114 00 00 00 00 115 116 117 118 |
+119 00 00 00 00 -1 120 00 00 00 00 00 00 -1 121 00 00 00 00 00 00 |
+122 00 00 00 00 -1 123 00 00 00 00 00 00 -1 124 00 00 00 00 00 00
+{F R E S C O S # I N S U L I N # S T A S H |
+L I M E A D E # S U C R O S E # A H O M E |
+Y O U A N D W H O S E A R M Y # B A R O N |
+# # # # N E N E # # N N E # # B E T T O R |
+T H E B E S # Y A L E U N I V E R S I T Y |
+R O B E R T O # L A S S # G E M # O C H S |
+A S E C # # D U O S # # Y O R I C K # # # |
+Y E R K E S O B S E R V A T O R Y # S T P |
+S A T # K A R A T # E O N # # E S C H E R |
+# # # K E N A N # A C T N O W # # A A R E |
+Y I E L D I N G T H E R I G H T O F W A Y |
+A C N E # # T I R A D E # R O U G E # # # |
+R E V E R T # # I Z E # G A R B O # O A T |
+D R Y # Y A N K E E D O O D L E D A N D Y |
+# # # P E R O N S # # F R Y E # # T E A K |
+C A S H # O N A # P A N E # D I C T A T E |
+Y U K O N T E R R I T O R Y # P L A T E S |
+C R A T E S # # E L M # # A S H E # # # # |
+L O G O S # T H E F O U R T H O F J U L Y |
+E R G O T # W A V E S T O # A N T O N I O |
+R A S P S # A L E R T E D # G E S T A P O
+{1. Murals on plaster |
+8. Glucose-level regulator |
+15. Squirrel away |
+20. Tart, green juice drink |
+21. Sweet stuff |
+22. Hit -- run |
+23. Cocky retort to a bully |
+25. Lowest peer |
+26. Aloha State state bird |
+27. Miami-to-Boston dir. |
+28. Casino patron |
+29. Ancient Egyptian city |
+33. Bulldogs' school |
+38. Baseballer Clemente |
+40. Damsel |
+41. Cameo, e.g. |
+42. Phil of folk |
+43. 'Just --!' ('Hold on!') |
+44. Two-person bands |
+46. 'Hamlet' court jester |
+48. Home of the world's largest refracting telescope |
+53. Fuel additive brand |
+56. Gained a lap |
+57. 24- -- gold |
+58. Umpteen years |
+59. Optical illusion artist M.C. -- |
+61. Kel's pal on Nickelodeon |
+62. Ad plea |
+65. River of Switzerland |
+66. Stopping to let a pedestrian cross |
+72. Skin condition |
+73. Diatribe |
+74. Red makeup |
+75. Go back (to) |
+78. Suffix with verbal |
+79. Greta of old films |
+80. Cereal grass |
+83. Like deserts |
+84. Boy born on 111-Across, in song |
+89. 'Evita' family |
+90. 'Punky Brewster' star Soleil Moon -- |
+91. Wood for shipbuilding |
+92. Moola |
+95. Go -- tear |
+96. Door glass |
+98. Give orders |
+101. Its capital is Whitehorse |
+105. Some china |
+106. Shipping boxes |
+107. Tall tree |
+108. Tennis champ Arthur |
+110. Letterhead designs |
+111. Letter that begins and ends this puzzle's six longest answers |
+119. Grain fungus |
+120. Greets from afar |
+121. Banderas of 'Spy Kids' |
+122. Abrades |
+123. Made aware |
+124. Brutal force 
+{1. With 114-Down, light fishing gear |
+2. Carnival site |
+3. Aussie avian |
+4. Viking realm |
+5. One preserving fruit, e.g. |
+6. Most weird |
+7. In stitches |
+8. Equi- equivalent |
+9. Xi preceders |
+10. Act divisions |
+11. Neighbor of Neptune |
+12. Italian film star Sophia |
+13. Belief |
+14. Napoleonic marshal Michel |
+15. Duel sword |
+16. 'No prob' |
+17. Of a major blood vessel |
+18. Not lumpy |
+19. Ford and Fonda |
+24. 'Psst!' |
+28. Stick in the mud |
+29. Dish holders |
+30. Daniel-Joel linkup |
+31. Roger with an influential thumb |
+32. Glenn of Fox News |
+34. 'It's -- cause!' |
+35. Do high-tech surgery on |
+36. Gershwin's '-- Rhythm' |
+37. -- Beach, Florida |
+39. Aroma emitter |
+45. African river |
+46. New Age pianist |
+47. Young and Coleman |
+49. Barely got, with 'out' |
+50. -- -Flush (bathroom brand) |
+51. Ebbed |
+52. 'À -- santé!' |
+53. George Bernard -- |
+54. Prefix with byte |
+55. Be raptorial |
+60. Little eatery |
+61. Artist Paul |
+62. In -- (foggy) |
+63. Actress Gail |
+64. Like fingerprints |
+66. Gridiron unit |
+67. Frosting tool |
+68. Jealousy |
+69. Endeavors |
+70. Idiot box |
+71. Psalm start |
+76. Cereal grass |
+77. Prophetic cards |
+79. One piercing |
+80. -- a time |
+81. Have -- with destiny |
+82. Kiddies |
+85. All's opposite |
+86. Tree knot |
+87. -- use (worthless) |
+88. '-- boy!' |
+89. Kodak moment |
+92. Bike rider |
+93. -- borealis (northern lights) |
+94. Country singer Ricky |
+96. Steal pettily |
+97. Maximally |
+99. 'There's an app for that' device |
+100. Crevices |
+102. Kite sites |
+103. Actor Christopher |
+104. Sun -- -sen |
+109. Kind of rug |
+111. Old Delta rival |
+112. '2001' villain |
+113. Sport- -- |
+114. See 1-Down |
+115. Write quickly |
+116. A, in Italy |
+117. Insolence |
+118. '-- -hoo!'

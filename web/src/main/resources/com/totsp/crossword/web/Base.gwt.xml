@@ -1,0 +1,22 @@
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name="com.googlecode.gwtx.Java"/>
+    <inherits name="com.totsp.crossword.Puz" />
+    <inherits name="com.google.gwt.inject.Inject"/>
+    <inherits name="com.google.gwt.resources.Resources" />
+    <inherits name="com.totsp.gwittir.Gwittir" />
+    <inherits name="com.totsp.gwittir.LoggingDisabled" />
+    <inherits name="com.google.gwt.user.theme.chrome.Chrome" />
+    <inherits name="com.totsp.gwittir.serial.json.JSON" />
+
+    <replace-with
+        class="com.totsp.crossword.web.client.rebind.WASDCodesSafari">
+        <when-type-is class="com.totsp.crossword.web.client.WASDCodes"/>
+        <when-property-is name="user.agent" value="safari"/>
+    </replace-with>
+
+    <source path="client" />
+    <source path="shared" />
+
+</module>

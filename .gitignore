@@ -1,0 +1,31 @@
+# See gitignore(5) or http://git-scm.com/docs/gitignore for syntax.
+#
+# These should all be checked.  bin is questionable, as it would match
+# directories we have checked in currently.  Therefore it is disabled.
+.settings
+.myumldata
+activemq-data
+#bin
+.idea
+*.iml
+.gradle
+.project
+.settings
+.classpath
+nbactions.xml
+/out
+/?
+
+build
+target
+gen
+
+/unit_test/com/gaggle/test/DirectoryTestRunner.java
+/bin
+/.gwt
+/.apt_generated
+/www-test
+/*.eml
+/*.ipr
+/*.iws
+

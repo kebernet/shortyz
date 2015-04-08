@@ -1,0 +1,34 @@
+body {
+    background-color: black;
+    background-image: url("/static/bggrad.png");
+    background-position: bottom;
+    background-repeat: repeat-x;
+}
+h1 {
+    padding-left: 30px;
+    font-family: "Century Gothic", "Avant Garde", "Gothic", sans-serif;
+    font-size: 32pt;
+    color: #EDEDED;
+    font-weight: bold;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+h2 {
+    padding-left: 30px;
+    padding-top: 0px;
+    margin-top: 0px;
+    font-family: "Century Gothic", "Avant Garde", "Gothic", sans-serif;
+    font-size: 18pt;
+    color: teal;
+}
+
+.content-container {
+    
+}
+
+.root-panel {
+    width: 750px;
+    height: 490px;
+    overflow: auto;
+    
+}

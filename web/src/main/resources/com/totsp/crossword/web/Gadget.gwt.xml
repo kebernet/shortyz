@@ -1,0 +1,13 @@
+<module rename-to="gadget">
+    <inherits name="com.google.gwt.gadgets.Gadgets" />
+    <inherits name="com.totsp.crossword.web.Base" />
+
+    <define-linker name="gadget"
+        class="com.totsp.crossword.misc.GadgetLinker" />
+    <add-linker name="gadget" />
+
+    <entry-point class="com.totsp.crossword.web.gadget.ShortyzGadget" />
+    <source path="gadget" />
+    <source path="client" />
+    <source path="shared" />
+</module>

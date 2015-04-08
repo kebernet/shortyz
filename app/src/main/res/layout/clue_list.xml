@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+
+        <android.inputmethodservice.KeyboardView
+            android:id="@+id/clueKeyboard"
+            android:layout_alignParentBottom="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:keyBackground="@color/background_material_light"
+            android:keyTextColor="@color/textColorPrimary"
+            android:background="@color/background_material_light"
+            android:shadowRadius="0.0"
+            android:keyPreviewLayout="@layout/key_preview"
+            />
+        
+        <com.totsp.crossword.view.ScrollingImageView
+        	android:id="@+id/miniboard"
+        	android:layout_width="fill_parent"
+        	android:layout_height="40dp"
+        />
+        <TabWidget
+        	android:layout_below="@id/miniboard"
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:focusable="false"/>
+        
+        <FrameLayout
+            android:layout_below="@android:id/tabs"
+            android:layout_above="@id/clueKeyboard"
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <ListView android:id="@+id/downList"
+         	android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+         	/>    
+         	<ListView android:id="@+id/acrossList"
+         	android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+         	/>    
+         </FrameLayout>
+    </RelativeLayout>
+</TabHost>

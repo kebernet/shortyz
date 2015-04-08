@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+	<TextView android:id="@+id/clueLine" 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:textSize="12dip" 
+		android:minLines="2"
+		android:maxLines="4"
+		android:textColor="#FFFFFF"
+		android:background="#2C2C2C"
+	/>
+	<android.inputmethodservice.KeyboardView
+		android:id="@+id/playKeyboard"
+		android:layout_alignParentBottom="true"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+        android:keyTextColor="@color/textColorPrimary"
+        android:keyBackground="@color/transparent"
+        android:background="@color/background_material_light"
+        android:shadowRadius="0.0"
+        android:keyPreviewLayout="@layout/key_preview"
+        />
+	/>
+	
+	<com.totsp.crossword.view.ScrollingImageView
+		android:id="@+id/board"
+		android:layout_below="@id/clueLine"
+		android:layout_above="@id/playKeyboard"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:scrollbars="horizontal|vertical"
+        android:background="#000000"
+	/>
+	
+	
+</RelativeLayout>	

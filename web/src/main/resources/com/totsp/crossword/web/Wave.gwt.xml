@@ -1,0 +1,14 @@
+<module rename-to="gwave">
+    <inherits name="com.google.gwt.gadgets.Gadgets" />
+    <inherits name="com.totsp.crossword.web.Base" />
+    <inherits name='org.cobogw.gwt.waveapi.gadget.WaveGadget' />
+
+    <!--set-property name="user.agent" value="safari" /-->
+    <define-linker name="gadget"
+        class="com.totsp.crossword.misc.GadgetLinker" />
+    <add-linker name="gadget" />
+
+    <entry-point class="com.totsp.crossword.web.wave.ShortyzWave" />
+    
+    <source path="wave" />
+</module>   

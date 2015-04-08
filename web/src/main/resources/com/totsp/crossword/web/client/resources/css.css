@@ -1,0 +1,179 @@
+.table {
+    color: black;
+    background-color: black;
+}
+
+.ssa {
+    border: 1px solid black;
+    border-radius: 3px;
+    \-moz-border-radius: 3px;
+    \-webkit-border-radius: 3px;
+}
+
+.black {
+    color: black;
+    background-color: black;
+    width: 27px;
+    height: 27px;
+}
+
+.square {
+    background-color: white;
+    font-family: Verdana;
+    font-size: 15px;
+    text-align: left;
+    vertical-align: top;
+    width: 27px;
+    height: 27px;
+    /*border: 1px solid black;*/
+}
+
+.number {
+    font-family: Verdana;
+    font-size: 8px;
+    height: 15px;
+    width: 25px;
+}
+
+.letter {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 5px;
+}
+
+.cursor {
+    width: 23px;
+    height: 23px;
+    border: 2px dashed red;
+    margin: 0px;
+    padding: 0px;
+}
+
+.boxPanel {
+    width: 27px;
+    height: 27px;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+.currentHighlightWord {
+    background-color: #FFAE57;
+}
+
+.currentLetterHighlight {
+    background-color: #EB6000;
+    /*border: 1px outset black;*/
+}
+
+.highlightClue{
+   background-color: #FFAE57;
+}
+
+
+.cheated {
+     background-color: #FFCCCC;
+}
+
+.error {
+    background-color: red;
+}
+
+
+.clueBox {
+    min-height: 30px;
+    border-bottom: 1px solid silver;
+    font-family: Verdana;
+    font-size: 10pt;
+    padding-left: 4px;
+    padding-right: 4px;
+    width: 100%;
+}
+
+.clueNumber {
+    font-size: 8pt;
+    width: 15%;
+}
+
+.pdDate{
+    font-size: 8pt;
+    font-family: Verdana;
+    text-align: center;
+}
+
+.pdTitle{
+    font-size: 10pt;
+    font-family: Verdana;
+    text-align: left;
+}
+
+.pdSource{
+    font-size: 12pt;
+    font-family: Verdana;
+}
+.pd {
+    border-bottom: 1px solid silver;
+    width: 100%;
+    cursor: pointer;
+}
+
+.pdOver {
+    background-color: #DDDDFF;
+}
+
+
+.puzzleListView{
+    width: 100%;
+}
+
+.statusHidden{
+    font-family: Verdana;
+    height: 15px;
+    background-color: transparent;
+    color: white;
+    padding: 2px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.statusInfo {
+    font-family: Verdana;
+    height: 15px;
+    background-color: #FFDD99;
+    color: black;
+    padding: 2px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.statusError {
+    font-family: Verdana;
+    height: 15px;
+    background-color: #FFCCCC;
+    color: black;
+    padding: 2px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.keyboardIntercept{
+    position: absolute;
+    left: -10px;
+    top: -10px;
+}
+
+.clueLine {
+    color: white;
+    background-color: black;
+    border: 1px outset black;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 5px;
+    margin-bottom: 2px;
+    width: 425px;
+}
