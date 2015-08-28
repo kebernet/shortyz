@@ -29,27 +29,22 @@ public class Box implements Serializable {
         Box other = (Box) obj;
 
         if (isAcross() != other.isAcross()) {
-        	System.out.println("across");
-            return false;
+        	return false;
         }
 
         if (isCheated() != other.isCheated()) {
-        	System.out.println("cheated");
-            return false;
+        	return false;
         }
 
         if (getClueNumber() != other.getClueNumber()) {
-        	System.out.println("clueNumber");
-            return false;
+        	return false;
         }
 
         if (isDown() != other.isDown()) {
-        	System.out.println("down");
-            return false;
+        	return false;
         }
         
         if (isCircled() != other.isCircled()) {
-        	System.out.println("circled");
         	return false;
         }
 
@@ -62,8 +57,7 @@ public class Box implements Serializable {
         }
 
         if (getResponse() != other.getResponse()) {
-        	System.out.println("response");
-            return false;
+        	return false;
         }
 
         if (getSolution() != other.getSolution()) {

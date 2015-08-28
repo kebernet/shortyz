@@ -35,7 +35,7 @@ public class FileHandle implements Comparable<FileHandle> {
     }
 
     int getProgress() {
-        return (meta == null) ? 0 : (meta.updateable ? (-1) : meta.percentComplete);
+        return (meta == null) ? 0 : (meta.updatable ? (-1) : meta.percentComplete);
     }
 
     String getSource() {

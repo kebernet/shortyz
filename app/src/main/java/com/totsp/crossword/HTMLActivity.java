@@ -2,16 +2,15 @@ package com.totsp.crossword;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 
-import com.shamanland.fab.FloatingActionButton;
-import com.shamanland.fab.ShowHideOnScroll;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.versions.AndroidVersionUtils;
+import com.totsp.crossword.view.recycler.ShowHideOnScroll;
 
 
 public class HTMLActivity extends ShortyzActivity {
@@ -31,7 +30,6 @@ public class HTMLActivity extends ShortyzActivity {
         webview.loadUrl(u.toString());
         FloatingActionButton download = (FloatingActionButton) this.findViewById(R.id.button_floating_action);
         if(download != null) {
-            System.out.println("DOING FAB");
             download.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

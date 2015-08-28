@@ -31,7 +31,7 @@ public class KFSDownloader extends AbstractDownloader {
     private int[] days;
 
     public KFSDownloader(String shortName, String fullName, String author, int[] days) {
-        super("http://" + shortName + ".king-online.com/clues/", DOWNLOAD_DIR, fullName);
+        super("http://puzzles.kingdigital.com/javacontent/clues/"+shortName+"/", DOWNLOAD_DIR, fullName);
         this.fullName = fullName;
         this.author = author;
         this.days = days;

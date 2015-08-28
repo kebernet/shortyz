@@ -13,23 +13,17 @@
   	android:layout_height="fill_parent"
   />
 
-    <com.andexert.library.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        app:rv_color="#fff">
-    <com.shamanland.fab.FloatingActionButton
+
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_floating_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:floatingActionButtonColor="#f44"
-        app:floatingActionButtonSize="normal"
-        />
-    </com.andexert.library.RippleView>
+        app:fabSize="normal"
+        app:backgroundTint="#F44"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"/>
+
   
 </RelativeLayout>

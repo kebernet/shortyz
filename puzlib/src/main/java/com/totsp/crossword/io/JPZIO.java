@@ -136,7 +136,6 @@ public class JPZIO {
 			Puzzle puz = readPuzzle(is);
 			puz.setDate(d);
 			puz.setVersion(IO.VERSION_STRING);
-
 			IO.saveNative(puz, os);
 
 			return true;

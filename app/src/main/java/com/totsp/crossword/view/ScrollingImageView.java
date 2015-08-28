@@ -24,8 +24,8 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
     private ScrollLocation scaleScrollLocation;
     private Timer longTouchTimer = new Timer();
     private boolean longTouched;
-    private float maxScale = 2.5f;
-    private float minScale = 0.25f;
+    private float maxScale = 1.5f;
+    private float minScale = 0.20f;
     private float runningScale = 1.0f;
     private boolean haveAdded = false;
     public ScrollingImageView(Context context, AttributeSet as) {
@@ -41,13 +41,10 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
                                              .newInstance();
                 aux.init(this);
             } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (InstantiationException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -149,9 +146,6 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
         int maxScrollX = this.getMaxScrollX();
         int x = p.x;
         int maxScrollY = this.getMaxScrollY();
-        ;
-        
-        
 
         int y = p.y;
 
@@ -160,23 +154,22 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
         int currentMinY = this.getScrollY();
         int currentMaxY = this.getHeight() + this.getScrollY();
 
-        LOG.info("X range " + currentMinX + " to " + currentMaxX);
-        LOG.info("Desired X:" + x);
-        LOG.info("Y range " + currentMinY + " to " + currentMaxY);
-        LOG.info("Desired Y:" + y);
+//        LOG.info("X range " + currentMinX + " to " + currentMaxX);
+//        LOG.info("Desired X:" + x);
+//        LOG.info("Y range " + currentMinY + " to " + currentMaxY);
+//        LOG.info("Desired Y:" + y);
 
         if ((x < currentMinX) || (x > currentMaxX)) {
             this.scrollTo((x > maxScrollX) ? maxScrollX : (x), this.getScrollY());
         }
 
         if ((y < currentMinY) || (y > currentMaxY)) {
-            LOG.info("Y adjust " + (y > maxScrollY ? maxScrollY : (y)));
+//            LOG.info("Y adjust " + (y > maxScrollY ? maxScrollY : (y)));
             this.scrollTo(this.getScrollX(), (y > maxScrollY) ? maxScrollY : (y));
         }
     }
 
     public boolean onDown(MotionEvent e) {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -250,7 +243,7 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
         Point p = this.resolveToImagePoint(e.getX(), e.getY());
         this.longTouchTimer.cancel();
 
-        if (this.longTouched == true) {
+        if (this.longTouched) {
             this.longTouched = false;
         } else {
             if (this.ctxListener != null) {
@@ -326,10 +319,10 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
             scale = 1.0F;
         }
 
-        if(scale * this.currentScale > 2.5 ){
+        if(scale * this.currentScale > maxScale ){
         	return;
         } 
-        if(scale * this.currentScale < .5){
+        if(scale * this.currentScale < minScale){
         	return;
         }
         int h = imageView.getHeight();
@@ -345,6 +338,7 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
 
     public void zoomEnd() {
         if ((this.scaleListener != null) && (this.scaleScrollLocation != null)) {
+            LOG.info("Zoom end "+runningScale);
             scaleListener.onScale(runningScale,
                 this.scaleScrollLocation.findNewPoint(imageView.getWidth(), imageView.getHeight()));
             this.scaleScrollLocation.fixScroll(imageView.getWidth(), imageView.getHeight(), true);
@@ -364,7 +358,7 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
         runningScale = 1.0f;
     }
 
-    public static interface AuxTouchHandler {
+    public interface AuxTouchHandler {
         boolean inProgress();
 
         void init(ScrollingImageView view);
@@ -372,13 +366,13 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
         boolean onTouchEvent(MotionEvent ev);
     }
 
-    public static interface ClickListener {
-        public void onContextMenu(Point e);
+    public interface ClickListener {
+        void onContextMenu(Point e);
 
-        public void onTap(Point e);
+        void onTap(Point e);
     }
 
-    public static interface ScaleListener {
+    public interface ScaleListener {
         void onScale(float scale, Point center);
     }
 

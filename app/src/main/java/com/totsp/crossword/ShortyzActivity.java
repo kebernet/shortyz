@@ -15,9 +15,12 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import com.totsp.crossword.versions.AndroidVersionUtils;
+
+import java.lang.reflect.Field;
 
 public class ShortyzActivity extends BaseGameActivity {
 	protected AndroidVersionUtils utils = AndroidVersionUtils.Factory
@@ -46,6 +49,20 @@ public class ShortyzActivity extends BaseGameActivity {
 			return;
 		}
 		doOrientation();
+
+	}
+
+	protected void showMenuAlways(){
+		try {
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+			if(menuKeyField != null) {
+				menuKeyField.setAccessible(true);
+				menuKeyField.setBoolean(config, false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -87,11 +104,11 @@ public class ShortyzActivity extends BaseGameActivity {
 	}
 
     public void onSignInFailed() {
-        Toast.makeText(this, "Not signed in.", Toast.LENGTH_SHORT);
+        //Toast.makeText(this, "Not signed in.", Toast.LENGTH_SHORT);
     }
 
     public void onSignInSucceeded() {
-        Toast.makeText(this, "Signed in", Toast.LENGTH_SHORT);
+        //Toast.makeText(this, "Signed in", Toast.LENGTH_SHORT);
         if(this.mHelper != null && !this.mHelper.getGamesClient().isConnected()){
             this.mHelper.getGamesClient().connect();
         }
@@ -100,17 +117,19 @@ public class ShortyzActivity extends BaseGameActivity {
     protected Bitmap createBitmap(String fontFile, String character){
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int size = (int)(48 * metrics.density);
-        Bitmap bitmap = Bitmap.createBitmap( size , size, Bitmap.Config.ARGB_8888);
+		int dpi = Math.round(160F * metrics.density);
+        int size = dpi / 2;
+		System.out.println("BITMAT SIZE "+size);
+        Bitmap bitmap = Bitmap.createBitmap(size , size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint p = new Paint();
         p.setColor(Color.WHITE);
         p.setStyle(Paint.Style.FILL);
         p.setTypeface(Typeface.createFromAsset(getAssets(), fontFile));
-        p.setTextSize(size / 2);
+        p.setTextSize(size);
         p.setAntiAlias(true);
         p.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(character, size/2, size / 2 +size / 5, p );
+        canvas.drawText(character, size/2, size - size / 5, p );
         return bitmap;
 
     }

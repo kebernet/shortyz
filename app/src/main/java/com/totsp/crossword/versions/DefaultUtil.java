@@ -22,6 +22,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.Window;
 
+import com.totsp.crossword.io.IO;
 import com.totsp.crossword.net.AbstractDownloader;
 import com.totsp.crossword.puz.PuzzleMeta;
 
@@ -50,11 +51,11 @@ public class DefaultUtil implements AndroidVersionUtils {
 			FileOutputStream fos = new FileOutputStream(destination);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			
-			AbstractDownloader.copyStream(entity.getContent(), baos);
+			IO.copyStream(entity.getContent(), baos);
 			if(url.toExternalForm().indexOf("crnet") != -1){
 				System.out.println(new String(baos.toByteArray()));
 			}
-			AbstractDownloader.copyStream(new ByteArrayInputStream(baos.toByteArray()), fos);
+			IO.copyStream(new ByteArrayInputStream(baos.toByteArray()), fos);
 			fos.close();
 			return true;
 

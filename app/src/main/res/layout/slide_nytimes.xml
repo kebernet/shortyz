@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    >
+
+    <LinearLayout
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:id="@+id/main">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingLeft="32dp"
+            android:layout_weight="3"
+            android:fontFamily="sans-serif-thin"
+            android:textColor="#000"
+            android:paddingRight="32dp"
+            android:textSize="28sp"
+            android:text="New York Times"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="5">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:src="@drawable/nyt_crossword_logo"/>
+
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/loginForm" android:theme="@style/NYT">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" android:theme="@style/NYT">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/NYT">
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Username"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:id="@+id/username"
+                        android:textColor="#000"
+                        android:textColorHint="#000000"
+                        android:theme="@style/NYT"
+                        android:inputType="textEmailAddress"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/NYT">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:hint="Password"
+                        android:id="@+id/password"
+                        android:password="true"
+                        android:textColor="#000"
+                        android:textColorHint="#000"
+                        android:theme="@style/NYT"
+                        android:inputType="textPassword"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Login"
+                android:id="@+id/loginButton"
+                android:theme="@style/NYT" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#000"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:textSize="16sp"
+            android:text="If you have a NYT subscription, enter your information above."
+            android:id="@+id/slideText"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="64dp" />
+    </LinearLayout>
+
+</RelativeLayout>

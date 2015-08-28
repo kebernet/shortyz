@@ -5,15 +5,26 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.gmail.Gmail;
+import com.totsp.crossword.gmail.GMConstants;
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.Playboard;
 import com.totsp.crossword.view.PlayboardRenderer;
@@ -23,9 +34,17 @@ public class ShortyzApplication extends Application {
 	public static File DEBUG_DIR;
 	public static File CROSSWORDS = new File(
 			Environment.getExternalStorageDirectory(), "crosswords");
+	final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+	final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+	private static GoogleAccountCredential credential;
+	private static Gmail gmailService;
+	private static SharedPreferences settings;
 
 	@Override
 	public void onCreate() {
+		// Initialize credentials and service object.
+		settings = PreferenceManager.getDefaultSharedPreferences(this);
+		updateCredential(settings);
 		super.onCreate();
 
 		if (Environment.MEDIA_MOUNTED.equals(Environment
@@ -54,7 +73,7 @@ public class ShortyzApplication extends Application {
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-		} 
+		}
 	}
 
 	public static Playboard BOARD;
@@ -153,6 +172,33 @@ public class ShortyzApplication extends Application {
 			}
 		default:
 			return false;
+		}
+	}
+
+	public Gmail getGmailService(){
+		return gmailService;
+	}
+
+	public GoogleAccountCredential getCredential() {
+		return credential;
+	}
+
+	public SharedPreferences getSettings() {
+		return settings;
+	}
+
+	public void updateCredential(SharedPreferences prefs){
+		credential = GoogleAccountCredential.usingOAuth2(
+				getApplicationContext(), Arrays.asList(GMConstants.SCOPES))
+				.setBackOff(new ExponentialBackOff())
+				.setSelectedAccountName(prefs.getString(GMConstants.PREF_ACCOUNT_NAME, null));
+		if(credential != null && credential.getSelectedAccount() != null) {
+			gmailService = new com.google.api.services.gmail.Gmail.Builder(
+					transport, jsonFactory, credential)
+					.setApplicationName("Shortyz")
+					.build();
+		} else {
+			gmailService = null;
 		}
 	}
 }

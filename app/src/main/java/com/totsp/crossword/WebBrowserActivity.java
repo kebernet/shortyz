@@ -17,7 +17,7 @@ import android.widget.EditText;
 
 import com.totsp.crossword.shortyz.R;
 
-
+@SuppressWarnings("SetJavaScriptEnabled")
 public class WebBrowserActivity extends ShortyzActivity {
     private EditText mURL;
     private InputMethodManager mIMM;
@@ -32,11 +32,11 @@ public class WebBrowserActivity extends ShortyzActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_PROGRESS);
 
         setContentView(R.layout.web_browser_view);
 
-        ((Button) findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
+        (findViewById(R.id.close)).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // This tells the download picker to close itself.
                     WebBrowserActivity.this.setResult(RESULT_OK);

@@ -62,7 +62,7 @@ public class NYTDownloader extends AbstractDownloader {
 	private Handler handler = new Handler();
 	private HashMap<String, String> params = new HashMap<String, String>();
 
-	protected NYTDownloader(Context context, String username, String password) {
+	public NYTDownloader(Context context, String username, String password) {
 		super("http://www.nytimes.com/svc/crosswords/v2/puzzle/", DOWNLOAD_DIR, NAME);
 		this.context = context;
 		nf.setMinimumIntegerDigits(2);
@@ -113,7 +113,7 @@ public class NYTDownloader extends AbstractDownloader {
 				f.deleteOnExit();
 
 				FileOutputStream fos = new FileOutputStream(f);
-				AbstractDownloader.copyStream(
+				IO.copyStream(
 						response.getEntity().getContent(), fos);
 				fos.close();
 
@@ -180,7 +180,7 @@ public class NYTDownloader extends AbstractDownloader {
 			HttpGet fetchIndex = new HttpGet(
 					"http://select.nytimes.com/premium/xword/puzzles.html");
 			HttpResponse indexResponse = client.execute(fetchIndex);
-			AbstractDownloader.copyStream(indexResponse.getEntity()
+			IO.copyStream(indexResponse.getEntity()
 					.getContent(),
 					new FileOutputStream(downloadDirectory.getAbsolutePath()
 							+ "/debug/xword-puzzles.html"));
@@ -194,11 +194,11 @@ public class NYTDownloader extends AbstractDownloader {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				File f = new File(downloadDirectory, this.createFileName(date));
 				FileOutputStream fos = new FileOutputStream(f);
-				AbstractDownloader.copyStream(
+				IO.copyStream(
 						response.getEntity().getContent(), fos);
 				fos.close();
 
-				AbstractDownloader.copyStream(
+				IO.copyStream(
 						new FileInputStream(f),
 						new FileOutputStream(downloadDirectory
 								.getAbsolutePath() + "/debug/debug.puz"));
@@ -216,7 +216,7 @@ public class NYTDownloader extends AbstractDownloader {
 		return null;
 	}
 
-	private HttpClient login() throws IOException {
+	public HttpClient login() throws IOException {
 
         DefaultHttpClient httpclient = null;
 
@@ -321,14 +321,14 @@ public class NYTDownloader extends AbstractDownloader {
 			entity.writeTo(baos);
 
 			new File(this.downloadDirectory, "debug/").mkdirs();
-			copyStream(
+			IO.copyStream(
 					new ByteArrayInputStream(baos.toByteArray()),
 					new FileOutputStream(this.downloadDirectory
 							.getAbsolutePath() + "/debug/authresp.html"));
 
 			String resp = new String(baos.toByteArray());
-
-			if (resp.indexOf("Log in to manage") != -1) {
+			System.out.println(resp);
+			if (resp.indexOf("The combination you entered could not be found") != -1) {
 				System.out.println("=================== Password error\n"
 						+ resp);
 				this.handler.post(new Runnable() {

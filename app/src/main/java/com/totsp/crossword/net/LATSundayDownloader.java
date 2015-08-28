@@ -7,6 +7,7 @@ import java.util.Date;
 /**
  * Created by keber_000 on 2/11/14.
  */
+@SuppressWarnings("SimpleDateFormat")
 public class LATSundayDownloader extends AbstractJPZDownloader {
 
     private static final String NAME = "LAT Sunday Calendar";

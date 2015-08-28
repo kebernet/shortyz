@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
@@ -13,6 +12,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,12 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.shamanland.fab.FloatingActionButton;
-import com.shamanland.fab.ShowHideOnScroll;
+import android.support.design.widget.FloatingActionButton;
+
+import com.totsp.crossword.firstrun.FirstrunActivity;
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.net.Downloader;
 import com.totsp.crossword.net.Downloaders;
@@ -36,9 +38,10 @@ import com.totsp.crossword.puz.PuzzleMeta;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
 import com.totsp.crossword.view.CircleProgressBar;
-import com.totsp.crossword.view.CompositeOnTouchListener;
-import com.totsp.crossword.view.SeparatedListAdapter;
-import com.totsp.crossword.view.SwipeDismissListViewTouchListener;
+import com.totsp.crossword.view.recycler.RecyclerItemClickListener;
+import com.totsp.crossword.view.recycler.RemovableRecyclerViewAdapter;
+import com.totsp.crossword.view.recycler.SeparatedRecyclerViewAdapter;
+import com.totsp.crossword.view.recycler.ShowHideOnScroll;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,22 +53,25 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
-public class BrowseActivity extends ShortyzActivity implements OnItemClickListener {
+@SuppressWarnings("SimpleDateFormat")
+public class BrowseActivity extends ShortyzActivity implements RecyclerItemClickListener.OnItemClickListener{
     private static final String MENU_ARCHIVES = "Archives";
     private static final int DOWNLOAD_DIALOG_ID = 0;
     private static final long DAY = 24L * 60L * 60L * 1000L;
+    private static final Logger LOGGER = Logger.getLogger(BrowseActivity.class.getCanonicalName());
     private Accessor accessor = Accessor.DATE_DESC;
-    private SeparatedListAdapter currentAdapter = null;
-    private Dialog mDownloadDialog;
+    private SeparatedRecyclerViewAdapter currentAdapter = null;
+    private Dialog downloadDialog;
     private File archiveFolder = new File(Environment.getExternalStorageDirectory(), "crosswords/archive");
     private File contextFile;
     private File crosswordsFolder = new File(Environment.getExternalStorageDirectory(), "crosswords");
     private FileHandle lastOpenedHandle = null;
     private Handler handler = new Handler();
     private List<String> sourceList = new ArrayList<String>();
-    private ListView puzzleList;
+    private RecyclerView puzzleList;
     private ListView sources;
     private MenuItem archiveMenuItem;
     private NotificationManager nm;
@@ -90,6 +96,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
             item = menu.add(viewArchive ? "Un-archive" : "Archive");
             utils.onActionBarWithText(item);
             item.setIcon(R.drawable.ic_action_remove);
+            download.setVisibility(View.GONE);
             return true;
         }
 
@@ -126,9 +133,11 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
         public void onDestroyActionMode(ActionMode actionMode) {
             selected.clear();
             render();
+            download.setVisibility(View.VISIBLE);
         }
     };
     private int primaryTextColor;
+
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -172,33 +181,6 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
 
         return super.onContextItemSelected(item);
     }
-
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
-//        AdapterView.AdapterContextMenuInfo info;
-//
-//        try {
-//            info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-//        } catch (ClassCastException e) {
-//            Log.e("com.totsp.crossword", "bad menuInfo", e);
-//
-//            return;
-//        }
-//
-//        contextFile = ((FileHandle) this.puzzleList.getAdapter()
-//                                                   .getItem(info.position)).file;
-//
-//        PuzzleMeta meta = ((FileHandle) this.puzzleList.getAdapter()
-//                                                       .getItem(info.position)).meta;
-//        menu.setHeaderTitle(contextFile.getName());
-//
-//        menu.add("Delete");
-//        this.archiveMenuItem = menu.add(this.viewArchive ? "Un-archive" : "Archive");
-//
-//        if ((meta != null) && meta.updateable) {
-//            menu.add("Mark as Updated");
-//        }
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -247,33 +229,6 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
         }
     }
 
-    public void onItemClick(AdapterView<?> l, final View v, int position, long id) {
-        if(!this.selected.isEmpty()){
-            if(selected.contains(v.getTag())){
-                setListItemColor(v, false);
-                selected.remove(v.getTag());
-            } else {
-                setListItemColor(v, true);
-                selected.add((FileHandle) v.getTag());
-            }
-            if(selected.isEmpty()){
-                actionMode.finish();
-            }
-        } else {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    lastOpenedView = v;
-                    lastOpenedHandle = ((FileHandle) v.getTag());
-
-                    File puzFile = lastOpenedHandle.file;
-                    Intent i = new Intent(Intent.ACTION_EDIT, Uri.fromFile(puzFile), BrowseActivity.this, PlayActivity.class);
-                    startActivity(i);
-                }
-            }, 450);
-        }
-
-    }
 
     @SuppressWarnings("deprecation")
 	@Override
@@ -326,21 +281,21 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
             this.accessor = Accessor.SOURCE;
             prefs.edit()
                  .putInt("sort", 2)
-                 .commit();
+                 .apply();
             this.render();
         } else if (item.getTitle()
                            .equals("By Date (Ascending)")) {
             this.accessor = Accessor.DATE_ASC;
             prefs.edit()
                  .putInt("sort", 1)
-                 .commit();
+                 .apply();
             this.render();
         } else if (item.getTitle()
                            .equals("By Date (Descending)")) {
             this.accessor = Accessor.DATE_DESC;
             prefs.edit()
                  .putInt("sort", 0)
-                 .commit();
+                 .apply();
             this.render();
         } else if("Send Debug Package".equals(item.getTitle())){
         	Intent i = ShortyzApplication.sendDebug();
@@ -353,22 +308,66 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((resultCode == RESULT_OK) && (mDownloadDialog != null) && mDownloadDialog.isShowing()) {
+        if ((resultCode == RESULT_OK) && (downloadDialog != null) && downloadDialog.isShowing()) {
             // If the user hit close in the browser download activity, we close the dialog.
-            mDownloadDialog.dismiss();
+            downloadDialog.dismiss();
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!((ShortyzApplication) getApplication()).getSettings().getBoolean("didFirstRun", false)){
+            Intent i = new Intent(Intent.ACTION_VIEW, null, this, FirstrunActivity.class);
+            this.startActivity(i);
+            finish();
+            return;
+        }
         this.setTitle("Puzzles");
         //this.utils.hideTitleOnPortrait(this);
         setDefaultKeyMode(DEFAULT_KEYS_SHORTCUT);
         this.setContentView(R.layout.browse);
-        this.puzzleList = (ListView) this.findViewById(R.id.puzzleList);
-        this.puzzleList.setOnCreateContextMenuListener(this);
-        this.puzzleList.setOnItemClickListener(this);
+        this.showMenuAlways();
+        this.puzzleList = (RecyclerView) this.findViewById(R.id.puzzleList);
+        this.puzzleList.setLayoutManager(new LinearLayoutManager(this));
+        this.puzzleList.addOnItemTouchListener(new RecyclerItemClickListener(this, this.puzzleList, this));
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END,
+                ItemTouchHelper.START | ItemTouchHelper.END) {
+
+            @Override
+            public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                if (!(viewHolder instanceof FileViewHolder)) {
+                    return 0; // Don't swipe the headers.
+                }
+                return super.getSwipeDirs(recyclerView, viewHolder);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                if(!selected.isEmpty()){
+                    return;
+                }
+                if(!(viewHolder instanceof FileViewHolder)){
+                    return;
+                }
+                FileHandle handle = (FileHandle) ((FileViewHolder) viewHolder).itemView.getTag();
+                System.out.println(" SWIPED "+handle.file.getAbsolutePath());
+                if("DELETE".equals(prefs.getString("swipeAction", "DELETE"))) {
+                    deleteFile(handle.file);
+                } else {
+                    moveTo(handle.file, archiveFolder);
+                }
+                currentAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+                puzzleList.invalidate();
+            }
+        });
+        helper.attachToRecyclerView(this.puzzleList);
         this.sources = (ListView) this.findViewById(R.id.sourceList);
         upgradePreferences();
         this.nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -387,35 +386,8 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
         default:
             this.accessor = Accessor.DATE_DESC;
         }
-        SwipeDismissListViewTouchListener touchListener =
-                new SwipeDismissListViewTouchListener(
-                        puzzleList,
-                        new SwipeDismissListViewTouchListener.OnDismissCallback() {
-                            @Override
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                if(!selected.isEmpty()){
-                                    return;
-                                }
-                                for (int position : reverseSortedPositions) {
-                                    if(!(currentAdapter.getItem(position) instanceof FileHandle)){
-                                        puzzleList.invalidate();
-                                        continue;
-                                    }
-                                    FileHandle handle = (FileHandle) currentAdapter.getItem(position);
-                                    if("DELETE".equals(prefs.getString("swipeAction", "DELETE"))) {
-                                        deleteFile(handle.file);
-                                    } else {
-                                        moveTo(handle.file, archiveFolder);
-                                    }
-                                    currentAdapter.remove(position);
-                                }
-                                currentAdapter.notifyDataSetChanged();
-                            }
-                        });
 
-        // Setting this scroll listener is required to ensure that during ListView scrolling,
-        // we don't look for swipes.
-        puzzleList.setOnScrollListener(touchListener.makeScrollListener());
+
         download = (FloatingActionButton) this.findViewById(R.id.button_floating_action);
         if(download != null) {
             download.setOnClickListener(new View.OnClickListener() {
@@ -425,11 +397,8 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
                 }
             });
             download.setImageBitmap(createBitmap("icons1.ttf", ","));
-            if(prefs.getBoolean("disableSwipe", false)){
-                this.puzzleList.setOnTouchListener(new ShowHideOnScroll(download));
-            } else {
-                this.puzzleList.setOnTouchListener(new CompositeOnTouchListener(touchListener, new ShowHideOnScroll(download)));
-            }
+            this.puzzleList.setOnTouchListener(new ShowHideOnScroll(download));
+
         }
 
 
@@ -437,29 +406,10 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
         highlightColor = getResources().getColor(R.color.accent);
         normalColor = getResources().getColor(R.color.background_material_light);
         primaryTextColor = getResources().getColor(R.color.textColorPrimary);
-        this.puzzleList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
-                System.out.println("Item Long CLick");
-                if(v.getTag() instanceof FileHandle){
-                    if(selected.contains(v.getTag())){
-                        setListItemColor(v, false);
-                        selected.remove(v.getTag());
-                    } else {
-                        setListItemColor(v, true);
-                        selected.add((FileHandle) v.getTag());
-                    }
-                    getSupportActionBar().startActionMode(actionModeCallback);
-                    return true;
-                }
-                return false;
-            }
-        });
 
 
 
 
-        // DO NOT PUT ANYTHIGN YOU EXPECT TO RUN AHEAD OF THIS IN THE ONCREATE!
         if (!crosswordsFolder.exists()) {
             this.downloadTen();
 
@@ -469,9 +419,9 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
 
             return;
         } else if (prefs.getBoolean("release_4.0.5", true)) {
-            Editor e = prefs.edit();
-            e.putBoolean("release_4.0.5", false);
-            e.commit();
+            prefs.edit()
+                    .putBoolean("release_4.0.5", false)
+                    .apply();
 
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///android_asset/release.html"), this,
                     HTMLActivity.class);
@@ -495,7 +445,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
                     public void onDownloadSelected(Date d, List<Downloader> downloaders, int selected) {
                         List<Downloader> toDownload = new LinkedList<Downloader>();
                         boolean scrape;
-                        System.out.println(selected + " of " + downloaders.size());
+                        LOGGER.info("Downloaders: " + selected + " of " + downloaders);
 
                         if (selected == 0) {
                             // Download all available.
@@ -523,9 +473,9 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
                         }
                     });
 
-            mDownloadDialog = dpd.getInstance();
+            downloadDialog = dpd.getInstance();
 
-            return mDownloadDialog;
+            return downloadDialog;
         }
 
         return null;
@@ -543,7 +493,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
 
                     CircleProgressBar bar = (CircleProgressBar) lastOpenedView.findViewById(R.id.puzzle_progress);
 
-                    if (lastOpenedHandle.meta.updateable) {
+                    if (lastOpenedHandle.meta.updatable) {
                         bar.setPercentComplete(-1);
                     } else {
                         bar.setPercentComplete(lastOpenedHandle.getProgress());
@@ -557,7 +507,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
         this.checkDownload();
     }
 
-    private SeparatedListAdapter buildList(final Dialog dialog, File directory, Accessor accessor) {
+    private SeparatedRecyclerViewAdapter buildList(final Dialog dialog, File directory, Accessor accessor) {
         directory.mkdirs();
 
         long incept = System.currentTimeMillis();
@@ -566,7 +516,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
 
         if (!directory.exists()) {
             showSDCardHelp();
-            return  new SeparatedListAdapter(this);
+            return new SeparatedRecyclerViewAdapter(R.layout.puzzle_list_header);
         }
         
 
@@ -623,7 +573,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
             e.printStackTrace();
         }
 
-        SeparatedListAdapter adapter = new SeparatedListAdapter(this);
+        SeparatedRecyclerViewAdapter adapter = new SeparatedRecyclerViewAdapter(R.layout.puzzle_list_header);
         String lastHeader = null;
         ArrayList<FileHandle> current = new ArrayList<FileHandle>();
 
@@ -631,7 +581,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
             String check = accessor.getLabel(handle);
 
             if (!((lastHeader == null) || lastHeader.equals(check))) {
-                FileAdapter fa = new FileAdapter(this, R.layout.puzzle_list_item, R.id.puzzle_name, current.toArray(new FileHandle[current.size()]));
+                FileAdapter fa = new FileAdapter(current);
                 adapter.addSection(lastHeader, fa);
                 current = new ArrayList<FileHandle>();
             }
@@ -641,7 +591,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
         }
 
         if (lastHeader != null) {
-            FileAdapter fa = new FileAdapter(this, R.layout.puzzle_list_item, R.id.puzzle_name, current.toArray(new FileHandle[current.size()]));
+            FileAdapter fa = new FileAdapter(current);
             adapter.addSection(lastHeader, fa);
             current = new ArrayList<FileHandle>();
         }
@@ -668,7 +618,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
             this.download(new Date(), null, true);
             prefs.edit()
                  .putLong("dlLast", System.currentTimeMillis())
-                 .commit();
+                 .apply();
         }
     }
 
@@ -738,6 +688,7 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
 
     private void download(final Date d, final List<Downloader> downloaders, final boolean scrape) {
         final Downloaders dls = new Downloaders(prefs, nm, this);
+        LOGGER.info("Downloading from "+downloaders);
         new Thread(new Runnable() {
                 public void run() {
                     dls.download(d, downloaders);
@@ -852,6 +803,52 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
         }
     }
 
+    @Override
+    public void onItemClick(final View v, int position) {
+        if(!selected.isEmpty()){
+            if(selected.contains(v.getTag())){
+                setListItemColor(v, false);
+                selected.remove(v.getTag());
+            } else {
+                setListItemColor(v, true);
+                selected.add((FileHandle) v.getTag());
+            }
+            if(selected.isEmpty()){
+                actionMode.finish();
+            }
+        } else {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    lastOpenedView = v;
+                    lastOpenedHandle = ((FileHandle) v.getTag());
+                    if(lastOpenedHandle == null || lastOpenedHandle.file == null){
+                        return;
+                    }
+                    File puzFile = lastOpenedHandle.file;
+                    Intent i = new Intent(Intent.ACTION_EDIT, Uri.fromFile(puzFile), BrowseActivity.this, PlayActivity.class);
+                    startActivity(i);
+                }
+            }, 450);
+        }
+
+
+    }
+
+    @Override
+    public void onItemLongClick(View v, int position) {
+        if(v.getTag() instanceof FileHandle){
+            if(selected.contains(v.getTag())){
+                setListItemColor(v, false);
+                selected.remove(v.getTag());
+            } else {
+                setListItemColor(v, true);
+                selected.add((FileHandle) v.getTag());
+            }
+            getSupportActionBar().startActionMode(actionModeCallback);
+        }
+    }
+
     public static interface Provider<T> {
         T get();
     }
@@ -862,22 +859,25 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
         return result;
     }
 
-    private class FileAdapter extends ArrayAdapter<FileHandle> {
-        SimpleDateFormat df = new SimpleDateFormat("EEEEEEEEE\n MMM dd, yyyy");
+    private class FileAdapter extends RemovableRecyclerViewAdapter<FileViewHolder> {
+        final SimpleDateFormat df = new SimpleDateFormat("EEEEEEEEE\n MMM dd, yyyy");
+        final ArrayList<FileHandle> objects;
 
-        public FileAdapter(Context context, int resource, int textViewResourceId, FileHandle[] objects) {
-            super(context, resource, textViewResourceId, toArrayList(objects));
+        public FileAdapter(ArrayList<FileHandle> objects) {
+            this.objects = objects;
         }
 
+        @Override
+        public FileViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.puzzle_list_item, parent, false);
+            return new FileViewHolder(view);
+        }
 
-        public View getView(final int i, View view, ViewGroup group) {
-            if (view == null) {
-                LayoutInflater inflater = (LayoutInflater) BrowseActivity.this.getApplicationContext()
-                                                                              .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.puzzle_list_item, null);
-            }
-
-            FileHandle handle = getItem(i);
+        @Override
+        public void onBindViewHolder(FileViewHolder holder, int position) {
+            View view = holder.itemView;
+            FileHandle handle = objects.get(position);
             view.setTag(handle);
 
             TextView date = (TextView) view.findViewById(R.id.puzzle_date);
@@ -903,8 +903,25 @@ public class BrowseActivity extends ShortyzActivity implements OnItemClickListen
             caption.setText(handle.getCaption());
 
             setListItemColor(view, selected.contains(handle));
-
-            return view;
         }
+
+        @Override
+        public int getItemCount() {
+            return objects.size();
+        }
+
+        @Override
+        public void remove(int position) {
+            objects.remove(position);
+        }
+    }
+
+    private class FileViewHolder extends RecyclerView.ViewHolder {
+
+        public FileViewHolder(View itemView) {
+            super(itemView);
+        }
+
+
     }
 }

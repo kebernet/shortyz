@@ -2,7 +2,7 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
  
-<PreferenceCategory
+<com.jenzz.materialpreference.PreferenceCategory
 	android:title="Select Puzzle Sources">
 	<!-- Organized alphabetically and by category. -->
 	<PreferenceScreen
@@ -14,7 +14,7 @@
 			android:title="New York Times"
 			android:summary="Requires subscription."
 			android:key="selectNYTimes">
-			<CheckBoxPreference
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="New York Times"
 				android:defaultValue="false"
 				android:key="downloadNYT" />
@@ -32,11 +32,11 @@
 			 	android:title="Get a Subscription" 
 			 	android:key="nytSubscribe"/>
 		</PreferenceScreen>
-		<CheckBoxPreference
-			android:title="Washington Post"
-			android:defaultValue="true"
-			android:key="downloadWaPo" />
-		<CheckBoxPreference
+		<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+			<!--android:title="Washington Post"-->
+			<!--android:defaultValue="true"-->
+			<!--android:key="downloadWaPo" />-->
+		<com.jenzz.materialpreference.CheckBoxPreference
 			android:title="Newsday"
 			android:defaultValue="true"
 			android:key="downloadNewsday" />
@@ -45,29 +45,29 @@
 			android:defaultValue="true"
 			android:summary="Also known as CrosSynergy"
 			android:key="downloadChron" /-->
-<!-- 		<CheckBoxPreference -->
-<!-- 			android:title="Joseph Crosswords" -->
-<!-- 			android:defaultValue="true" -->
-<!-- 			android:summary="Updates Monday-Saturday" -->
-<!-- 			android:key="downloadJoseph" /> -->
-		<CheckBoxPreference
+ 		<CheckBoxPreference
+ 			android:title="Joseph Crosswords"
+ 			android:defaultValue="true"
+ 			android:summary="Updates Monday-Saturday"
+ 			android:key="downloadJoseph" />
+		<com.jenzz.materialpreference.CheckBoxPreference
 			android:title="Los Angeles Times"
 			android:defaultValue="true"
 			android:key="downloadLat" />
-<!-- 		<CheckBoxPreference -->
-<!-- 			android:title="Sheffer Crosswords" -->
-<!-- 			android:defaultValue="true" -->
-<!-- 			android:summary="Updates Monday-Saturday" -->
-<!-- 			android:key="downloadSheffer" /> -->
-		<!--<CheckBoxPreference-->
-			<!--android:title="Thinks.com"-->
-			<!--android:defaultValue="true"-->
-			<!--android:key="downloadThinks" />-->
+ 		<CheckBoxPreference
+ 			android:title="Sheffer Crosswords"
+ 			android:defaultValue="true"
+ 			android:summary="Updates Monday-Saturday"
+ 			android:key="downloadSheffer" />
 		<CheckBoxPreference
+			android:title="Thinks.com"
+			android:defaultValue="true"
+			android:key="downloadThinks" />
+		<com.jenzz.materialpreference.CheckBoxPreference
 			android:title="Universal Crossword"
 			android:defaultValue="true"
 			android:key="downloadUniversal" />
-		<CheckBoxPreference
+		<com.jenzz.materialpreference.CheckBoxPreference
 			android:title="USA Today"
 			android:defaultValue="true"
 			android:summary="Updates Monday-Saturday"
@@ -77,133 +77,133 @@
 		android:title="Weekly Crosswords"
 		android:summary="Puzzles which update weekly."
 		android:key="selectWeekly">
-		<PreferenceCategory android:title="Regular Sized">
+		<com.jenzz.materialpreference.PreferenceCategory android:title="Regular Sized">
 			<!--CheckBoxPreference
 				android:title="Brendan Emmett Quigley"
 				android:defaultValue="true"
 				android:summary="Updates Mondays &amp; Thursdays - brendanemmettquigley.com"
 				android:key="scrapeBEQ" /-->
-			<CheckBoxPreference
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="Ink Well"
 				android:defaultValue="true"
 				android:summary="Updates Fridays"
 				android:key="downloadInkwell" />
-			<CheckBoxPreference
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="Jonesin' Crosswords"
 				android:defaultValue="true"
 				android:summary="Updates Thursdays"
 				android:key="downloadJonesin" />
-			<CheckBoxPreference
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="New York Times Classic"
 				android:defaultValue="true"
 				android:summary="Updates Mondays"
 				android:key="downloadNYTClassic" />
-			<CheckBoxPreference
-				android:title="The Onion AV Club"
-				android:defaultValue="true"
-				android:summary="Updates Wednesdays"
-				android:key="downloadAvClub" />
-			<CheckBoxPreference
+			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+				<!--android:title="The Onion AV Club"-->
+				<!--android:defaultValue="true"-->
+				<!--android:summary="Updates Wednesdays"-->
+				<!--android:key="downloadAvClub" />-->
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="Washington Post Puzzler"
 				android:defaultValue="true"
 				android:summary="Updates Sundays"
 				android:key="downloadWaPoPuzzler" />
-		    <CheckBoxPreference
+		    <com.jenzz.materialpreference.CheckBoxPreference
 				android:title="People Magazine"
 				android:defaultValue="true"
 				android:summary="Updates Thursdays"
 				android:key="scrapePeople" />
-			 <CheckBoxPreference
-				android:title="I Swear"
-				android:defaultValue="true"
-				android:summary="Updates Fridays"
-				android:key="downloadISwear" />
-		</PreferenceCategory>
-		<PreferenceCategory android:title="Large Sized">
-			<CheckBoxPreference
-				android:title="Boston Globe"
-				android:defaultValue="true"
-				android:summary="Updates Sundays"
-				android:key="downloadGlobe" />
-			<CheckBoxPreference
+			 <!--<com.jenzz.materialpreference.CheckBoxPreference-->
+				<!--android:title="I Swear"-->
+				<!--android:defaultValue="true"-->
+				<!--android:summary="Updates Fridays"-->
+				<!--android:key="downloadISwear" />-->
+		</com.jenzz.materialpreference.PreferenceCategory>
+		<com.jenzz.materialpreference.PreferenceCategory android:title="Large Sized">
+			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+				<!--android:title="Boston Globe"-->
+				<!--android:defaultValue="true"-->
+				<!--android:summary="Updates Sundays"-->
+				<!--android:key="downloadGlobe" />-->
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="Chron. of Higher Ed."
 				android:defaultValue="true"
 				android:summary="Updates Fridays (Currently Biweekly)"
 				android:key="downloadCHE" />
-			<CheckBoxPreference
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="LAT Sunday Calendar"
 				android:defaultValue="true"
 				android:summary="Updates Sundays"
 				android:key="downloadLACal" />
-			<CheckBoxPreference
-				android:title="Philadelphia Inquirer"
-				android:defaultValue="true"
-				android:summary="Updates Sundays - By Merl Reagle"
-				android:key="downloadPhilly" />
-			<CheckBoxPreference
+			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+				<!--android:title="Philadelphia Inquirer"-->
+				<!--android:defaultValue="true"-->
+				<!--android:summary="Updates Sundays - By Merl Reagle"-->
+				<!--android:key="downloadPhilly" />-->
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="Premier Crosswords"
 				android:defaultValue="true"
 				android:summary="Updates Sundays"
 				android:key="downloadPremier" />
-			<CheckBoxPreference
+			<com.jenzz.materialpreference.CheckBoxPreference
 				android:title="The Wall Street Journal"
 				android:defaultValue="true"
 				android:summary="Updates Fridays"
 				android:key="downloadWsj" />
-		</PreferenceCategory>
+		</com.jenzz.materialpreference.PreferenceCategory>
 	</PreferenceScreen>
 	<PreferenceScreen
 		android:title="Experimental Sources"
 		android:summary="May or may not function correctly."
 		android:key="selectExperimental">
-		<CheckBoxPreference
+		<com.jenzz.materialpreference.CheckBoxPreference
 			android:title="Cru Puzzle Workshop"
 			android:defaultValue="false"
 			android:summary="NYT Cru Cryptic Fan Puzzles\nhttp://web.me.com/joecab/nytcru/\n(Please Read the help item below)"
 			android:key="scrapeCru" />
-		<CheckBoxPreference
+		<com.jenzz.materialpreference.CheckBoxPreference
 			android:title="Kegler's Kryptics"
 			android:defaultValue="false"
 			android:summary="Ron &quot;Kegler&quot; Sweet's Cryptic Archive\nhttp://www.lafn.org/~keglerron/kegler.html\n(Please Read the help item below)"
 			android:key="scrapeKegler" />
-		<Preference
-		 	android:title="About These Sources" 
+		<com.jenzz.materialpreference.Preference
+		 	android:title="About These Sources"
 		 	android:key="aboutScrapes" />
 	</PreferenceScreen>
-</PreferenceCategory>
+</com.jenzz.materialpreference.PreferenceCategory>
 	
-<PreferenceCategory
+<com.jenzz.materialpreference.PreferenceCategory
 	android:title="Application Settings">
 		
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Fit to screen when starting"
 		android:defaultValue="false"
 		android:summary="Best-fits the puzzle when you start."
 		android:key="fitToScreen"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Automatic Download"
 		android:defaultValue="true"
 		android:summary="Download today's puzzles when starting the application"
 		android:key="dlOnStartup"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="No Download Notifications"
 		android:defaultValue="false"
 		android:summary="Prevents a notification for each puzzle downloaded from appearing in the notifications list."
 		android:key="supressMessages"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="No Hint Highlighting"
 		android:defaultValue="false"
 		android:summary="Prevents the pink boxes indicating 'hints' in the form of reveals or show errors."
 		android:key="supressHints"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Delete on Cleanup"
 		android:defaultValue="false"
 		android:summary="Delete rather than archive old puzzles"
@@ -218,21 +218,21 @@
 		android:entries="@array/cleanupAgeLabels"
 		android:entryValues="@array/cleanupAgeValues" />
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Snap to Current Word"
 		android:defaultValue="true"
 		android:summary="Toggles the auto-scrolling of the playboard to the current play position"
 		android:key="ensureVisible"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Show Length"
 		android:defaultValue="false"
 		android:summary="Shows the number of letters in the answer on the clue line"
 		android:key="showCount"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Scroll To Clue"
 		android:defaultValue="false"
 		android:summary="Toggles the auto-scrolling to the selected clue in the clues list mode. (Works like Shortyz 1)"
@@ -247,42 +247,42 @@
 		android:entries="@array/movementStrategyLabels"
 		android:entryValues="@array/movementStrategyValues" />
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Skip Filled Boxes"
 		android:defaultValue="false"
 		android:summary="Toggles the skipping of filled boxes when you enter a new letter."
 		android:key="skipFilled"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Space Changes Direction"
 		android:defaultValue="true"
 		android:summary="Spacebar changed direction rather than blanking the box."
 		android:key="spaceChangesDirection"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Enter Changes Direction"
 		android:defaultValue="true"
 		android:summary="Enter changes direction rather than moving to the next clue."
 		android:key="enterChangesDirection"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Double Tap Zoom"
 		android:defaultValue="false"
 		android:summary="Double tap toggles between fit to screen, and your default zoom."
 		android:key="doubleTap"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Show Timer"
 		android:defaultValue="false"
 		android:summary="Shows your puzzle time.\nYou must leave and re-enter a puzzle to apply."
 		android:key="showTimer"
 	/>
 	
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Full Screen"
 		android:defaultValue="false"
 		android:summary="Hides the notification bar.\nYou must leave and re-enter a puzzle to apply."
@@ -297,7 +297,7 @@
 		android:entries="@array/keyboardTypeLabels"
 		android:entryValues="@array/keyboardTypeValues" />
 		
-	<CheckBoxPreference
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Force Keyboard"
 		android:defaultValue="false"
 		android:summary="Forces the keyboard to always be on screen. \n Good for some generic tablets"
@@ -318,7 +318,7 @@
 		android:key="fullScreen"
 	/-->
 
-    <CheckBoxPreference
+    <com.jenzz.materialpreference.CheckBoxPreference
         android:title="Disable Swipe"
         android:defaultValue="false"
         android:summary="Disables swiping to dismiss on the list view. (Requires Restart)"
@@ -333,7 +333,11 @@
         android:entries="@array/swipeActionLabels"
         android:entryValues="@array/swipeActionValues" />
 
-</PreferenceCategory>
+</com.jenzz.materialpreference.PreferenceCategory>
+
+	<Preference
+		android:title="Clear Gmail Account"
+		android:key="clearGmail" />
 	
 	<PreferenceCategory
 		android:title="About Shortyz">
@@ -341,8 +345,13 @@
 	<Preference
 	 	android:title="Release Notes" 
 	 	android:key="releaseNotes"/>
-	
+
 	<Preference
+			android:title="First Run Screens"
+			android:key="firstRun"/>
+
+
+		<Preference
 	 	android:title="License" 
 	 	android:key="license"/>
 	 	

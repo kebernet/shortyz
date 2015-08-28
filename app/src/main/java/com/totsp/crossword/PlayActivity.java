@@ -114,6 +114,13 @@ public class PlayActivity extends ShortyzActivity {
     private long lastKey;
     private long lastTap = 0;
     private long resumedOn;
+    private int screenWidthInInches;
+    private Runnable fitToScreenTask = new Runnable() {
+        @Override
+        public void run() {
+            fitToScreen();
+        }
+    };
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -141,6 +148,14 @@ public class PlayActivity extends ShortyzActivity {
         if (runTimer) {
             this.handler.post(this.updateTimeTask);
         }
+
+        metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        this.screenWidthInInches = (metrics.widthPixels > metrics.heightPixels ? metrics.widthPixels : metrics.heightPixels) / Math.round(160 * metrics.density);
+        LOG.info("Configuration Changed "+this.screenWidthInInches+" ");
+        if(this.screenWidthInInches >= 7){
+            this.handler.post(this.fitToScreenTask);
+        }
     }
 
     DisplayMetrics metrics;
@@ -155,6 +170,7 @@ public class PlayActivity extends ShortyzActivity {
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        this.screenWidthInInches = (metrics.widthPixels > metrics.heightPixels ? metrics.widthPixels : metrics.heightPixels) / Math.round(160 * metrics.density);
         this.configuration = getBaseContext().getResources().getConfiguration();
 
         try {
@@ -168,7 +184,7 @@ public class PlayActivity extends ShortyzActivity {
                 }
 
             } else {
-                requestWindowFeature(Window.FEATURE_PROGRESS);
+                supportRequestWindowFeature(Window.FEATURE_PROGRESS);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,11 +205,7 @@ public class PlayActivity extends ShortyzActivity {
         View.OnKeyListener onKeyListener = new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    return PlayActivity.this.onKeyUp(i, keyEvent);
-                } else {
-                    return false;
-                }
+                return keyEvent.getAction() == KeyEvent.ACTION_UP && PlayActivity.this.onKeyUp(i, keyEvent);
             }
         };
 
@@ -212,20 +224,20 @@ public class PlayActivity extends ShortyzActivity {
             }
 
             BOARD = new Playboard(puz, movement);
-            RENDERER = new PlayboardRenderer(BOARD, metrics.density,
+            RENDERER = new PlayboardRenderer(BOARD, metrics.density, metrics.widthPixels,
                     !prefs.getBoolean("supressHints", false));
 
             float scale = prefs.getFloat("scale", metrics.density);
 
             if (scale > RENDERER.getDeviceMaxScale()) {
                 scale = RENDERER.getDeviceMaxScale();
-                prefs.edit().putFloat("scale", scale).commit();
+                prefs.edit().putFloat("scale", scale).apply();
             } else if (scale < .5f) {
                 scale = .25f;
-                prefs.edit().putFloat("scale", .25f).commit();
+                prefs.edit().putFloat("scale", .25f).apply();
             } else if (scale == Float.NaN) {
                 scale = 1f;
-                prefs.edit().putFloat("scale", 1f).commit();
+                prefs.edit().putFloat("scale", 1f).apply();
             }
 
             RENDERER.setScale(scale);
@@ -344,15 +356,17 @@ public class PlayActivity extends ShortyzActivity {
                 clue = (TextView) utils.onActionBarCustom(this,
                         R.layout.clue_line_only).findViewById(R.id.clueLine);
             }
-            this.clue.setClickable(true);
-            this.clue.setOnClickListener(new OnClickListener() {
-                public void onClick(View arg0) {
-                    Intent i = new Intent(PlayActivity.this,
-                            ClueListActivity.class);
-                    i.setData(Uri.fromFile(baseFile));
-                    PlayActivity.this.startActivityForResult(i, 0);
-                }
-            });
+            if(this.clue != null) {
+                this.clue.setClickable(true);
+                this.clue.setOnClickListener(new OnClickListener() {
+                    public void onClick(View arg0) {
+                        Intent i = new Intent(PlayActivity.this,
+                                ClueListActivity.class);
+                        i.setData(Uri.fromFile(baseFile));
+                        PlayActivity.this.startActivityForResult(i, 0);
+                    }
+                });
+            }
 
             boardView = (ScrollingImageView) this.findViewById(R.id.board);
             this.boardView.setCurrentScale(scale);
@@ -421,8 +435,11 @@ public class PlayActivity extends ShortyzActivity {
             Toast t = Toast
                     .makeText(
                             this,
-                            (("Unable to read file" + filename) != null) ? (" \n" + filename)
-                                    : "", Toast.LENGTH_SHORT);
+                            "Unable to read file" +
+                                    (filename != null ?
+                                            (" \n" + filename)
+                                    : "")
+                            , Toast.LENGTH_SHORT);
             t.show();
             this.finish();
 
@@ -470,7 +487,7 @@ public class PlayActivity extends ShortyzActivity {
                                 prefs.edit()
                                         .putFloat("scale",
                                                 scale)
-                                        .commit();
+                                        .apply();
                                 BOARD.setHighlightLetter(RENDERER
                                         .findBox(center));
 
@@ -619,8 +636,8 @@ public class PlayActivity extends ShortyzActivity {
         }
 
         this.setClueSize(prefs.getInt("clueSize", 12));
-        setTitle("Shortyz - " + puz.getTitle() + " - " + puz.getAuthor()
-                + " - 	" + puz.getCopyright());
+        setTitle(neverNull(puz.getTitle()) + " - " + neverNull(puz.getAuthor())
+             + " - 	" + neverNull(puz.getCopyright()));
         this.showCount = prefs.getBoolean("showCount", false);
         if (this.prefs.getBoolean("fitToScreen", false) || (android.os.Build.VERSION.SDK_INT > 11 && ShortyzApplication.isLandscape(metrics)) && (ShortyzApplication.isTabletish(metrics) || ShortyzApplication.isMiniTabletish(metrics))) {
             this.handler.postDelayed(new Runnable() {
@@ -636,7 +653,7 @@ public class PlayActivity extends ShortyzActivity {
                     float newScale = RENDERER.fitTo(v);
                     boardView.setCurrentScale(newScale);
 
-                    prefs.edit().putFloat("scale", newScale).commit();
+                    prefs.edit().putFloat("scale", newScale).apply();
                     render();
                 }
 
@@ -644,6 +661,10 @@ public class PlayActivity extends ShortyzActivity {
 
         }
 
+    }
+
+    private static String neverNull(String val) {
+        return val == null ? "" : val.trim();
     }
 
     @Override
@@ -933,14 +954,7 @@ public class PlayActivity extends ShortyzActivity {
 
             return true;
         } else if (item.getTitle().toString().equals("Fit to Screen")) {
-            this.boardView.scrollTo(0, 0);
-
-            int v = (this.boardView.getWidth() < this.boardView.getHeight()) ? this.boardView
-                    .getWidth() : this.boardView.getHeight();
-            float newScale = RENDERER.fitTo(v);
-            this.prefs.edit().putFloat("scale", newScale).commit();
-            boardView.setCurrentScale(newScale);
-            this.render();
+            fitToScreen();
 
             return true;
         } else if (item.getTitle().toString().equals("Zoom Reset")) {
@@ -989,6 +1003,17 @@ public class PlayActivity extends ShortyzActivity {
         }
 
         return false;
+    }
+
+    private void fitToScreen() {
+        this.boardView.scrollTo(0, 0);
+
+        int v = (this.boardView.getWidth() < this.boardView.getHeight()) ? this.boardView
+                .getWidth() : this.boardView.getHeight();
+        float newScale = RENDERER.fitTo(v);
+        this.prefs.edit().putFloat("scale", newScale).commit();
+        boardView.setCurrentScale(newScale);
+        this.render();
     }
 
 
@@ -1121,14 +1146,19 @@ public class PlayActivity extends ShortyzActivity {
         } else {
             String stratName = this.prefs.getString("movementStrategy",
                     "MOVE_NEXT_ON_AXIS");
-            if (stratName.equals("MOVE_NEXT_ON_AXIS")) {
-                movement = MovementStrategy.MOVE_NEXT_ON_AXIS;
-            } else if (stratName.equals("STOP_ON_END")) {
-                movement = MovementStrategy.STOP_ON_END;
-            } else if (stratName.equals("MOVE_NEXT_CLUE")) {
-                movement = MovementStrategy.MOVE_NEXT_CLUE;
-            } else if (stratName.equals("MOVE_PARALLEL_WORD")) {
-                movement = MovementStrategy.MOVE_PARALLEL_WORD;
+            switch (stratName) {
+                case "MOVE_NEXT_ON_AXIS":
+                    movement = MovementStrategy.MOVE_NEXT_ON_AXIS;
+                    break;
+                case "STOP_ON_END":
+                    movement = MovementStrategy.STOP_ON_END;
+                    break;
+                case "MOVE_NEXT_CLUE":
+                    movement = MovementStrategy.MOVE_NEXT_CLUE;
+                    break;
+                case "MOVE_PARALLEL_WORD":
+                    movement = MovementStrategy.MOVE_PARALLEL_WORD;
+                    break;
             }
 
             return movement;

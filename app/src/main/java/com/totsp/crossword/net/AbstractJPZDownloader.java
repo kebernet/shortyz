@@ -60,7 +60,7 @@ public abstract class AbstractJPZDownloader extends AbstractDownloader {
             meta.date = date;
             meta.source = getName();
             meta.sourceUrl = url.toString();
-            meta.updateable = false;
+            meta.updatable = false;
             
             utils.storeMetas(Uri.fromFile(f), meta);
             if( canDefer ){

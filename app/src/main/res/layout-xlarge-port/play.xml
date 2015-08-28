@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:tools="http://schemas.android.com/tools">
 
 	<TextView android:id="@+id/clueLine" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" 
-		android:textSize="12dip" android:minLines="2" android:maxLines="4"
+		android:textSize="12sp" android:minLines="2" android:maxLines="4"
 		android:textColor="#FFFFFF" android:background="#2C2C2C"
 		android:visibility="gone" />
 	<LinearLayout android:id="@+id/cluesLinear"
@@ -13,33 +15,34 @@
 		android:layout_alignParentBottom="true">
 
 		<TextView android:id="@+id/acrossLabel" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Across"
-			android:textStyle="bold" android:textSize="16dp" 
+			android:layout_height="wrap_content" android:text="@string/across"
+			android:textStyle="bold" android:textSize="16sp"
 			android:gravity="center_horizontal"/>
 		<Gallery android:id="@+id/acrossListGal" android:layout_width="fill_parent"
 			android:spacing="0dp"
-			android:layout_height="wrap_content" />
+			android:layout_height="wrap_content"
+			tools:ignore="InconsistentLayout"/>
 		<TextView android:id="@+id/downLabel" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Down"
-			android:textStyle="bold" android:textSize="16dp" 
+			android:layout_height="wrap_content" android:text="@string/down"
+			android:textStyle="bold" android:textSize="16sp"
 			android:gravity="center_horizontal"/>
 
 		<Gallery android:id="@+id/downListGal" android:layout_width="fill_parent"
 			android:spacing="0dp"
-			android:layout_height="wrap_content" 
+			android:layout_height="wrap_content"
+			tools:ignore="InconsistentLayout"
 		android:layout_marginBottom="10dp" />
 
 		<android.inputmethodservice.KeyboardView
-		android:id="@+id/playKeyboard" android:layout_alignParentBottom="true"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-
+		android:id="@+id/playKeyboard"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
             android:keyBackground="@color/background_material_light"
             android:keyTextColor="@color/textColorPrimary"
             android:background="@color/background_material_light"
             android:shadowRadius="0.0"
             android:keyPreviewLayout="@layout/key_preview"
-            />/>
-		
+            />
 
 	</LinearLayout>
 	
@@ -51,6 +54,7 @@
 		android:layout_alignParentLeft="true" 
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:scrollbars="horizontal|vertical"
-		android:layout_marginBottom="5dp" />
+		android:layout_marginBottom="5dp"
+		android:background="#000000"/>
 
 </RelativeLayout>	

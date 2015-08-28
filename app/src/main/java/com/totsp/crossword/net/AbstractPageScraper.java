@@ -34,7 +34,7 @@ public class AbstractPageScraper {
 	public String getContent() throws IOException {
 		URL u = new URL(url);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		AbstractDownloader.copyStream(u.openStream(), baos);
+		IO.copyStream(u.openStream(), baos);
 
 		return new String(baos.toByteArray());
 	}
@@ -44,7 +44,7 @@ public class AbstractPageScraper {
 		File output = new File(AbstractDownloader.DOWNLOAD_DIR, fileName);
 		try {
 			FileOutputStream fos = new FileOutputStream(output);
-			AbstractDownloader.copyStream(u.openStream(), fos);
+			IO.copyStream(u.openStream(), fos);
 			fos.close();
 		} catch (Exception e) {
 			output.delete();

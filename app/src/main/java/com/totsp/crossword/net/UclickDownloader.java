@@ -32,14 +32,19 @@ public class UclickDownloader extends AbstractDownloader {
     private String shortName;
     private int[] days;
 
-    public UclickDownloader(String shortName, String fullName, String copyright, int[] days) {
-        super("http://picayune.uclick.com/comics/" + shortName + "/data/", DOWNLOAD_DIR, fullName);
+    public UclickDownloader(String prefix, String shortName, String fullName, String copyright, int[] days){
+        super(prefix+shortName+"/data/", DOWNLOAD_DIR, fullName);
         this.shortName = shortName;
         this.fullName = fullName;
         this.copyright = copyright;
         this.days = days;
         nf.setMinimumIntegerDigits(2);
         nf.setMaximumFractionDigits(0);
+    }
+
+    public UclickDownloader(String shortName, String fullName, String copyright, int[] days) {
+        this("http://picayune.uclick.com/comics/",shortName, fullName, copyright, days);
+
     }
 
     public int[] getDownloadDates() {

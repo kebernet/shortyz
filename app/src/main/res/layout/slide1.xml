@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:clickable="true">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/bg_intro_bottom"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
+
+    <LinearLayout
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:id="@+id/main">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingLeft="32dp"
+            android:layout_weight="3"
+            android:fontFamily="sans-serif-thin"
+            android:textColor="#ffffff"
+            android:paddingRight="32dp"
+            android:textSize="28sp"
+            android:text="Shortyz Crosswords"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:textColor="#ffffff"
+                android:paddingLeft="64dp"
+                android:paddingRight="64dp"
+                android:textSize="16sp"
+                android:background="#CC000000"
+                android:text="Shortyz is a crossword puzzle client that lets you download puzzles from around the internet, or play them from your personal sources!\n\n Let's get you started!"/>
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:paddingRight="16dp"-->
+                <!--android:src="@drawable/ic_slide1"/>-->
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:textSize="16sp"
+            android:text=""/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="64dp" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -23,7 +23,6 @@ import com.totsp.crossword.versions.DefaultUtil;
 public abstract class AbstractDownloader implements Downloader {
     protected static final Logger LOG = Logger.getLogger("com.totsp.crossword");
     public static File DOWNLOAD_DIR = ShortyzApplication.CROSSWORDS;
-    public static final int DEFAULT_BUFFER_SIZE = 1024;
     @SuppressWarnings("unchecked")
 	protected static final Map<String, String> EMPTY_MAP = Collections.EMPTY_MAP;
     protected File downloadDirectory;
@@ -44,38 +43,7 @@ public abstract class AbstractDownloader implements Downloader {
         this.utils.setContext(ctx);
     }
 
-    /**
-     * Copies the data from an InputStream object to an OutputStream object.
-     *
-     * @param sourceStream
-     *            The input stream to be read.
-     * @param destinationStream
-     *            The output stream to be written to.
-     * @return int value of the number of bytes copied.
-     * @exception IOException
-     *                from java.io calls.
-     */
-    public static int copyStream(InputStream sourceStream, OutputStream destinationStream)
-        throws IOException {
-        int bytesRead = 0;
-        int totalBytes = 0;
-        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 
-        while (bytesRead >= 0) {
-            bytesRead = sourceStream.read(buffer, 0, buffer.length);
-
-            if (bytesRead > 0) {
-                destinationStream.write(buffer, 0, bytesRead);
-            }
-
-            totalBytes += bytesRead;
-        }
-
-        destinationStream.flush();
-        destinationStream.close();
-
-        return totalBytes;
-    }
 
     public String createFileName(Date date) {
         return (date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" +
@@ -110,7 +78,7 @@ public abstract class AbstractDownloader implements Downloader {
             meta.date = date;
             meta.source = getName();
             meta.sourceUrl = url.toString();
-            meta.updateable = false;
+            meta.updatable = false;
             
             utils.storeMetas(Uri.fromFile(f), meta);
             if( canDefer ){
@@ -169,5 +137,10 @@ public abstract class AbstractDownloader implements Downloader {
 
             return null;
         }
+    }
+
+    @Override
+    public boolean alwaysRun(){
+        return false;
     }
 }

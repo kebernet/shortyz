@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent"
+	xmlns:tools="http://schemas.android.com/tools">
 	
 	<TextView android:id="@+id/clueLine" 
 		android:layout_width="fill_parent"
@@ -72,6 +73,7 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
                 android:paddingLeft="8dp"
+				tools:ignore="InconsistentLayout"
 				/>
          	<ListView android:id="@+id/acrossList"
                 android:layout_width="325dp"
@@ -80,9 +82,10 @@
                 android:layout_alignParentBottom="true"
                 android:layout_toLeftOf="@id/downList"
                 android:background="@color/primary_material_light"
+				tools:ignore="InconsistentLayout"
 			/>
      </RelativeLayout>
-	
+
 	<com.totsp.crossword.view.ScrollingImageView
 		android:id="@+id/board"
 		android:layout_alignParentTop="true"

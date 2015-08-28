@@ -6,4 +6,5 @@
     <color name="textColorSecondary">#BEBEBE</color>
     <color name="accentText">#fff</color>
     <color name="transparent">#00000000</color>
+    <color name="background_light">#bbb</color>
 </resources>

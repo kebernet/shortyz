@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,9 +24,11 @@ import android.os.Environment;
 
 import com.totsp.crossword.BrowseActivity;
 import com.totsp.crossword.PlayActivity;
+import com.totsp.crossword.gmail.GmailDownloader;
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.puz.PuzzleMeta;
+import com.totsp.crossword.shortyz.ShortyzApplication;
 
 public class Downloaders {
 	private static final Logger LOG = Logger.getLogger("com.totsp.crossword");
@@ -35,20 +38,20 @@ public class Downloaders {
 	private boolean supressMessages;
 
 	public Downloaders(SharedPreferences prefs,
-			NotificationManager notificationManager, Context context) {
+			NotificationManager notificationManager, Activity context) {
 		this.notificationManager = notificationManager;
 		this.context = context;
 
-		if (prefs.getBoolean("downloadGlobe", true)) {
-			downloaders.add(new BostonGlobeDownloader());
-		}
+//		if (prefs.getBoolean("downloadGlobe", true)) {
+//			downloaders.add(new OldBostonGlobeDownloader());
+//		}
 //
 //		if (prefs.getBoolean("downloadThinks", true)) {
 //			downloaders.add(new ThinksDownloader());
 //		}
-		if (prefs.getBoolean("downloadWaPo", true)) {
-		 downloaders.add(new WaPoDownloader());
-		 }
+//		if (prefs.getBoolean("downloadWaPo", true)) {
+//		 downloaders.add(new WaPoDownloader());
+//		 }
 		
 		if (prefs.getBoolean("downloadWsj", true)) {
 			downloaders.add(new WSJDownloader());
@@ -62,9 +65,9 @@ public class Downloaders {
 			downloaders.add(new NYTClassicDownloader());
 		}
 
-		if (prefs.getBoolean("downloadInkwell", true)) {
-			downloaders.add(new InkwellDownloader());
-		}
+//		if (prefs.getBoolean("downloadInkwell", true)) {
+//			downloaders.add(new InkwellDownloader());
+//		}
 
 		if (prefs.getBoolean("downloadJonesin", true)) {
 			downloaders.add(new JonesinDownloader());
@@ -75,27 +78,27 @@ public class Downloaders {
 			downloaders.add(new LATimesDownloader());
 		}
 
-		if (prefs.getBoolean("downloadAvClub", true)) {
-			downloaders.add(new AVClubDownloader());
-		}
+//		if (prefs.getBoolean("downloadAvClub", true)) {
+//			downloaders.add(new AVClubDownloader());
+//		}
 
-		if (prefs.getBoolean("downloadPhilly", true)) {
-			downloaders.add(new PhillyDownloader());
-		}
+//		if (prefs.getBoolean("downloadPhilly", true)) {
+//			downloaders.add(new PhillyDownloader());
+//		}
 
 		if (prefs.getBoolean("downloadCHE", true)) {
 			downloaders.add(new CHEDownloader());
 		}
 
-//		if (prefs.getBoolean("downloadJoseph", true)) {
-//			downloaders.add(new KFSDownloader("joseph", "Joseph Crosswords",
-//					"Thomas Joseph", Downloader.DATE_NO_SUNDAY));
-//		}
-//
-//		if (prefs.getBoolean("downloadSheffer", true)) {
-//			downloaders.add(new KFSDownloader("sheffer", "Sheffer Crosswords",
-//					"Eugene Sheffer", Downloader.DATE_NO_SUNDAY));
-//		}
+		if (prefs.getBoolean("downloadJoseph", true)) {
+			downloaders.add(new KFSDownloader("joseph", "Joseph Crosswords",
+					"Thomas Joseph", Downloader.DATE_NO_SUNDAY));
+		}
+
+		if (prefs.getBoolean("downloadSheffer", true)) {
+			downloaders.add(new KFSDownloader("sheffer", "Sheffer Crosswords",
+					"Eugene Sheffer", Downloader.DATE_NO_SUNDAY));
+		}
 
 //		if (prefs.getBoolean("downloadPremier", true)) {
 //			downloaders.add(new KFSDownloader("premier", "Premier Crosswords",
@@ -122,15 +125,22 @@ public class Downloaders {
 			downloaders.add(new LATSundayDownloader());
 		}
 
-		if (prefs.getBoolean("downloadISwear", true)) {
-			downloaders.add(new ISwearDownloader());
-		}
+//		if (prefs.getBoolean("downloadISwear", true)) {
+//			downloaders.add(new ISwearDownloader());
+//		}
 		
 		
 		if (prefs.getBoolean("downloadNYT", false)) {
 			downloaders.add(new NYTDownloader(context, prefs.getString(
 					"nytUsername", ""), prefs.getString("nytPassword", "")));
 		}
+
+		ShortyzApplication application = (ShortyzApplication) context.getApplication();
+		System.out.println("Doing GMAIL: " + application.getGmailService() != null);
+		if(application.getGmailService() != null){
+			downloaders.add(new GmailDownloader(application.getGmailService()));
+		}
+
 
 		this.supressMessages = prefs.getBoolean("supressMessages", false);
 	}
@@ -195,6 +205,7 @@ public class Downloaders {
         HashSet<File> newlyDownloaded = new HashSet<File>();
 
         for (Downloader d : downloaders) {
+			LOG.info("Downloading "+d.toString());
             d.setContext(context);
 
             try {
@@ -213,7 +224,8 @@ public class Downloaders {
                 System.out.println(downloaded.getAbsolutePath() + " " + downloaded.exists() + " OR " +
                     archived.getAbsolutePath() + " " + archived.exists());
 
-                if (downloaded.exists() || archived.exists()) {
+                if (!d.alwaysRun() && (downloaded.exists() || archived.exists())) {
+					System.out.println("==Skipping "+d.toString());
                     continue;
                 }
 
@@ -234,7 +246,7 @@ public class Downloaders {
                     meta.date = date;
                     meta.source = d.getName();
                     meta.sourceUrl = d.sourceUrl(date);
-                    meta.updateable = updatable;
+                    meta.updatable = updatable;
 
                     if (processDownloadedPuzzle(downloaded, meta)) {
                         if (!this.supressMessages) {
@@ -248,7 +260,7 @@ public class Downloaders {
 
                 i++;
             } catch (Exception e) {
-                e.printStackTrace();
+               LOG.log(Level.WARNING, "Failed to download "+d.getName(), e);
             }
         }
 
@@ -287,7 +299,7 @@ public class Downloaders {
                 try {
                     IO.meta(file);
 
-                    //                    if ((meta != null) && meta.updateable && (nyt != null) &&
+                    //                    if ((meta != null) && meta.updatable && (nyt != null) &&
                     //                            nyt.getName().equals(meta.source)) {
                     //                        System.out.println("Trying update for " + file);
                     //
@@ -328,7 +340,7 @@ public class Downloaders {
 			puz.setDate(meta.date);
 			puz.setSource(meta.source);
 			puz.setSourceUrl(meta.sourceUrl);
-			puz.setUpdatable(meta.updateable);
+			puz.setUpdatable(meta.updatable);
 
 			IO.save(puz, downloaded);
 

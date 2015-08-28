@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#5B8D40"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:id="@+id/main">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingLeft="32dp"
+            android:layout_weight="3"
+            android:fontFamily="sans-serif-thin"
+            android:textColor="#ffffff"
+            android:paddingRight="32dp"
+            android:textSize="28sp"
+            android:text="Google Play Games"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="5">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:src="@drawable/play_games_logo"/>
+
+        </LinearLayout>
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="invisible"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:textSize="16sp"
+            android:text="Earn achievements in Play Games by signing in!"
+            android:id="@+id/slideText"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="64dp" />
+    </LinearLayout>
+
+</RelativeLayout>

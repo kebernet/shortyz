@@ -12,11 +12,10 @@ public class GamesSignIn extends ShortyzActivity  {
 
     private View signInButton;
     private View signOutButton;
-    private View ignoreButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_games_sign_in);
         (this.signInButton = findViewById(R.id.sign_in_button)).setOnClickListener(new OnClickListener(){
 
@@ -32,12 +31,12 @@ public class GamesSignIn extends ShortyzActivity  {
                 finish();
             }
         });
-        (this.ignoreButton = findViewById(R.id.dont_want_play)).setOnClickListener(new OnClickListener() {
+        (findViewById(R.id.dont_want_play)).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if(signInButton.getVisibility() == View.VISIBLE){
                     signOut();
                 }
-                prefs.edit().putBoolean("no_play_games", Boolean.TRUE).commit();
+                prefs.edit().putBoolean("no_play_games", Boolean.TRUE).apply();
                 finish();
 
             }

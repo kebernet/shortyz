@@ -16,7 +16,7 @@ public class IOVersion2 extends IOVersion1 {
 	protected void applyMeta(Puzzle puz, PuzzleMeta meta){
 		super.applyMeta(puz, meta);
 		//System.out.println("Applying V2 Meta");
-		puz.setUpdatable(meta.updateable);
+		puz.setUpdatable(meta.updatable);
 		puz.setSourceUrl(meta.sourceUrl);
 	}
 	
@@ -29,7 +29,7 @@ public class IOVersion2 extends IOVersion1 {
 		meta.title = IO.readNullTerminatedString(dis);
 		meta.date = new Date( dis.readLong() );
 		meta.percentComplete = dis.readInt();
-		meta.updateable = dis.read() == 1;
+		meta.updatable = dis.read() == 1;
 		meta.sourceUrl = IO.readNullTerminatedString(dis);
 		//System.out.println(meta);
 		return meta;

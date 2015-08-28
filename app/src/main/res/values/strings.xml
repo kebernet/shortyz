@@ -4,4 +4,8 @@
     <string name="puzzle_select">Select a puzzle:</string>
     <string name="title_activity_games_sign_in">Sign Into Play Games</string>
     <string name="action_settings">Settings</string>
+    <string name="skip_button">Skip</string>
+    <string name="done_button">Done</string>
+    <string name="across">Across</string>
+    <string name="down">Down</string>
 </resources>

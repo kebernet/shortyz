@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.totsp.crossword.shortyz"
     android:installLocation="auto"
     android:versionCode="40007"
@@ -13,12 +14,30 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="22" />
+
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
     <application
         android:name="com.totsp.crossword.shortyz.ShortyzApplication"
         android:backupAgent="com.totsp.crossword.shortyz.BackupAgent"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:restoreAnyVersion="true">
+        android:restoreAnyVersion="true"
+        android:allowBackup="true">
 
         <activity
             android:name="com.totsp.crossword.HttpDownloadActivity"
@@ -31,11 +50,12 @@
 
                 <data
                     android:host="*"
-                    android:pathPattern=".*\\.puz"
+                    android:pathPattern="/.*\\.puz"
                     android:scheme="http" />
             </intent-filter>
         </activity>
         <activity
+            tools:ignore="UnusedAttribute"
             android:name="com.totsp.crossword.PlayActivity"
             android:hardwareAccelerated="false"
             android:label="@string/app_name"
@@ -48,7 +68,7 @@
 
                 <data
                     android:host="*"
-                    android:pathPattern=".*\\.puz"
+                    android:pathPattern="/.*\\.puz"
                     android:scheme="file" />
                 <data
                     android:mimeType="application/x-crossword"
@@ -59,17 +79,17 @@
             android:name="com.totsp.crossword.PreferencesActivity"
             android:label="Settings"
             android:theme="@style/Theme.Shortyz"
-            ></activity>
+            />
         <activity
             android:name="com.totsp.crossword.ClueListActivity"
             android:label="Clues"
             android:theme="@style/Theme.Shortyz"
-            ></activity>
+            />
         <activity
             android:name="com.totsp.crossword.HTMLActivity"
             android:label="Shortyz"
             android:theme="@style/Theme.Shortyz"
-            ></activity>
+            />
         <activity
             android:name="com.totsp.crossword.BrowseActivity"
             android:label="@string/app_name"
@@ -84,11 +104,11 @@
             android:name="com.totsp.crossword.WebBrowserActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="Browse for Puzzles"
-            android:theme="@style/Theme.Shortyz"></activity>
+            android:theme="@style/Theme.Shortyz"/>
         <activity
             android:name="com.totsp.crossword.PuzzleFinishedActivity"
             android:label="Puzzle Completed!"
-            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+            android:theme="@style/Theme.AppCompat.Dialog"/>
 
         <receiver android:name="com.totsp.crossword.net.DownloadReceiver">
             <intent-filter>
@@ -99,7 +119,13 @@
         <activity
             android:name="com.totsp.crossword.GamesSignIn"
             android:label="@string/title_activity_games_sign_in"
-            android:theme="@style/Theme.Shortyz"></activity>
+            android:theme="@style/Theme.Shortyz"/>
+
+        <activity android:name="com.totsp.crossword.firstrun.FirstrunActivity"
+            android:exported="true"
+            android:label="Welcome"
+            android:theme="@style/NYT"/>
+
 
         <meta-data
             android:name="com.google.android.backup.api_key"
@@ -113,15 +139,5 @@
 
     </application>
 
-    <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="11" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="false" />
 
 </manifest>

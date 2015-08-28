@@ -4,32 +4,25 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
-  <ListView
+  <android.support.v7.widget.RecyclerView
   		android:id="@+id/puzzleList"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
   		android:layout_width="fill_parent"
   		android:layout_height="fill_parent"
-        android:background="@color/primary_material_light"
+        android:background="@color/background_light"
   	/>
 
-    <com.andexert.library.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        app:rv_color="#fff">
-    <com.shamanland.fab.FloatingActionButton
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_floating_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:floatingActionButtonColor="#ff669900"
-        app:floatingActionButtonSize="normal"
-        />
-    </com.andexert.library.RippleView>
+        app:fabSize="normal"
+        app:backgroundTint="#ff669900"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"/>
+
 
 </RelativeLayout>

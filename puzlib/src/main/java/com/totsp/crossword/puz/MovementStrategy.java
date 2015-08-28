@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public interface MovementStrategy extends Serializable {
 
-	public static final MovementStrategy MOVE_NEXT_ON_AXIS = new MovementStrategy() {
+	MovementStrategy MOVE_NEXT_ON_AXIS = new MovementStrategy() {
 
 		public Word move(Playboard board, boolean skipCompletedLetters) {
 			if (board.isAcross()) {
@@ -27,7 +27,7 @@ public interface MovementStrategy extends Serializable {
 		}
 	};
 
-	public static final MovementStrategy STOP_ON_END = new MovementStrategy() {
+	MovementStrategy STOP_ON_END = new MovementStrategy() {
 
 		public Word move(Playboard board, boolean skipCompletedLetters) {
 			// This is overly complex, but I am trying to save calls to heavy
@@ -61,7 +61,7 @@ public interface MovementStrategy extends Serializable {
 
 	};
 
-	public static final MovementStrategy MOVE_NEXT_CLUE = new MovementStrategy() {
+	MovementStrategy MOVE_NEXT_CLUE = new MovementStrategy() {
 		
 		/**
 		 * Moves to the word corresponding to the next clue.  If the current word is the last
@@ -190,7 +190,7 @@ public interface MovementStrategy extends Serializable {
 		
 	};
 
-	public static final MovementStrategy MOVE_PARALLEL_WORD = new MovementStrategy() {
+	MovementStrategy MOVE_PARALLEL_WORD = new MovementStrategy() {
 
 		public Word move(Playboard board, boolean skipCompletedLetters) {
 			Word w = board.getCurrentWord();

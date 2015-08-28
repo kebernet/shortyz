@@ -15,7 +15,7 @@ public class WaPoDownloader extends AbstractJPZDownloader {
     NumberFormat nf = NumberFormat.getInstance();
 
     public WaPoDownloader() {
-        super("http://cdn.games.arkadiumhosted.com/washingtonpost/crossynergy/", DOWNLOAD_DIR, NAME);
+        super("https://washingtonpost.as.arkadiumhosted.com/clients/washingtonpost-content/crossynergy/", DOWNLOAD_DIR, NAME);
         nf.setMinimumIntegerDigits(2);
         nf.setMaximumFractionDigits(0);
     }

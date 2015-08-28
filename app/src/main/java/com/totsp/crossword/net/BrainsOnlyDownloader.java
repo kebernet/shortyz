@@ -17,6 +17,7 @@ import java.util.logging.Level;
 /**
  * Created by keber_000 on 2/9/14.
  */
+@SuppressWarnings("SimpleDateFormat")
 public class BrainsOnlyDownloader extends AbstractDownloader {
 
     private final SimpleDateFormat df = new SimpleDateFormat("yyMMdd");

@@ -24,6 +24,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class IO {
+	public static final int DEFAULT_BUFFER_SIZE = 1024;
 	public static final String FILE_MAGIC = "ACROSS&DOWN";
 	public static final String VERSION_STRING = "1.2";
 	public static File TEMP_FOLDER;
@@ -44,7 +45,7 @@ public class IO {
 	}
 
 	public static int cksum_region(byte[] data, int offset, int length,
-			int cksum) {
+								   int cksum) {
 		for (int i = offset; i < (offset + length); i++) {
 			if ((cksum & 0x1) != 0) {
 				cksum = (cksum >> 1) + 0x8000;
@@ -60,7 +61,7 @@ public class IO {
 	}
 
 	public static Puzzle load(DataInputStream puzzleInput,
-			DataInputStream metaInput) throws IOException {
+							  DataInputStream metaInput) throws IOException {
 		Puzzle puz = IO.loadNative(puzzleInput);
 		puzzleInput.close();
 		IO.readCustom(puz, metaInput);
@@ -197,13 +198,13 @@ public class IO {
 		while (!eof) {
 			try {
 				switch (readExtraSectionType(input)) {
-				case GEXT:
-					readGextSection(input, puz);
+					case GEXT:
+						readGextSection(input, puz);
 
-					break;
+						break;
 
-				default:
-					skipExtraSection(input);
+					default:
+						skipExtraSection(input);
 				}
 			} catch (EOFException e) {
 				eof = true;
@@ -229,23 +230,23 @@ public class IO {
 		IOVersion v;
 
 		switch (version) {
-		case 1:
-			v = new IOVersion1();
+			case 1:
+				v = new IOVersion1();
 
-			break;
+				break;
 
-		case 2:
-			v = new IOVersion2();
+			case 2:
+				v = new IOVersion2();
 
-			break;
+				break;
 
-		case 3:
-			v = new IOVersion3();
+			case 3:
+				v = new IOVersion3();
 
-			break;
+				break;
 
-		default:
-			throw new IOException("UnknownVersion " + version);
+			default:
+				throw new IOException("UnknownVersion " + version);
 		}
 
 		v.read(puz, is);
@@ -295,23 +296,23 @@ public class IO {
 		IOVersion v;
 
 		switch (version) {
-		case 1:
-			v = new IOVersion1();
+			case 1:
+				v = new IOVersion1();
 
-			break;
+				break;
 
-		case 2:
-			v = new IOVersion2();
+			case 2:
+				v = new IOVersion2();
 
-			break;
+				break;
 
-		case 3:
-			v = new IOVersion3();
+			case 3:
+				v = new IOVersion3();
 
-			break;
+				break;
 
-		default:
-			throw new IOException("UnknownVersion  " + version);
+			default:
+				throw new IOException("UnknownVersion  " + version);
 		}
 
 		PuzzleMeta m = v.readMeta(is);
@@ -339,7 +340,7 @@ public class IO {
 	}
 
 	public static void save(Puzzle puz, DataOutputStream puzzleOutputStream,
-			DataOutputStream metaOutputStream) throws IOException {
+							DataOutputStream metaOutputStream) throws IOException {
 		IO.saveNative(puz, puzzleOutputStream);
 		puzzleOutputStream.close();
 		IO.writeCustom(puz, metaOutputStream);
@@ -594,13 +595,13 @@ public class IO {
 	}
 
 	private static int cksum_grid(byte[] puzByteArray, int numberOfBoxes,
-			int cksum) {
+								  int cksum) {
 		return cksum_region(puzByteArray, 0x34 + numberOfBoxes, numberOfBoxes,
 				cksum);
 	}
 
 	private static int cksum_partial_board(byte[] puzByteArray,
-			int numberOfBoxes, int numberOfClues, int cksum) {
+										   int numberOfBoxes, int numberOfClues, int cksum) {
 		int offset = 0x34 + (2 * numberOfBoxes);
 
 		for (int i = 0; i < (4 + numberOfClues); i++) {
@@ -626,7 +627,7 @@ public class IO {
 	}
 
 	private static int cksum_primary_board(byte[] puzByteArray,
-			int numberOfBoxes, int numberOfClues, int cksum) {
+										   int numberOfBoxes, int numberOfClues, int cksum) {
 		cksum = cksum_solution(puzByteArray, numberOfBoxes, cksum);
 		cksum = cksum_grid(puzByteArray, numberOfBoxes, cksum);
 		cksum = cksum_partial_board(puzByteArray, numberOfBoxes, numberOfClues,
@@ -636,7 +637,41 @@ public class IO {
 	}
 
 	private static int cksum_solution(byte[] puzByteArray, int numberOfBoxes,
-			int cksum) {
+									  int cksum) {
 		return cksum_region(puzByteArray, 0x34, numberOfBoxes, cksum);
 	}
+
+	/**
+	 * Copies the data from an InputStream object to an OutputStream object.
+	 *
+	 * @param sourceStream
+	 *            The input stream to be read.
+	 * @param destinationStream
+	 *            The output stream to be written to.
+	 * @return int value of the number of bytes copied.
+	 * @exception IOException
+	 *                from java.io calls.
+	 */
+	public static int copyStream(InputStream sourceStream, OutputStream destinationStream)
+			throws IOException {
+		int bytesRead = 0;
+		int totalBytes = 0;
+		byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+
+		while (bytesRead >= 0) {
+			bytesRead = sourceStream.read(buffer, 0, buffer.length);
+
+			if (bytesRead > 0) {
+				destinationStream.write(buffer, 0, bytesRead);
+			}
+
+			totalBytes += bytesRead;
+		}
+
+		destinationStream.flush();
+		destinationStream.close();
+
+		return totalBytes;
+	}
+
 }

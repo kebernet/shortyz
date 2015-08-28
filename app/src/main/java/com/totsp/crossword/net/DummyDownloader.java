@@ -10,31 +10,41 @@ import android.content.Context;
  * Does not actually download any puzzles; just adds an "All Available" option to the dropdown.
  */
 public class DummyDownloader implements Downloader {
-    public void setContext(Context context) {
-        // TODO Auto-generated method stub
-    }
+    @Override
+    public void setContext(Context context) {}
 
+    @Override
     public int[] getDownloadDates() {
         return null;
     }
 
+    @Override
     public String getName() {
         return null;
     }
 
+    @Override
     public String createFileName(Date date) {
         return null;
     }
 
+    @Override
     public File download(Date date) {
         return null;
     }
 
+    @Override
     public String sourceUrl(Date date) {
         return null;
     }
 
+    @Override
     public String toString() {
         return "All available";
+    }
+
+    @Override
+    public boolean alwaysRun(){
+        return false;
     }
 }

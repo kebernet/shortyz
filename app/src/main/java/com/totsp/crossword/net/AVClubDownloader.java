@@ -1,5 +1,7 @@
 package com.totsp.crossword.net;
 
+import com.totsp.crossword.io.IO;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -57,7 +59,7 @@ public class AVClubDownloader extends AbstractDownloader {
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 File f = new File(downloadDirectory, this.createFileName(date));
                 FileOutputStream fos = new FileOutputStream(f);
-                AbstractDownloader.copyStream(connection.getInputStream(), fos);
+                IO.copyStream(connection.getInputStream(), fos);
                 fos.close();
 
                 return f;

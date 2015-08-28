@@ -19,8 +19,8 @@ import com.totsp.crossword.view.ScrollingImageView.Point;
 
 
 public class PlayboardRenderer {
-    private static final int BOX_SIZE = 30;
-    private static final Logger LOG = Logger.getLogger("com.totsp.crossword");
+    private static final float BASE_BOX_SIZE_INCHES = 0.5F;
+    private static final Logger LOG = Logger.getLogger(PlayboardRenderer.class.getCanonicalName());
     private final Paint blackBox = new Paint();
     private final Paint blackCircle = new Paint();
     private final Paint blackLine = new Paint();
@@ -34,13 +34,14 @@ public class PlayboardRenderer {
     private final Paint white = new Paint();
     private Bitmap bitmap;
     private Playboard board;
-    private float logicalDensity;
+    private int dpi;
     private float scale = 1.0F;
     private boolean hintHighlight;
+    private int widthPixels;
 
-    public PlayboardRenderer(Playboard board, float logicalDensity, boolean hintHighlight) {
-        this.scale = scale * logicalDensity;
-        this.logicalDensity = logicalDensity;
+    public PlayboardRenderer(Playboard board, float logicalDensity, int widthPixels, boolean hintHighlight) {
+        this.dpi = Math.round(160F * logicalDensity);
+        this.widthPixels = widthPixels;
         this.board = board;
         this.hintHighlight = hintHighlight;
         blackLine.setColor(Color.BLACK);
@@ -81,33 +82,23 @@ public class PlayboardRenderer {
     }
 
     public float getDeviceMaxScale(){
-        float deviceMaxScale = 2.5F;
-
-        // TODO find a more precise way to calculate this rather than device density
-        if (logicalDensity > 2.0F)
-            deviceMaxScale = 4.25F;
-
-        return deviceMaxScale;
+        float retValue;
+        LOG.info("Board "+board.getBoxes().length+" widthPixels "+widthPixels);
+        // inches * pixels per inch * units
+        if( .75 * dpi * board.getBoxes().length < widthPixels){
+            retValue = (widthPixels /board.getBoxes().length) / BASE_BOX_SIZE_INCHES;
+        } else {
+            retValue = 1.5F;
+        }
+        LOG.warning("getDeviceMaxScale "+retValue);
+        return retValue;
     }
 
     public float getDeviceMinScale(){
-        return logicalDensity * 0.5F;
-    }
-
-    public float setLogicalScale(float scale) {
-        this.scale *= scale;
-
-        if (scale > getDeviceMaxScale()) {
-            scale = getDeviceMaxScale();
-        } else if (scale < getDeviceMinScale()) {
-            scale = getDeviceMinScale();
-        } else if (("" + scale).equals("NaN")) {
-            scale = 1.0f * this.logicalDensity;
-        }
-
-        this.bitmap = null;
-
-        return this.scale;
+        //inches * (pixels / pixels per inch);
+        float retValue = (0.20F * (160F / dpi)) / BASE_BOX_SIZE_INCHES;
+        LOG.warning("getDeviceMinScale "+retValue);
+        return retValue;
     }
 
     public void setScale(float scale) {
@@ -115,8 +106,8 @@ public class PlayboardRenderer {
             scale = getDeviceMaxScale();
         } else if (scale < getDeviceMinScale()) {
             scale = getDeviceMinScale();
-        } else if (("" + scale).equals("NaN")) {
-            scale = 1.0f * this.logicalDensity;
+        } else if (String.valueOf(scale).equals("NaN")) {
+            scale = 1.0f;
         }
         this.bitmap = null;
         this.scale = scale;
@@ -137,13 +128,15 @@ public class PlayboardRenderer {
             } else if (scale < getDeviceMinScale()) {
                 scale = getDeviceMinScale();
             } else if (scale == Float.NaN) {
-                scale = 1.0f * this.logicalDensity;
+                scale = 1.0F;
             }
 
+            int boxSize = (int) (.5 * dpi * scale);
+
             if (bitmap == null) {
-                LOG.warning("New bitmap");
-                bitmap = Bitmap.createBitmap((int) (boxes.length * BOX_SIZE * scale),
-                        (int) (boxes[0].length * BOX_SIZE * scale), Bitmap.Config.RGB_565);
+                LOG.warning("New bitmap box size "+boxSize);
+                bitmap = Bitmap.createBitmap(boxes.length * boxSize,
+                        boxes[0].length * boxSize, Bitmap.Config.RGB_565);
                 bitmap.eraseColor(Color.BLACK);
                 renderAll = true;
             }
@@ -151,20 +144,20 @@ public class PlayboardRenderer {
             Canvas canvas = new Canvas(bitmap);
 
             // board data
-            int boxSize = (int) (BOX_SIZE * scale);
+
             Word currentWord = this.board.getCurrentWord();
 
             for (int col = 0; col < boxes.length; col++) {
                 for (int row = 0; row < boxes[col].length; row++) {
                     if (!renderAll) {
-                        if (!currentWord.checkInWord(col, row) && (reset != null) && !reset.checkInWord(col, row)) {
+                        if (!currentWord.checkInWord(col, row) && !reset.checkInWord(col, row)) {
                             continue;
                         }
                     }
 
                     int x = col * boxSize;
                     int y = row * boxSize;
-                    this.drawBox(canvas, x, y, row, col, scale, boxes[col][row], currentWord);
+                    this.drawBox(canvas, x, y, row, col, boxSize, boxes[col][row], currentWord);
                 }
             }
 
@@ -177,26 +170,26 @@ public class PlayboardRenderer {
     public Bitmap drawWord() {
         Position[] word = this.board.getCurrentWordPositions();
         Box[] boxes = this.board.getCurrentWordBoxes();
-        int boxSize = (int) (BOX_SIZE * this.logicalDensity);
-        Bitmap bitmap = Bitmap.createBitmap((int) (word.length * boxSize), (int) (boxSize), Bitmap.Config.RGB_565);
+        int boxSize = (int) (BASE_BOX_SIZE_INCHES * this.dpi * scale) ;
+        Bitmap bitmap = Bitmap.createBitmap(word.length * boxSize, boxSize, Bitmap.Config.RGB_565);
         bitmap.eraseColor(Color.BLACK);
 
         Canvas canvas = new Canvas(bitmap);
 
         for (int i = 0; i < word.length; i++) {
-            int x = (int) (i * boxSize);
+            int x = i * boxSize;
             int y = 0;
-            this.drawBox(canvas, x, y, word[i].down, word[i].across, this.logicalDensity, boxes[i], null);
+            this.drawBox(canvas, x, y, word[i].down, word[i].across, boxSize, boxes[i], null);
         }
 
         return bitmap;
     }
 
     public Position findBox(Point p) {
-        int boxSize = (int) (BOX_SIZE * scale);
+        int boxSize = (int) (BASE_BOX_SIZE_INCHES * dpi * scale);
 
         if (boxSize == 0) {
-            boxSize = (int) (BOX_SIZE * 0.25D);
+            boxSize = (int) (BASE_BOX_SIZE_INCHES * dpi * 0.25F);
         }
 
         int col = p.x / boxSize;
@@ -206,13 +199,13 @@ public class PlayboardRenderer {
     }
 
     public int findBoxNoScale(Point p) {
-        int boxSize = (int) (BOX_SIZE * this.logicalDensity);
+        int boxSize = (int) (BASE_BOX_SIZE_INCHES * scale);
 
         return p.x / boxSize;
     }
 
     public Point findPointBottomRight(Position p) {
-        int boxSize = (int) (BOX_SIZE * scale);
+        int boxSize = (int) (BASE_BOX_SIZE_INCHES * dpi * scale);
         int x = (p.across * boxSize) + boxSize;
         int y = (p.down * boxSize) + boxSize;
 
@@ -220,7 +213,7 @@ public class PlayboardRenderer {
     }
 
     public Point findPointTopLeft(Position p) {
-        int boxSize = (int) (BOX_SIZE * scale);
+        int boxSize = (int) (BASE_BOX_SIZE_INCHES  * dpi * scale);
         int x = p.across * boxSize;
         int y = p.down * boxSize;
 
@@ -229,10 +222,9 @@ public class PlayboardRenderer {
 
     public float fitTo(int shortDimension) {
         this.bitmap = null;
-
-        double newScale = (double) shortDimension /
-                (double) (this.board.getBoxes().length) /
-                (double) BOX_SIZE;
+        // (pixels / boxes) / (pixels per inch / inches)
+        double newScale = (double) shortDimension / (double) this.board.getBoxes().length / ((double) dpi * (double) BASE_BOX_SIZE_INCHES);
+        LOG.warning("fitTo "+shortDimension+" dpi"+ dpi +" == "+newScale);
         if(newScale < getDeviceMinScale()){
             newScale = getDeviceMinScale();
         }
@@ -243,47 +235,49 @@ public class PlayboardRenderer {
     public float zoomIn() {
         this.bitmap = null;
         this.scale = scale * 1.25F;
-
+        if(scale > this.getDeviceMaxScale()){
+            this.scale = this.getDeviceMaxScale();
+        }
         return scale;
     }
 
     public float zoomOut() {
         this.bitmap = null;
         this.scale = scale / 1.25F;
-
+        if(scale < this.getDeviceMinScale()){
+            scale = this.getDeviceMinScale();
+        }
         return scale;
     }
 
     public float zoomReset() {
         this.bitmap = null;
-        this.scale = 1.0F * logicalDensity;
+        this.scale = 0.5F;
 
         return scale;
     }
 
-    public float zoomInMax()
-    {
+    public float zoomInMax() {
         this.bitmap = null;
         this.scale = getDeviceMaxScale();
 
         return scale;
     }
 
-    private void drawBox(Canvas canvas, int x, int y, int row, int col, float scale, Box box, Word currentWord) {
-        int boxSize = (int) (BOX_SIZE * scale);
-        int numberTextSize = (int) (scale * 8F);
-        int letterTextSize = (int) (scale * 20);
+    private void drawBox(Canvas canvas, int x, int y, int row, int col, int boxSize, Box box, Word currentWord) {
+        int numberTextSize = boxSize / 4;
+        int letterTextSize = Math.round(boxSize * 0.7F);
 
         // scale paints
-        numberText.setTextSize(scale * 8F);
-        letterText.setTextSize(scale * 20F);
-        red.setTextSize(scale * 20F);
-        white.setTextSize(scale * 20F);
+        numberText.setTextSize(numberTextSize);
+        letterText.setTextSize(letterTextSize);
+        red.setTextSize(boxSize);
+        white.setTextSize(boxSize);
 
         boolean inCurrentWord = (currentWord != null) && currentWord.checkInWord(col, row);
         Position highlight = this.board.getHighlightLetter();
 
-        Paint thisLetter = null;
+        Paint thisLetter;
 
         Rect r = new Rect(x + 1, y + 1, (x + boxSize) - 1, (y + boxSize) - 1);
 

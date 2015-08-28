@@ -89,7 +89,6 @@ public class CircleProgressBar extends View {
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(textSize);
 
-        //System.out.println("Draw "+this.width + " " +this.height);
         if (this.percentComplete < 0) {
             paint.setColor(RED);
             paint.setStrokeWidth(circleStroke);

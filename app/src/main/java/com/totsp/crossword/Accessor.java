@@ -5,7 +5,8 @@ import java.util.Comparator;
 
 
 public interface Accessor extends Comparator<FileHandle> {
-    public static Accessor DATE_ASC = new Accessor() {
+    Accessor DATE_ASC = new Accessor() {
+            @SuppressWarnings("SimpleDateFormat")
             public String getLabel(FileHandle o) {
                 SimpleDateFormat df = new SimpleDateFormat("EEEEEEEEE MMM dd, yyyy");
 
@@ -18,7 +19,8 @@ public interface Accessor extends Comparator<FileHandle> {
             }
         };
 
-    public static Accessor DATE_DESC = new Accessor() {
+    Accessor DATE_DESC = new Accessor() {
+            @SuppressWarnings("SimpleDateFormat")
             public String getLabel(FileHandle o) {
                 SimpleDateFormat df = new SimpleDateFormat("EEEEEEEEE MMM dd, yyyy");
 
@@ -31,7 +33,7 @@ public interface Accessor extends Comparator<FileHandle> {
             }
         };
 
-    public static Accessor SOURCE = new Accessor() {
+    Accessor SOURCE = new Accessor() {
             public String getLabel(FileHandle o) {
                 return o.getSource();
             }
@@ -42,5 +44,5 @@ public interface Accessor extends Comparator<FileHandle> {
             }
         };
 
-    public String getLabel(FileHandle o);
+    String getLabel(FileHandle o);
 }
