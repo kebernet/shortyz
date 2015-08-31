@@ -119,8 +119,7 @@ public class ShortyzActivity extends BaseGameActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		int dpi = Math.round(160F * metrics.density);
         int size = dpi / 2;
-		System.out.println("BITMAT SIZE "+size);
-        Bitmap bitmap = Bitmap.createBitmap(size , size, Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(size , size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint p = new Paint();
         p.setColor(Color.WHITE);
@@ -129,7 +128,7 @@ public class ShortyzActivity extends BaseGameActivity {
         p.setTextSize(size);
         p.setAntiAlias(true);
         p.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(character, size/2, size - size / 5, p );
+        canvas.drawText(character, size/2, size - size / 9, p );
         return bitmap;
 
     }

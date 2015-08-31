@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.totsp.crossword.BrowseActivity.Provider;
 import com.totsp.crossword.net.Downloader;
@@ -33,6 +34,7 @@ import java.util.logging.Logger;
  * Custom dialog for choosing puzzles to download.
  */
 public class DownloadPickerDialogBuilder {
+    private static final String[] DAYS = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     private static final Logger LOGGER = Logger.getLogger(DownloadPickerDialogBuilder.class.getCanonicalName());
     private Activity mActivity;
     private Dialog mDialog;
@@ -43,6 +45,9 @@ public class DownloadPickerDialogBuilder {
                 mYear = year;
                 mMonthOfYear = monthOfYear;
                 mDayOfMonth = dayOfMonth;
+                if(dayOfWeek != null){
+                    dayOfWeek.setText(DAYS[new Date(year, monthOfYear, dayOfMonth).getDay()]);
+                }
                 updatePuzzleSelect();
             }
         };
@@ -53,6 +58,7 @@ public class DownloadPickerDialogBuilder {
     private int mMonthOfYear;
     private int mYear;
     private int selectedItemPosition = 0;
+    private final TextView dayOfWeek;
 
     public DownloadPickerDialogBuilder(Activity a, final OnDownloadSelectedListener downloadButtonListener, int year,
         int monthOfYear, int dayOfMonth, Provider<Downloaders> provider) {
@@ -69,6 +75,8 @@ public class DownloadPickerDialogBuilder {
 
 
         final DatePicker datePicker = (DatePicker) layout.findViewById(R.id.datePicker);
+        dayOfWeek = (TextView) layout.findViewById(R.id.dayOfWeek);
+
         datePicker.init(year, monthOfYear, dayOfMonth, dateChangedListener);
 
         mPuzzleSelect = (Spinner) layout.findViewById(R.id.puzzleSelect);

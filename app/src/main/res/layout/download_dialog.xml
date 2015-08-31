@@ -8,6 +8,10 @@
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"
 	  android:orientation="vertical">
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/dayOfWeek"/>
 	  	<DatePicker
 	      android:id="@+id/datePicker"
 	      android:padding="5dip"
