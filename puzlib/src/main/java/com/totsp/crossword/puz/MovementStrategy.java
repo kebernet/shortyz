@@ -195,13 +195,26 @@ public interface MovementStrategy extends Serializable {
 		public Word move(Playboard board, boolean skipCompletedLetters) {
 			Word w = board.getCurrentWord();
 			Position p = board.getHighlightLetter();
-			
 
-			if ((w.across && p.across == w.start.across + w.length - 1)
-					|| (!w.across && p.down == w.start.down + w.length - 1)) {
-				//board.setHighlightLetter(w.start);
+			boolean isWordEnd =
+				(w.across && p.across == w.start.across + w.length - 1) ||
+				(!w.across && p.down == w.start.down + w.length - 1)
+			;
+
+			if (isWordEnd) {
+				//reset the position to the beginning in order to calculate the parallel word
+				board.setHighlightLetter(w.start);
 				Word newWord;
+				Box[][] boxes = board.getBoxes();
 				if (w.across) {
+					if (w.start.down + 1 < boxes[w.start.across].length) {
+						int indexOfLargestWhitepsace = getIndexOfLargestWhitepsace(boxes, w);
+
+						board.setHighlightLetter(new Position(w.start.across + indexOfLargestWhitepsace, w.start.down));
+						//setHighlightLetter alters the across state when indexOfLargestWhitepsace == 0, no need
+						// to check for it, we already know this is an across
+						board.setAcross(w.across);
+					}
 					board.moveDown();
 					while(board.getClue().hint == null && board.getHighlightLetter().down < board.getBoxes()[0].length){
 						board.moveDown();
@@ -211,6 +224,14 @@ public interface MovementStrategy extends Serializable {
 					}
 					newWord = board.getCurrentWord();
 				} else {
+					if (w.start.across + 1 < boxes.length) {
+						int indexOfLargestWhitepsace = getIndexOfLargestWhitepsace(boxes, w);
+
+						board.setHighlightLetter(new Position(w.start.across, w.start.down + indexOfLargestWhitepsace));
+						//setHighlightLetter alters the across state when indexOfLargestWhitepsace == 0, no need
+						// to check for it, we already know this is an across
+						board.setAcross(w.across);
+					}
 					board.moveRight();
 					while(board.getClue().hint == null && board.getHighlightLetter().across < board.getBoxes().length){
 						board.moveRight();
@@ -239,6 +260,38 @@ public interface MovementStrategy extends Serializable {
 			}
 
 			return w;
+		}
+
+		/**
+		 * find the index of the next parallel section where the most whitespaces match
+		 * Precondition: the current word is not on the last row (otherwise there will be an ArrayIndexOutOfBounds)
+		 */
+		private int getIndexOfLargestWhitepsace(Box[][] boxes, Word w) {
+			int indexOfLargestWhitepsace = 0;
+			int largestWhitespace = 0;
+			int curCount = 0;
+			int curIndex = 0;
+			for (int i = 0; i < w.length; i++) {
+				Box nextBox;
+				if (w.across) {
+					nextBox = boxes[w.start.across + i][w.start.down + 1];
+				} else {
+					nextBox = boxes[w.start.across + 1][w.start.down + i];
+				}
+				if (nextBox != null) {
+					curCount++;
+					if (curCount == 1) {
+						curIndex = i;
+					}
+				} else {
+					curCount = 0;
+				}
+				if (curCount > largestWhitespace) {
+					largestWhitespace = curCount;
+					indexOfLargestWhitepsace = curIndex;
+				}
+			}
+			return indexOfLargestWhitepsace;
 		}
 
 		public Word back(Playboard board) {
