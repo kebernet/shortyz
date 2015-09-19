@@ -70,12 +70,17 @@ public interface MovementStrategy extends Serializable {
 			} else {
 				MOVE_NEXT_ON_AXIS.move(board,skipCompletedLetters);
 				Word newWord = board.getCurrentWord();
-				if (newWord.equals(w)) {
-					return w;
-				} else {
+				if (!newWord.equals(w)) {
 					board.setHighlightLetter(p);
-					return w;
+				} else if (skipCompletedLetters && Common.isLastWordInDirection(board, w)) {
+					// special case if this is at the end of the board
+					Position current = board.getHighlightLetter();
+					Box[][] boxes = board.getBoxes();
+					if (boxes[current.across][current.down].getResponse() != ' ') {
+						board.setHighlightLetter(p);
+					}
 				}
+				return w;
 			}
 		}
 
