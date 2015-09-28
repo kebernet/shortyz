@@ -8,6 +8,36 @@ import java.util.Arrays;
 
 public interface MovementStrategy extends Serializable {
 
+	static class Common {
+
+		/**
+		 * @return if @param Word (w) is the last word in its direction in the @param board
+		 */
+		static boolean isLastWordInDirection(Playboard board, Word w) {
+			return isLastWordInDirection(board.getBoxes(), w);
+		}
+
+		/**
+		 * @return if @param Word (w) is the last word in its direction in @param boxes
+		 */
+		static boolean isLastWordInDirection(Box[][] boxes, Word w) {
+			if (w.across) {
+				return (w.start.down + 1 >= boxes[w.start.across].length);
+			}
+			return (w.start.across + 1 >= boxes.length);
+		}
+
+		/**
+		 * @return if @param Position (p) is the last position in @param Word (w)
+		 */
+		static boolean isWordEnd(Position p, Word w) {
+			return
+				(w.across && p.across == w.start.across + w.length - 1) ||
+				(!w.across && p.down == w.start.down + w.length - 1)
+			;
+		}
+	}
+
 	MovementStrategy MOVE_NEXT_ON_AXIS = new MovementStrategy() {
 
 		public Word move(Playboard board, boolean skipCompletedLetters) {
@@ -35,18 +65,22 @@ public interface MovementStrategy extends Serializable {
 
 			Position p = board.getHighlightLetter();
 			Word w = board.getCurrentWord();
-			if ((w.across && p.across == w.start.across + w.length - 1)
-					|| (!w.across && p.down == w.start.down + w.length - 1)) {
+			if (Common.isWordEnd(p, w)) {
 				return w;
 			} else {
 				MOVE_NEXT_ON_AXIS.move(board,skipCompletedLetters);
 				Word newWord = board.getCurrentWord();
-				if (newWord.equals(w)) {
-					return w;
-				} else {
+				if (!newWord.equals(w)) {
 					board.setHighlightLetter(p);
-					return w;
+				} else if (skipCompletedLetters && Common.isLastWordInDirection(board, w)) {
+					// special case if this is at the end of the board
+					Position current = board.getHighlightLetter();
+					Box[][] boxes = board.getBoxes();
+					if (boxes[current.across][current.down].getResponse() != ' ') {
+						board.setHighlightLetter(p);
+					}
 				}
+				return w;
 			}
 		}
 
@@ -154,8 +188,7 @@ public interface MovementStrategy extends Serializable {
 			}
 			
 			Position nextPos;
-			if ((w.across && p.across == w.start.across + w.length - 1)
-					|| (!w.across && p.down == w.start.down + w.length - 1)) {
+			if (Common.isWordEnd(p, w)) {
 				// At end of a word - move to the next one and continue.
 				if(moveToNextWord(board, skipCompletedLetters)) {
 					return w;
@@ -196,18 +229,16 @@ public interface MovementStrategy extends Serializable {
 			Word w = board.getCurrentWord();
 			Position p = board.getHighlightLetter();
 
-			boolean isWordEnd =
-				(w.across && p.across == w.start.across + w.length - 1) ||
-				(!w.across && p.down == w.start.down + w.length - 1)
-			;
-
-			if (isWordEnd) {
+			if (Common.isWordEnd(p, w)) {
 				//reset the position to the beginning in order to calculate the parallel word
-				board.setHighlightLetter(w.start);
 				Word newWord;
 				Box[][] boxes = board.getBoxes();
+				boolean isLastWordInDirection = Common.isLastWordInDirection(boxes, w);
+				if (!isLastWordInDirection) {
+					board.setHighlightLetter(w.start);
+				}
 				if (w.across) {
-					if (w.start.down + 1 < boxes[w.start.across].length) {
+					if (!isLastWordInDirection) {
 						int indexOfLargestWhitepsace = getIndexOfLargestWhitepsace(boxes, w);
 
 						board.setHighlightLetter(new Position(w.start.across + indexOfLargestWhitepsace, w.start.down));
@@ -224,7 +255,7 @@ public interface MovementStrategy extends Serializable {
 					}
 					newWord = board.getCurrentWord();
 				} else {
-					if (w.start.across + 1 < boxes.length) {
+					if (!isLastWordInDirection) {
 						int indexOfLargestWhitepsace = getIndexOfLargestWhitepsace(boxes, w);
 
 						board.setHighlightLetter(new Position(w.start.across, w.start.down + indexOfLargestWhitepsace));
@@ -248,8 +279,7 @@ public interface MovementStrategy extends Serializable {
 				}
 			
 			} else {
-				MOVE_NEXT_ON_AXIS.move(board,
-						skipCompletedLetters);
+				MOVE_NEXT_ON_AXIS.move(board, skipCompletedLetters);
 				Word newWord = board.getCurrentWord();
 				if (!newWord.equals(w)) {
 					Position end = new Position(w.start.across + (w.across ? w.length -1: 0),
