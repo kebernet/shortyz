@@ -47,4 +47,14 @@ public class DummyDownloader implements Downloader {
     public boolean alwaysRun(){
         return false;
     }
+
+    @Override
+    public Date getGoodThrough() {
+        return new Date();
+    }
+
+    @Override
+    public Date getGoodFrom() {
+        return new Date(0L);
+    }
 }

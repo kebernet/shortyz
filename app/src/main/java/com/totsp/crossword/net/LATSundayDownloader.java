@@ -15,7 +15,7 @@ public class LATSundayDownloader extends AbstractJPZDownloader {
 
 
     public LATSundayDownloader() {
-        super("http://cdn.games.arkadiumhosted.com/latimes/assets/SundayCrossword/mreagle_", DOWNLOAD_DIR, NAME);
+        super("https://washingtonpost.as.arkadiumhosted.com/clients/washingtonpost-content/SundayCrossword/mreagle_", DOWNLOAD_DIR, NAME);
     }
 
     @Override

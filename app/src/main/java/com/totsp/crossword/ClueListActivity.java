@@ -11,6 +11,7 @@ import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.totsp.crossword.puz.Playboard.Word;
 import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
+import com.totsp.crossword.view.PlayboardRenderer;
 import com.totsp.crossword.view.ScrollingImageView;
 import com.totsp.crossword.view.ScrollingImageView.ClickListener;
 import com.totsp.crossword.view.ScrollingImageView.Point;
@@ -46,6 +48,7 @@ public class ClueListActivity extends ShortyzActivity {
 	private ScrollingImageView imageView;
 	private TabHost tabHost;
 	private boolean useNativeKeyboard = false;
+	private PlayboardRenderer renderer;
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -81,6 +84,11 @@ public class ClueListActivity extends ShortyzActivity {
 		super.onCreate(icicle);
 		utils.holographic(this);
 		utils.finishOnHomeButton(this);
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		this.renderer = new PlayboardRenderer(ShortyzApplication.BOARD,metrics.density, metrics.widthPixels,
+				!prefs.getBoolean("supressHints", false));
+
 		try {
 			this.configuration = getBaseContext().getResources()
 					.getConfiguration();
@@ -465,6 +473,6 @@ public class ClueListActivity extends ShortyzActivity {
 			this.keyboardView.setVisibility(View.GONE);
 		}
 
-		this.imageView.setBitmap(ShortyzApplication.RENDERER.drawWord());
+		this.imageView.setBitmap(renderer.drawWord());
 	}
 }

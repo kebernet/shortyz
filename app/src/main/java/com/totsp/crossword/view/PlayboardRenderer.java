@@ -199,8 +199,8 @@ public class PlayboardRenderer {
     }
 
     public int findBoxNoScale(Point p) {
-        int boxSize = (int) (BASE_BOX_SIZE_INCHES * scale);
-
+        int boxSize =  (int) (BASE_BOX_SIZE_INCHES * dpi);
+        LOG.info("DPI "+dpi+" scale "+ scale +" box size "+boxSize);
         return p.x / boxSize;
     }
 
@@ -271,8 +271,8 @@ public class PlayboardRenderer {
         // scale paints
         numberText.setTextSize(numberTextSize);
         letterText.setTextSize(letterTextSize);
-        red.setTextSize(boxSize);
-        white.setTextSize(boxSize);
+        red.setTextSize(letterTextSize);
+        white.setTextSize(letterTextSize);
 
         boolean inCurrentWord = (currentWord != null) && currentWord.checkInWord(col, row);
         Position highlight = this.board.getHighlightLetter();
@@ -289,7 +289,7 @@ public class PlayboardRenderer {
                 canvas.drawRect(r, this.currentLetterHighlight);
             } else if ((currentWord != null) && currentWord.checkInWord(col, row)) {
                 canvas.drawRect(r, this.currentWordHighlight);
-            } else if (this.hintHighlight && box.isCheated() && !(board.isShowErrors() && box.getResponse() != box.getSolution())) {
+            } else if (this.hintHighlight && box.isCheated()) {
                 canvas.drawRect(r, this.cheated);
             } else if (this.board.isShowErrors() && (box.getResponse() != ' ') &&
                     (box.getSolution() != box.getResponse())) {
@@ -311,6 +311,9 @@ public class PlayboardRenderer {
             thisLetter = this.letterText;
 
             if (board.isShowErrors() && (box.getSolution() != box.getResponse())) {
+                if(box.getResponse() != ' '){
+                    box.setCheated(true);
+                }
                 if ((highlight.across == col) && (highlight.down == row)) {
                     thisLetter = this.white;
                 } else if (inCurrentWord) {

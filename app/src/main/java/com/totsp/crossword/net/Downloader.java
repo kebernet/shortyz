@@ -32,4 +32,9 @@ public interface Downloader {
     String sourceUrl(Date date);
 
     boolean alwaysRun();
+
+
+    Date getGoodThrough();
+
+    Date getGoodFrom();
 }

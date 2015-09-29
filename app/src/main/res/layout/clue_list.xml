@@ -24,7 +24,7 @@
         <com.totsp.crossword.view.ScrollingImageView
         	android:id="@+id/miniboard"
         	android:layout_width="fill_parent"
-        	android:layout_height="40dp"
+        	android:layout_height="0.501in"
         />
         <TabWidget
         	android:layout_below="@id/miniboard"

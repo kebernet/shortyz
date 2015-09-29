@@ -184,4 +184,14 @@ public class GmailDownloader implements Downloader {
     public boolean alwaysRun(){
         return true;
     }
+
+    @Override
+    public Date getGoodThrough() {
+        return new Date();
+    }
+
+    @Override
+    public Date getGoodFrom() {
+        return new Date(0L);
+    }
 }

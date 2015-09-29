@@ -54,7 +54,8 @@ public class Downloaders {
 //		 }
 		
 		if (prefs.getBoolean("downloadWsj", true)) {
-			downloaders.add(new WSJDownloader());
+			downloaders.add(new WSJFridayDownloader());
+			downloaders.add(new WSJSaturdayDownloader());
 		}
 
 		if (prefs.getBoolean("downloadWaPoPuzzler", true)) {
@@ -151,7 +152,9 @@ public class Downloaders {
 
 		for (Downloader d : downloaders) {
 			if (Arrays.binarySearch(d.getDownloadDates(), dayOfWeek) >= 0) {
-				retVal.add(d);
+				if(date.getTime() >= d.getGoodFrom().getTime() && date.getTime() <= d.getGoodThrough().getTime()) {
+					retVal.add(d);
+				}
 			}
 		}
 

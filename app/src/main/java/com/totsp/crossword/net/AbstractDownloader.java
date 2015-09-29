@@ -30,6 +30,7 @@ public abstract class AbstractDownloader implements Downloader {
     protected final AndroidVersionUtils utils = AndroidVersionUtils.Factory.getInstance();
     private String downloaderName;
     protected File tempFolder;
+    protected Date goodThrough = new Date();
 
     protected AbstractDownloader(String baseUrl, File downloadDirectory, String downloaderName) {
         this.baseUrl = baseUrl;
@@ -142,5 +143,13 @@ public abstract class AbstractDownloader implements Downloader {
     @Override
     public boolean alwaysRun(){
         return false;
+    }
+
+    public Date getGoodThrough(){
+        return this.goodThrough;
+    }
+
+    public Date getGoodFrom(){
+        return new Date(0L);
     }
 }
