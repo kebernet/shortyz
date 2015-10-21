@@ -689,7 +689,7 @@ public class Playboard implements Serializable {
 
         @Override
         public int hashCode() {
-            return this.across ^ this.down;
+            return Arrays.hashCode(new int[] {across, down});
         }
 
         @Override
