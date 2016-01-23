@@ -25,8 +25,10 @@ import com.totsp.crossword.net.Downloaders;
 import com.totsp.crossword.net.DummyDownloader;
 import com.totsp.crossword.shortyz.R;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 
@@ -34,7 +36,6 @@ import java.util.logging.Logger;
  * Custom dialog for choosing puzzles to download.
  */
 public class DownloadPickerDialogBuilder {
-    private static final String[] DAYS = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     private static final Logger LOGGER = Logger.getLogger(DownloadPickerDialogBuilder.class.getCanonicalName());
     private Activity mActivity;
     private Dialog mDialog;
@@ -42,11 +43,9 @@ public class DownloadPickerDialogBuilder {
     private OnDateChangedListener dateChangedListener = new DatePicker.OnDateChangedListener() {
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 LOGGER.info("OnDateChanged " + year + " " + monthOfYear + " " + dayOfMonth);
-                mYear = year;
-                mMonthOfYear = monthOfYear;
-                mDayOfMonth = dayOfMonth;
+                downloadDate.set(year, monthOfYear, dayOfMonth);
                 if(dayOfWeek != null){
-                    dayOfWeek.setText(DAYS[new Date(year, monthOfYear, dayOfMonth).getDay()]);
+                    updateDayOfWeek();
                 }
                 updatePuzzleSelect();
             }
@@ -54,9 +53,7 @@ public class DownloadPickerDialogBuilder {
 
     private Provider<Downloaders> mDownloaders;
     private Spinner mPuzzleSelect;
-    private int mDayOfMonth;
-    private int mMonthOfYear;
-    private int mYear;
+    private Calendar downloadDate;
     private int selectedItemPosition = 0;
     private final TextView dayOfWeek;
 
@@ -64,9 +61,8 @@ public class DownloadPickerDialogBuilder {
         int monthOfYear, int dayOfMonth, Provider<Downloaders> provider) {
         mActivity = a;
 
-        mYear = year;
-        mMonthOfYear = monthOfYear;
-        mDayOfMonth = dayOfMonth;
+        downloadDate = Calendar.getInstance();
+        downloadDate.set(year, monthOfYear,  dayOfMonth);
 
         mDownloaders = provider;
 
@@ -76,6 +72,7 @@ public class DownloadPickerDialogBuilder {
 
         final DatePicker datePicker = (DatePicker) layout.findViewById(R.id.datePicker);
         dayOfWeek = (TextView) layout.findViewById(R.id.dayOfWeek);
+        updateDayOfWeek();
 
         datePicker.init(year, monthOfYear, dayOfMonth, dateChangedListener);
 
@@ -121,13 +118,17 @@ public class DownloadPickerDialogBuilder {
             });
     }
 
+    private void updateDayOfWeek() {
+        String dayName = downloadDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        dayOfWeek.setText(dayName);
+    }
+
     public Dialog getInstance() {
         return mDialog;
     }
 
-    @SuppressWarnings("deprecation")
 	private Date getCurrentDate() {
-        return new Date(mYear - 1900, mMonthOfYear, mDayOfMonth);
+        return downloadDate.getTime();
     }
 
 
