@@ -119,7 +119,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                     puzzleList.invalidate();
                 }
                 actionMode.finish();
-            } else if(menuItem.getTitle().equals("Un-Archive")){
+            } else if(menuItem.getTitle().equals("Un-archive")){
                 for(FileHandle handle : selected){
                     moveTo(handle.file, crosswordsFolder);
                     puzzleList.invalidate();
@@ -361,7 +361,11 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                 if("DELETE".equals(prefs.getString("swipeAction", "DELETE"))) {
                     deleteFile(handle.file);
                 } else {
-                    moveTo(handle.file, archiveFolder);
+                    if (viewArchive) {
+                        moveTo(handle.file, crosswordsFolder);
+                    } else {
+                        moveTo(handle.file, archiveFolder);
+                    }
                 }
                 currentAdapter.onItemDismiss(viewHolder.getAdapterPosition());
                 puzzleList.invalidate();
