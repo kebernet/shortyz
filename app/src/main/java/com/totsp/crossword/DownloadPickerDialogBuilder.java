@@ -44,9 +44,7 @@ public class DownloadPickerDialogBuilder {
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 LOGGER.info("OnDateChanged " + year + " " + monthOfYear + " " + dayOfMonth);
                 downloadDate.set(year, monthOfYear, dayOfMonth);
-                if(dayOfWeek != null){
-                    updateDayOfWeek();
-                }
+                updateDayOfWeek();
                 updatePuzzleSelect();
             }
         };
@@ -119,6 +117,8 @@ public class DownloadPickerDialogBuilder {
     }
 
     private void updateDayOfWeek() {
+        if (dayOfWeek == null) return;
+
         String dayName = downloadDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         dayOfWeek.setText(dayName);
     }
