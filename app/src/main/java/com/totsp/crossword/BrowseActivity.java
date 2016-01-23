@@ -337,7 +337,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
             @Override
             public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (!(viewHolder instanceof FileViewHolder)) {
+                if (!(viewHolder instanceof FileViewHolder) || prefs.getBoolean("disableSwipe", false)) {
                     return 0; // Don't swipe the headers.
                 }
                 return super.getSwipeDirs(recyclerView, viewHolder);
