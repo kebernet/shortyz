@@ -119,7 +119,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                     puzzleList.invalidate();
                 }
                 actionMode.finish();
-            } else if(menuItem.getTitle().equals("Un-Archive")){
+            } else if(menuItem.getTitle().equals("Un-archive")){
                 for(FileHandle handle : selected){
                     moveTo(handle.file, crosswordsFolder);
                     puzzleList.invalidate();
@@ -130,10 +130,11 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         }
 
         @Override
-        public void onDestroyActionMode(ActionMode actionMode) {
+        public void onDestroyActionMode(ActionMode mode) {
             selected.clear();
             render();
             download.setVisibility(View.VISIBLE);
+            actionMode = null;
         }
     };
     private int primaryTextColor;
@@ -337,7 +338,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
             @Override
             public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (!(viewHolder instanceof FileViewHolder)) {
+                if (!(viewHolder instanceof FileViewHolder) || prefs.getBoolean("disableSwipe", false)) {
                     return 0; // Don't swipe the headers.
                 }
                 return super.getSwipeDirs(recyclerView, viewHolder);
@@ -361,7 +362,11 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                 if("DELETE".equals(prefs.getString("swipeAction", "DELETE"))) {
                     deleteFile(handle.file);
                 } else {
-                    moveTo(handle.file, archiveFolder);
+                    if (viewArchive) {
+                        moveTo(handle.file, crosswordsFolder);
+                    } else {
+                        moveTo(handle.file, archiveFolder);
+                    }
                 }
                 currentAdapter.onItemDismiss(viewHolder.getAdapterPosition());
                 puzzleList.invalidate();
@@ -805,24 +810,18 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
     @Override
     public void onItemClick(final View v, int position) {
-        if(!selected.isEmpty()){
-            if(selected.contains(v.getTag())){
-                setListItemColor(v, false);
-                selected.remove(v.getTag());
-            } else {
-                setListItemColor(v, true);
-                selected.add((FileHandle) v.getTag());
-            }
-            if(selected.isEmpty()){
-                actionMode.finish();
-            }
+        if (!(v.getTag() instanceof FileHandle)) {
+            return;
+        }
+        if (!selected.isEmpty()) {
+            updateSelection(v);
         } else {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     lastOpenedView = v;
                     lastOpenedHandle = ((FileHandle) v.getTag());
-                    if(lastOpenedHandle == null || lastOpenedHandle.file == null){
+                    if (lastOpenedHandle == null || lastOpenedHandle.file == null) {
                         return;
                     }
                     File puzFile = lastOpenedHandle.file;
@@ -831,21 +830,29 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                 }
             }, 450);
         }
-
-
     }
 
     @Override
     public void onItemLongClick(View v, int position) {
-        if(v.getTag() instanceof FileHandle){
-            if(selected.contains(v.getTag())){
-                setListItemColor(v, false);
-                selected.remove(v.getTag());
-            } else {
-                setListItemColor(v, true);
-                selected.add((FileHandle) v.getTag());
-            }
+        if (!(v.getTag() instanceof FileHandle)) {
+            return;
+        }
+        if (actionMode == null) {
             getSupportActionBar().startActionMode(actionModeCallback);
+        }
+        updateSelection(v);
+    }
+
+    private void updateSelection(View v) {
+        if (selected.contains(v.getTag())) {
+            setListItemColor(v, false);
+            selected.remove(v.getTag());
+        } else {
+            setListItemColor(v, true);
+            selected.add((FileHandle) v.getTag());
+        }
+        if (selected.isEmpty()) {
+            actionMode.finish();
         }
     }
 

@@ -321,7 +321,7 @@
     <com.jenzz.materialpreference.CheckBoxPreference
         android:title="Disable Swipe"
         android:defaultValue="false"
-        android:summary="Disables swiping to dismiss on the list view. (Requires Restart)"
+        android:summary="Disables swiping to dismiss on the list view."
         android:key="disableSwipe"
         />
 
