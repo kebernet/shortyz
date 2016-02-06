@@ -286,6 +286,22 @@ public interface MovementStrategy extends Serializable {
 							w.start.down + (w.across? 0 : w.length -1));
 					board.setHighlightLetter(end);
 					this.move(board, skipCompletedLetters);
+				} else {
+					//edge case - the move next on axis didn't move the position because the skipCompleted
+					//moved to the end of the word, and the next on axis tried to move onto a non-letter space
+					if (skipCompletedLetters && Common.isWordEnd(board.getHighlightLetter(), w)) {
+						if (board.skipCurrentBox(board.getCurrentBox(), skipCompletedLetters)) {
+							this.move(board, skipCompletedLetters);
+						}
+					} else {
+						Position newPos = board.getHighlightLetter();
+						if (p.across == newPos.across && p.down == newPos.down && !Common.isWordEnd(board.getHighlightLetter(), w)) {
+							Position end = new Position(w.start.across + (w.across ? w.length -1: 0),
+									w.start.down + (w.across? 0 : w.length -1));
+							board.setHighlightLetter(end);
+							this.move(board, skipCompletedLetters);
+						}
+					}
 				}
 			}
 
