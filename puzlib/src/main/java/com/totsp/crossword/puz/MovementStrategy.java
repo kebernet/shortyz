@@ -40,6 +40,7 @@ public interface MovementStrategy extends Serializable {
 
 	MovementStrategy MOVE_NEXT_ON_AXIS = new MovementStrategy() {
 
+		@Override
 		public Word move(Playboard board, boolean skipCompletedLetters) {
 			if (board.isAcross()) {
 				return board.moveRight(skipCompletedLetters);
@@ -48,6 +49,7 @@ public interface MovementStrategy extends Serializable {
 			}
 		}
 
+		@Override
 		public Word back(Playboard board) {
 	        if (board.isAcross()) {
 	            return board.moveLeft();
@@ -59,6 +61,7 @@ public interface MovementStrategy extends Serializable {
 
 	MovementStrategy STOP_ON_END = new MovementStrategy() {
 
+		@Override
 		public Word move(Playboard board, boolean skipCompletedLetters) {
 			// This is overly complex, but I am trying to save calls to heavy
 			// methods on the board.
@@ -84,6 +87,7 @@ public interface MovementStrategy extends Serializable {
 			}
 		}
 
+		@Override
 		public Word back(Playboard board) {
 			Word w = board.getCurrentWord();
 			Position p = board.getHighlightLetter();
@@ -176,7 +180,8 @@ public interface MovementStrategy extends Serializable {
 			}
 			return false;
 		}
-		
+
+		@Override
 		public Word move(Playboard board, boolean skipCompletedLetters) {
 			Position p = board.getHighlightLetter();
 			Word w = board.getCurrentWord();
@@ -207,6 +212,7 @@ public interface MovementStrategy extends Serializable {
 			return w;
 		}
 
+		@Override
 		public Word back(Playboard board) {
 			Position p = board.getHighlightLetter();
 			Word w = board.getCurrentWord();
@@ -225,6 +231,7 @@ public interface MovementStrategy extends Serializable {
 
 	MovementStrategy MOVE_PARALLEL_WORD = new MovementStrategy() {
 
+		@Override
 		public Word move(Playboard board, boolean skipCompletedLetters) {
 			Word w = board.getCurrentWord();
 			Position p = board.getHighlightLetter();
@@ -239,10 +246,10 @@ public interface MovementStrategy extends Serializable {
 				}
 				if (w.across) {
 					if (!isLastWordInDirection) {
-						int indexOfLargestWhitepsace = getIndexOfLargestWhitepsace(boxes, w);
+						int indexOfLargestWhitespace = getIndexOfLargestWhitespace(boxes, w);
 
-						board.setHighlightLetter(new Position(w.start.across + indexOfLargestWhitepsace, w.start.down));
-						//setHighlightLetter alters the across state when indexOfLargestWhitepsace == 0, no need
+						board.setHighlightLetter(new Position(w.start.across + indexOfLargestWhitespace, w.start.down));
+						//setHighlightLetter alters the across state when indexOfLargestWhitespace == 0, no need
 						// to check for it, we already know this is an across
 						board.setAcross(w.across);
 					}
@@ -256,10 +263,10 @@ public interface MovementStrategy extends Serializable {
 					newWord = board.getCurrentWord();
 				} else {
 					if (!isLastWordInDirection) {
-						int indexOfLargestWhitepsace = getIndexOfLargestWhitepsace(boxes, w);
+						int indexOfLargestWhitespace = getIndexOfLargestWhitespace(boxes, w);
 
-						board.setHighlightLetter(new Position(w.start.across, w.start.down + indexOfLargestWhitepsace));
-						//setHighlightLetter alters the across state when indexOfLargestWhitepsace == 0, no need
+						board.setHighlightLetter(new Position(w.start.across, w.start.down + indexOfLargestWhitespace));
+						//setHighlightLetter alters the across state when indexOfLargestWhitespace == 0, no need
 						// to check for it, we already know this is an across
 						board.setAcross(w.across);
 					}
@@ -312,8 +319,8 @@ public interface MovementStrategy extends Serializable {
 		 * find the index of the next parallel section where the most whitespaces match
 		 * Precondition: the current word is not on the last row (otherwise there will be an ArrayIndexOutOfBounds)
 		 */
-		private int getIndexOfLargestWhitepsace(Box[][] boxes, Word w) {
-			int indexOfLargestWhitepsace = 0;
+		private int getIndexOfLargestWhitespace(Box[][] boxes, Word w) {
+			int indexOfLargestWhitespace = 0;
 			int largestWhitespace = 0;
 			int curCount = 0;
 			int curIndex = 0;
@@ -334,12 +341,13 @@ public interface MovementStrategy extends Serializable {
 				}
 				if (curCount > largestWhitespace) {
 					largestWhitespace = curCount;
-					indexOfLargestWhitepsace = curIndex;
+					indexOfLargestWhitespace = curIndex;
 				}
 			}
-			return indexOfLargestWhitepsace;
+			return indexOfLargestWhitespace;
 		}
 
+		@Override
 		public Word back(Playboard board) {
 			Word w = board.getCurrentWord();
 			Position p = board.getHighlightLetter();

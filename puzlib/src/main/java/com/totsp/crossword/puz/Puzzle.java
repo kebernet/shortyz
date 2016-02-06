@@ -63,43 +63,59 @@ public class Puzzle implements Serializable{
         return author;
     }
 
+    private static Box checkedGet(Box[][] boxes, int row, int col) {
+        try {
+            return boxes[row][col];
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    private static boolean somethingAbove(Box[][] boxes, int row, int col) {
+        return checkedGet(boxes, row - 1, col) != null;
+    }
+
+    private static boolean somethingBelow(Box[][]boxes, int row, int col) {
+        return checkedGet(boxes, row + 1, col) != null;
+    }
+
+    private static boolean somethingLeftOf(Box[][] boxes, int row, int col) {
+        return checkedGet(boxes, row, col - 1) != null;
+    }
+
+    private static boolean somethingRightOf(Box[][] boxes, int row, int col) {
+        return checkedGet(boxes, row, col + 1) != null;
+    }
+
     public void setBoxes(Box[][] boxes) {
         this.boxes = boxes;
 
         int clueCount = 1;
 
-        for (int x = 0; x < boxes.length; x++) {
-            boolean tickedClue = false;
-
-            for (int y = 0; y < boxes[x].length; y++) {
-                if (boxes[x][y] == null) {
+        for (int row = 0; row < boxes.length; row++) {
+            for (int col = 0; col < boxes[row].length; col++) {
+                if (boxes[row][col] == null) {
                     continue;
                 }
 
-                if (((x == 0) || (boxes[x - 1][y] == null)) &&
-                        (((x + 1) < boxes.length) && (boxes[x + 1][y] != null))) {
-                    boxes[x][y].setDown(true);
-
-                    if ((x == 0) || (boxes[x - 1][y] == null)) {
-                        boxes[x][y].setClueNumber(clueCount);
-                        tickedClue = true;
+                boolean tickedClue = false;
+                if (!somethingAbove(boxes, row, col)) {
+                    if (somethingBelow(boxes, row, col)) {
+                        boxes[row][col].setDown(true);
                     }
+                    tickedClue = true;
                 }
 
-                if (((y == 0) || (boxes[x][y - 1] == null)) &&
-                        (((y + 1) < boxes[x].length) &&
-                        (boxes[x][y + 1] != null))) {
-                    boxes[x][y].setAcross(true);
-
-                    if ((y == 0) || (boxes[x][y - 1] == null)) {
-                        boxes[x][y].setClueNumber(clueCount);
-                        tickedClue = true;
+                if (!somethingLeftOf(boxes, row, col)) {
+                    if (somethingRightOf(boxes, row, col)) {
+                        boxes[row][col].setAcross(true);
                     }
+                    tickedClue = true;
                 }
 
                 if (tickedClue) {
+                    boxes[row][col].setClueNumber(clueCount);
                     clueCount++;
-                    tickedClue = false;
                 }
             }
         }
