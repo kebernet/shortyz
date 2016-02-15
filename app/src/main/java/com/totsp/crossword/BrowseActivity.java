@@ -258,7 +258,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                            .equals("Crosswords") || item.getTitle()
                                                             .equals(MENU_ARCHIVES)) {
             this.viewArchive = !viewArchive;
-            item.setTitle(viewArchive ? "Crosswords" : MENU_ARCHIVES);
+            item.setTitle(viewArchive ? "Crosswords" : MENU_ARCHIVES); //menu item title
+            this.setTitle(!viewArchive ? "Puzzles" : MENU_ARCHIVES); //activity title
 
             if (archiveMenuItem != null) {
                 archiveMenuItem.setTitle(viewArchive ? "Un-archive" : "Archive");
