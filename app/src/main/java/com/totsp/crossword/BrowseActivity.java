@@ -109,21 +109,21 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
             if(menuItem.getTitle().equals("Delete")){
                 for(FileHandle handle : selected){
-                    handle.file.delete();
-                    puzzleList.invalidate();
+                    deleteFile(handle.file);
                 }
+                puzzleList.invalidate();
                 actionMode.finish();
             } else if(menuItem.getTitle().equals("Archive")){
                 for(FileHandle handle : selected){
                     moveTo(handle.file, archiveFolder);
-                    puzzleList.invalidate();
                 }
+                puzzleList.invalidate();
                 actionMode.finish();
             } else if(menuItem.getTitle().equals("Un-archive")){
                 for(FileHandle handle : selected){
                     moveTo(handle.file, crosswordsFolder);
-                    puzzleList.invalidate();
                 }
+                puzzleList.invalidate();
                 actionMode.finish();
             }
             return true;
