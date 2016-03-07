@@ -24,7 +24,8 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
     private final NumberFormat two_int = NumberFormat.getIntegerInstance();
 	private final DateFormat date = DateFormat.getDateInstance(DateFormat.SHORT);
 
-    private double cheatLevel = 0.0D;
+    /** Percentage varying from 0 to 100. */
+    private int cheatLevel = 0;
     private long finishedTime = 0L;
 
 
@@ -67,8 +68,11 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
         	totalBoxes++;
         }
 
-        this.cheatLevel = (double) cheatedBoxes  * 100D / (double) totalBoxes;
-        String cheatedString = cheatedBoxes +" ("+ two_int.format( cheatLevel) +"%)";
+        this.cheatLevel = cheatedBoxes * 100 / totalBoxes;
+        if(this.cheatLevel == 0 && cheatedBoxes > 0){
+            this.cheatLevel = 1;
+        }
+        String cheatedString = cheatedBoxes + " (" + cheatLevel + "%)";
         
         final String shareMessage;
         if(puz.getSource() != null && puz.getDate() != null){
@@ -121,7 +125,7 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
         System.out.println("DOING ACHIEVEMENT "+"achievement_complete_a_puzzle");
         System.out.println("CHEAT LEVEL "+ this.cheatLevel + "time "+ TimeUnit.MINUTES.convert(this.finishedTime, TimeUnit.MILLISECONDS));
         this.doAchievement(R.string.achievement_complete_a_puzzle);
-        if(this.cheatLevel == 0.0D){
+        if(this.cheatLevel == 0){
             this.doAchievement(R.string.achievement_cheaters_never_win);
             this.incrementAchievement(R.string.achievement_playing_in_sharpie);
             this.incrementAchievement(R.string.achievement_the_master_and_the_commander);
@@ -134,7 +138,7 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
                 this.incrementAchievement(R.string.achievement_the_professional);
             }
         }
-        if(this.cheatLevel < 20.0D){
+        if(this.cheatLevel < 20){
             this.incrementAchievement(R.string.achievement_complete_ten_puzzles);
             this.incrementAchievement(R.string.achievement_complete_50_puzzles);
             this.incrementAchievement(R.string.achievement_century_mark);
