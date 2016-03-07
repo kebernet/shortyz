@@ -316,7 +316,7 @@ public class PlayboardRenderer {
                 }
                 if ((highlight.across == col) && (highlight.down == row)) {
                     thisLetter = this.white;
-                } else if (inCurrentWord) {
+                } else {
                     thisLetter = red;
                 }
             }
