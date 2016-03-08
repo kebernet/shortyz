@@ -127,7 +127,7 @@ public class PlayboardRenderer {
                 scale = getDeviceMaxScale();
             } else if (scale < getDeviceMinScale()) {
                 scale = getDeviceMinScale();
-            } else if (scale == Float.NaN) {
+            } else if (Float.isNaN(scale)) {
                 scale = 1.0F;
             }
 

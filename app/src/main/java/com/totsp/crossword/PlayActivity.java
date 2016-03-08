@@ -235,7 +235,7 @@ public class PlayActivity extends ShortyzActivity {
             } else if (scale < .5f) {
                 scale = .25f;
                 prefs.edit().putFloat("scale", .25f).apply();
-            } else if (scale == Float.NaN) {
+            } else if (Float.isNaN(scale)) {
                 scale = 1f;
                 prefs.edit().putFloat("scale", 1f).apply();
             }
