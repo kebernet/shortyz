@@ -4,19 +4,22 @@
   android:orientation="vertical"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
-  android:paddingLeft="6dp">
-  
+  android:paddingLeft="6dp"
+  android:background="@color/background_material_light">
+
   <TextView android:id="@+id/clueLine"
   	android:textSize="14dp"
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content"
-  	android:layout_marginTop="3dp" />
+  	android:layout_marginTop="3dp"
+    android:textColor="@color/textColorPrimary"/>
   
   <TextView android:id="@+id/clueWord"
   	android:textSize="8dp"
   	android:typeface="monospace"
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content"
-  	android:layout_marginBottom="3dp" />
+  	android:layout_marginBottom="3dp"
+	android:textColor="@color/textColorSecondary"/>
   
 </LinearLayout>
