@@ -19,4 +19,9 @@ allprojects {
             url "http://dl.bintray.com/jenzz/maven"
         }
     }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:fallthrough"
+        }
+    }
 }
