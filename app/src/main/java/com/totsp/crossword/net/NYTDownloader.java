@@ -1,5 +1,13 @@
 package com.totsp.crossword.net;
 
+import android.content.Context;
+import android.os.Handler;
+import android.widget.Toast;
+
+import com.totsp.crossword.io.IO;
+import com.totsp.crossword.puz.Box;
+import com.totsp.crossword.puz.Puzzle;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -8,9 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,35 +23,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.HTTP;
-
-import android.content.Context;
-import android.os.Handler;
-import android.widget.Toast;
-
-import com.totsp.crossword.io.IO;
-import com.totsp.crossword.puz.Box;
-import com.totsp.crossword.puz.Puzzle;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * New York Times URL: http://select.nytimes.com/premium/xword/[Mon]DDYY.puz
@@ -70,7 +54,7 @@ public class NYTDownloader extends AbstractDownloader {
 		params.put("is_continue", "true");
 		params.put("SAVEOPTION", "YES");
 		params.put("URI",
-				"http://select.nytimes.com/premium/xword/puzzles.html");
+				"http://www.nytimes.com/crosswords/index.html");
 		params.put("OQ", "");
 		params.put("OP", "");
 		params.put("userid", username);
@@ -102,19 +86,19 @@ public class NYTDownloader extends AbstractDownloader {
 			System.out.println("Source URL:" + oPuz.getSourceUrl());
 
 			URL url = new URL(oPuz.getSourceUrl());
-			HttpClient client = this.login();
+			OkHttpClient client = this.login();
 
-			HttpGet get = new HttpGet(url.toString());
-			HttpResponse response = client.execute(get);
+			Request get = new Request.Builder().url(url).get().build();
+			Response response = client.newCall(get).execute();
 
-			if (response.getStatusLine().getStatusCode() == 200) {
+			if (response.code() == 200) {
 				File f = File.createTempFile(
 						"update" + System.currentTimeMillis(), ".tmp");
 				f.deleteOnExit();
 
 				FileOutputStream fos = new FileOutputStream(f);
 				IO.copyStream(
-						response.getEntity().getContent(), fos);
+						response.body().byteStream(), fos);
 				fos.close();
 
 				Puzzle nPuz = IO.load(f);
@@ -138,7 +122,7 @@ public class NYTDownloader extends AbstractDownloader {
 						}
 					}
 				}
-
+                http://www.nytimes.com/crosswords/index.html
 				f.delete();
 
 				if (updated) {
@@ -175,27 +159,21 @@ public class NYTDownloader extends AbstractDownloader {
 	protected File download(Date date, String urlSuffix) {
 		try {
 			URL url = new URL(this.baseUrl + urlSuffix);
-			HttpClient client = this.login();
+			OkHttpClient client = this.login();
 
-			HttpGet fetchIndex = new HttpGet(
-					"http://select.nytimes.com/premium/xword/puzzles.html");
-			HttpResponse indexResponse = client.execute(fetchIndex);
-			IO.copyStream(indexResponse.getEntity()
-					.getContent(),
-					new FileOutputStream(downloadDirectory.getAbsolutePath()
-							+ "/debug/xword-puzzles.html"));
+			Request request = new Request.Builder()
+					.url(url)
+					.header("Referer", "http://www.nytimes.com/crosswords/index.html")
+					.build();
 
-			HttpGet get = new HttpGet(url.toString());
-			get.addHeader("Referer",
-					"http://select.nytimes.com/premium/xword/puzzles.html");
 
-			HttpResponse response = client.execute(get);
+			Response response = client.newCall(request).execute();
 
-			if (response.getStatusLine().getStatusCode() == 200) {
+			if (response.code() == 200) {
 				File f = new File(downloadDirectory, this.createFileName(date));
 				FileOutputStream fos = new FileOutputStream(f);
 				IO.copyStream(
-						response.getEntity().getContent(), fos);
+						response.body().byteStream(), fos);
 				fos.close();
 
 				IO.copyStream(
@@ -216,52 +194,48 @@ public class NYTDownloader extends AbstractDownloader {
 		return null;
 	}
 
-	public HttpClient login() throws IOException {
+	public OkHttpClient login() throws IOException {
 
-        DefaultHttpClient httpclient = null;
+        OkHttpClient httpclient =  new OkHttpClient.Builder()
+				.cookieJar(new CookieJar() {
+                    List<Cookie> cookies = new ArrayList<Cookie>();
+					@Override
+					public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+						this.cookies.addAll(cookies);
+					}
 
-        try {
-            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            trustStore.load(null, null);
+					@Override
+					public List<Cookie> loadForRequest(HttpUrl url) {
+						return cookies;
+					}
+				})
+				.addInterceptor(new  Interceptor() {
+
+			@Override
+			public Response intercept(Chain chain) throws IOException {
+				Request originalRequest = chain.request();
+				Request requestWithUserAgent = originalRequest.newBuilder()
+						.header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36")
+						.build();
+				return chain.proceed(requestWithUserAgent);
+			}
+		})
+				.build();
+
+		Request request = new Request.Builder()
+				.url(LOGIN_URL)
+				.get()
+				.build();
 
 
-            SSLSocketFactory sf = new TrustAllSocketFactory(trustStore);
-            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-            HttpParams params = new BasicHttpParams();
-            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
-            SchemeRegistry registry = new SchemeRegistry();
-            registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-            registry.register(new Scheme("https", sf, 443));
-
-            ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
-            httpclient = new DefaultHttpClient(ccm, params);
-
-        } catch (Exception e) {
-           throw new IOException("Failed to set up ssl", e);
-        }
-
-		httpclient
-				.getParams()
-				.setParameter(
-						"User-Agent",
-						"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+		Response response = httpclient.newCall(request).execute();
 
 
-        HttpGet httpget = new HttpGet(LOGIN_URL);
+		System.out.println("Login form get: " + response.code());
 
-		HttpResponse response = httpclient.execute(httpget);
-		HttpEntity entity = response.getEntity();
+		if (response.code() == 200 && response.body() != null) {
 
-		System.out.println("Login form get: " + response.getStatusLine());
-
-		if (entity != null) {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			entity.writeTo(baos);
-
-			String resp = new String(baos.toByteArray());
+			String resp = response.body().string();
 			String tok = "name=\"token\" value=\"";
 			String expires = "name=\"expires\" value=\"";
 			int tokIndex = resp.indexOf(tok);
@@ -287,50 +261,28 @@ public class NYTDownloader extends AbstractDownloader {
 			}
 		}
 
-		System.out.println("Initial set of cookies:");
-
-		List<Cookie> cookies = httpclient.getCookieStore().getCookies();
-
-		if (cookies.isEmpty()) {
-			System.out.println("None");
-		} else {
-			for (int i = 0; i < cookies.size(); i++) {
-				System.out.println("- " + cookies.get(i).toString());
-			}
-		}
-
-		HttpPost httpost = new HttpPost(LOGIN_URL);
-
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-
+		FormBody.Builder requestBuilder = new FormBody.Builder();
 		for (Entry<String, String> e : this.params.entrySet()) {
-			nvps.add(new BasicNameValuePair(e.getKey(), e.getValue()));
-			System.out.println(e.getKey() + "=" + e.getValue());
+			requestBuilder = requestBuilder.add(e.getKey(), e.getValue());
 		}
 
-		httpost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 
-		response = httpclient.execute(httpost);
-		entity = response.getEntity();
+		Request httpost = new Request.Builder().url(LOGIN_URL)
+				.post(requestBuilder.build())
+				.build();
 
-		System.out.println("Login form get: " + response.getStatusLine());
+		response = httpclient.newCall(httpost).execute();
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-		if (entity != null) {
-			entity.writeTo(baos);
-
+		if (response.body() != null) {
+            String resp = response.body().string();
 			new File(this.downloadDirectory, "debug/").mkdirs();
 			IO.copyStream(
-					new ByteArrayInputStream(baos.toByteArray()),
+					new ByteArrayInputStream(resp.getBytes()),
 					new FileOutputStream(this.downloadDirectory
 							.getAbsolutePath() + "/debug/authresp.html"));
 
-			String resp = new String(baos.toByteArray());
-			System.out.println(resp);
-			if (resp.indexOf("The combination you entered could not be found") != -1) {
-				System.out.println("=================== Password error\n"
-						+ resp);
+
+			if (resp.indexOf("The email and password provided do not match an account in our system.") != -1) {
 				this.handler.post(new Runnable() {
 					public void run() {
 						Toast.makeText(
@@ -341,17 +293,6 @@ public class NYTDownloader extends AbstractDownloader {
 				});
 
 				return null;
-			}
-		}
-
-		System.out.println("Post logon cookies:");
-		cookies = httpclient.getCookieStore().getCookies();
-
-		if (cookies.isEmpty()) {
-			System.out.println("None");
-		} else {
-			for (int i = 0; i < cookies.size(); i++) {
-				System.out.println("- " + cookies.get(i).toString());
 			}
 		}
 

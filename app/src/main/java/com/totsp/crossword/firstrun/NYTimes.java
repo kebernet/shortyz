@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.regex.Pattern;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by rcooper on 6/27/15.
  */
@@ -96,7 +98,7 @@ public class NYTimes extends SlideFragment {
             @Override
             public void run() {
                 try {
-                    HttpClient client = downloader.login();
+                    OkHttpClient client = downloader.login();
                     if(client == null){
                         fail("Login failed. Please check your username and password.");
                     } else {

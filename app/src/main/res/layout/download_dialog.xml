@@ -11,7 +11,9 @@
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:id="@+id/dayOfWeek"/>
+			android:id="@+id/dayOfWeek"
+			android:textAlignment="center"
+			android:layout_margin="20dp"/>
 	  	<DatePicker
 	      android:id="@+id/datePicker"
 	      android:padding="5dip"

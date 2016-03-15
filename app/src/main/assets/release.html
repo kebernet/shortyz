@@ -7,23 +7,52 @@ body { background: #eeeeee; height: 100%; margin: 0px; }
 <img src="play-graphic.png" width="100%" />
 <div style="margin: 8px;">
 <div style="float:right; text-align: center; vertical-align: middle;">
-<form action="https://www.paypal.com/cgi-bin/webscr" method="get" target="_blank">
-<input type="hidden" name="cmd" value="_xclick">
-<input type="hidden" name="business" value="kebernet@gmail.com">
-<input type="hidden" name="no_shipping" value="2">
-<input type="hidden" name="no_note" value="1">
-<input type="hidden" name="currency_code" value="USD">
-<input type="hidden" name="tax" value="0">
-<input type="hidden" name="bn" value="PP-DonationsBF">
 <a href="https://plus.google.com/b/112662859624418565027" target="_blank"><img src="gplus-32.png" style="border: none; display:inline;" /></a>
-<br />
-<input style="display:inline; float:right;" type="image" src="donate.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
-</form>
-<a style="font-size:10px; float:right; width:60px; text-align: center" href="#donations">Huh?</a>
 </div>
 
+<h2>Shortyz 4.2.0</h2>
 
-<h2>Shortyz 4.1.1</h2>
+<p>
+    Face front, true believer!
+</p>
+
+<p>
+    So this is another maintenance release. No big new features.
+</p>
+<ul>
+    <li>
+        Big thanks to the following people who have submitted bug fixes through GitHub:
+        <ul>
+            <li><a href="http://github.com/andrewgaul" target="_blank">andrewgaul</a> <br />
+            Correct fit to screen with rectangular puzzles,
+            Do not fallthrough KEYCODE_ENTER,
+            Omit leading zero when formatting cheat percentages,
+            Show errors when word not selected</li>
+            <li><a href="http://github.com/estmatic" target="_blank">estmatic</a> <br />
+            title update when viewing the Archive
+            </li>
+            <li><a href="http://github.com/gtkirk" target="_blank">gtkirk</a> <br/>
+                Set background and text colors for large landscape layout,
+                <b>Display correct day of week</b> -- many many people complaining about this one :P --
+                Check disableSwipe setting
+            </li>
+            <li><a href="http://github.com/vin" target="_blank">vin</a> <br />
+                Code sanity improvements.
+            </li>
+        </ul>
+    </li>
+    <li>Reworked the New York Times downloader to use Square's OkHttp library. This was needed
+    for a few reasons. 1) Google was yelling at me about having a completely open SSL Trust Manager
+    for doing the downloads. 2) The Apache Http Client library it was using has been removed from
+    Android 6+.</li>
+    <li>Google also yelled at me about having the PayPal donation link on this screen, so it has
+    been removed.</li>
+    <li>Fixed the text detection on NYT login failures.</li>
+</ul>
+
+
+
+<h3>Previously 4.1.1</h3>
 
 <p>Welcome back. Sorry for the delay getting this bugfix release out. A few quick notes: </p>
 <ul>
