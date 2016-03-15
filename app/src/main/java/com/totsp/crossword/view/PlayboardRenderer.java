@@ -223,7 +223,9 @@ public class PlayboardRenderer {
     public float fitTo(int shortDimension) {
         this.bitmap = null;
         // (pixels / boxes) / (pixels per inch / inches)
-        double newScale = (double) shortDimension / (double) this.board.getBoxes().length / ((double) dpi * (double) BASE_BOX_SIZE_INCHES);
+        Box[][] boxes = this.board.getBoxes();
+        int numBoxes = Math.max(boxes.length, boxes[0].length);
+        double newScale = (double) shortDimension / (double) numBoxes / ((double) dpi * (double) BASE_BOX_SIZE_INCHES);
         LOG.warning("fitTo "+shortDimension+" dpi"+ dpi +" == "+newScale);
         if(newScale < getDeviceMinScale()){
             newScale = getDeviceMinScale();
