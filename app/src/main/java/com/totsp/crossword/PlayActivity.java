@@ -850,11 +850,11 @@ public class PlayActivity extends ShortyzActivity {
                         previous = BOARD.nextWord();
                         this.render(previous);
                     }
-
-                    lastKey = System.currentTimeMillis();
-
-                    return true;
                 }
+
+                lastKey = System.currentTimeMillis();
+
+                return true;
 
             case KeyEvent.KEYCODE_DEL:
 
