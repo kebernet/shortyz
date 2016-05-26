@@ -22,9 +22,9 @@ public interface MovementStrategy extends Serializable {
 		 */
 		static boolean isLastWordInDirection(Box[][] boxes, Word w) {
 			if (w.across) {
-				return (w.start.down + 1 >= boxes[w.start.across].length);
+				return (w.start.across + w.length >= boxes.length);
 			}
-			return (w.start.across + 1 >= boxes.length);
+			return (w.start.down + w.length >= boxes[w.start.across].length);
 		}
 
 		/**
