@@ -225,7 +225,7 @@ public class PlayActivity extends ShortyzActivity {
 
             BOARD = new Playboard(puz, movement);
             RENDERER = new PlayboardRenderer(BOARD, metrics.density, metrics.widthPixels,
-                    !prefs.getBoolean("supressHints", false));
+                    !prefs.getBoolean("supressHints", false), prefs.getBoolean("nighttime", false));
 
             float scale = prefs.getFloat("scale", metrics.density);
 

@@ -87,7 +87,7 @@ public class ClueListActivity extends ShortyzActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		this.renderer = new PlayboardRenderer(ShortyzApplication.BOARD,metrics.density, metrics.widthPixels,
-				!prefs.getBoolean("supressHints", false));
+				!prefs.getBoolean("supressHints", false), prefs.getBoolean("nighttime", false));
 
 		try {
 			this.configuration = getBaseContext().getResources()

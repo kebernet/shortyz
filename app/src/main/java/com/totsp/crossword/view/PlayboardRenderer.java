@@ -38,12 +38,14 @@ public class PlayboardRenderer {
     private float scale = 1.0F;
     private boolean hintHighlight;
     private int widthPixels;
+    private final boolean nighttime;
 
-    public PlayboardRenderer(Playboard board, float logicalDensity, int widthPixels, boolean hintHighlight) {
+    public PlayboardRenderer(Playboard board, float logicalDensity, int widthPixels, boolean hintHighlight, boolean nighttime) {
         this.dpi = Math.round(160F * logicalDensity);
         this.widthPixels = widthPixels;
         this.board = board;
         this.hintHighlight = hintHighlight;
+        this.nighttime = nighttime;
         blackLine.setColor(Color.BLACK);
         blackLine.setStrokeWidth(2.0F);
 
@@ -53,7 +55,7 @@ public class PlayboardRenderer {
         numberText.setTypeface(Typeface.MONOSPACE);
 
         letterText.setTextAlign(Align.CENTER);
-        letterText.setColor(Color.BLACK);
+        letterText.setColor(nighttime ? Color.LTGRAY : Color.BLACK);
         letterText.setAntiAlias(true);
         letterText.setTypeface(Typeface.SANS_SERIF);
 
@@ -63,13 +65,13 @@ public class PlayboardRenderer {
         blackCircle.setAntiAlias(true);
         blackCircle.setStyle(Style.STROKE);
 
-        currentWordHighlight.setColor(Color.parseColor("#FFAE57"));
-        currentLetterHighlight.setColor(Color.parseColor("#EB6000"));
+        currentWordHighlight.setColor(Color.parseColor(nighttime ? "#A05000" : "#FFAE57"));
+        currentLetterHighlight.setColor(Color.parseColor(nighttime ? "#502000" : "#EB6000"));
         currentLetterBox.setColor(Color.parseColor("#FFFFFF"));
         currentLetterBox.setStrokeWidth(2.0F);
 
         white.setTextAlign(Align.CENTER);
-        white.setColor(Color.WHITE);
+        white.setColor(nighttime ? Color.DKGRAY : Color.WHITE);
         white.setAntiAlias(true);
         white.setTypeface(Typeface.SANS_SERIF);
 
@@ -78,7 +80,7 @@ public class PlayboardRenderer {
         red.setAntiAlias(true);
         red.setTypeface(Typeface.SANS_SERIF);
 
-        this.cheated.setColor(Color.parseColor("#FFE0E0"));
+        this.cheated.setColor(Color.parseColor(nighttime ? "#400000" : "#FFE0E0"));
     }
 
     public float getDeviceMaxScale(){
