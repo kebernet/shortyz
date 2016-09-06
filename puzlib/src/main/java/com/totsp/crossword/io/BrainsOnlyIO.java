@@ -49,6 +49,10 @@ public class BrainsOnlyIO {
 
         int width = Integer.parseInt(readLineAtOffset(reader, 1));
         int height = Integer.parseInt(readLineAtOffset(reader, 1));
+        if (width == 0 || height == 0) {
+            System.out.println("width: " + width + ", height: " + height);
+            throw new IOException("Invalid puzzle contents");
+        }
         puz.setWidth(width);
         puz.setHeight(height);
         readLineAtOffset(reader, 4);

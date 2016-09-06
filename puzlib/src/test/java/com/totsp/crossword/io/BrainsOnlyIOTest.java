@@ -4,6 +4,7 @@ import com.totsp.crossword.puz.Playboard;
 import com.totsp.crossword.puz.Puzzle;
 import junit.framework.TestCase;
 
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -48,5 +49,15 @@ public class BrainsOnlyIOTest  extends TestCase {
         System.out.println("5 across "+puz.findAcrossClue(5));
         assertEquals("Company with a duck mascot", puz.findAcrossClue(5));
 
+    }
+
+    public void testParse3() throws Exception {
+        try {
+            // This was from http://brainsonly.com/servlets-newsday-crossword/newsdaycrossword?date=150903
+            BrainsOnlyIO.parse(BrainsOnlyIOTest.class.getResourceAsStream("/brainsonly3.txt"));
+        } catch (IOException e) {
+            return;
+        }
+        fail("Expected brainsonly3.txt to fail to parse");
     }
 }
