@@ -73,7 +73,6 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     private List<String> sourceList = new ArrayList<String>();
     private RecyclerView puzzleList;
     private ListView sources;
-    private MenuItem archiveMenuItem;
     private NotificationManager nm;
     private View lastOpenedView = null;
     private boolean viewArchive;
@@ -260,10 +259,6 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             this.viewArchive = !viewArchive;
             item.setTitle(viewArchive ? "Crosswords" : MENU_ARCHIVES); //menu item title
             this.setTitle(!viewArchive ? "Puzzles" : MENU_ARCHIVES); //activity title
-
-            if (archiveMenuItem != null) {
-                archiveMenuItem.setTitle(viewArchive ? "Un-archive" : "Archive");
-            }
 
             render();
 
@@ -628,14 +623,13 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         }
     }
 
-    private void cleanup() {
-        File directory = new File(Environment.getExternalStorageDirectory(), "crosswords");
+    private FileHandle[] getFileHandlesFromDirectory(File directory) {
         ArrayList<FileHandle> files = new ArrayList<FileHandle>();
         FileHandle[] puzFiles = null;
 
         for (File f : directory.listFiles()) {
             if (f.getName()
-                     .endsWith(".puz")) {
+                    .endsWith(".puz")) {
                 PuzzleMeta m = null;
 
                 try {
@@ -650,31 +644,52 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         }
 
         puzFiles = files.toArray(new FileHandle[files.size()]);
-
-        long cleanupValue = Long.parseLong(prefs.getString("cleanupAge", "2")) + 1;
-        long maxAge = (cleanupValue == 0) ? 0 : (System.currentTimeMillis() - (cleanupValue * 24 * 60 * 60 * 1000));
-
-        ArrayList<FileHandle> toCleanup = new ArrayList<FileHandle>();
         Arrays.sort(puzFiles);
         files.clear();
 
-        for (FileHandle h : puzFiles) {
+        return puzFiles;
+    }
+
+    private long getMaxAgeMs(String preferenceValue) {
+        long cleanupValue = Long.parseLong(preferenceValue) + 1;
+        long maxAge = (cleanupValue == 0) ? 0 : (System.currentTimeMillis() - (cleanupValue * 24 * 60 * 60 * 1000));
+        return maxAge;
+    }
+
+    private void cleanup() {
+        boolean deleteOnCleanup = prefs.getBoolean("deleteOnCleanup", false);
+        long maxAge = getMaxAgeMs(prefs.getString("cleanupAge", "2"));
+        long archiveMaxAge = getMaxAgeMs(prefs.getString("archiveCleanupAge", "-1"));
+
+        ArrayList<FileHandle> toArchive = new ArrayList<FileHandle>();
+        ArrayList<FileHandle> toDelete = new ArrayList<FileHandle>();
+
+        for (FileHandle h : getFileHandlesFromDirectory(this.crosswordsFolder)) {
             if ((h.getProgress() == 100) || (h.getDate()
                                                   .getTime() < maxAge)) {
-                toCleanup.add(h);
+                if (deleteOnCleanup) {
+                    toDelete.add(h);
+                } else {
+                    toArchive.add(h);
+                }
             }
         }
 
-        for (FileHandle h : toCleanup) {
-            File meta = new File(directory,
-                    h.file.getName().substring(0, h.file.getName().lastIndexOf(".")) + ".shortyz");
-
-            if (prefs.getBoolean("deleteOnCleanup", false)) {
-                h.file.delete();
-                meta.delete();
-            } else {
-               moveTo(h.file, this.archiveFolder);
+        for (FileHandle h : getFileHandlesFromDirectory(this.archiveFolder)) {
+            if (h.getDate().getTime() < archiveMaxAge) {
+                toDelete.add(h);
             }
+        }
+
+        for (FileHandle h : toDelete) {
+            File meta = new File(
+                    h.file.getPath().substring(0, h.file.getPath().lastIndexOf(".")) + ".shortyz");
+            h.file.delete();
+            meta.delete();
+        }
+
+        for (FileHandle h : toArchive) {
+            moveTo(h.file, this.archiveFolder);
         }
 
         render();
