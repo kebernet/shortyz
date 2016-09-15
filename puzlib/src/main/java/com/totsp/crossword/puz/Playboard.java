@@ -346,7 +346,11 @@ public class Playboard implements Serializable {
             currentBox = this.boxes[this.highlightLetter.across][this.highlightLetter.down];
         }
 
-        currentBox.setResponse(' ');
+        if (currentBox.getResponse() == currentBox.getSolution() && this.isShowErrors()) {
+            // Prohibit deleting correct letters
+        } else {
+            currentBox.setResponse(' ');
+        }
 
         return wordToReturn;
     }
@@ -524,10 +528,15 @@ public class Playboard implements Serializable {
             return null;
         }
 
-        b.setResponse(letter);
-        b.setResponder(this.responder);
+        if (b.getResponse() == b.getSolution() && isShowErrors()) {
+            // Prohibit replacing correct letters
+            return this.getCurrentWord();
+        } else {
+            b.setResponse(letter);
+            b.setResponder(this.responder);
 
-        return this.nextLetter();
+            return this.nextLetter();
+        }
     }
 
     public Word previousLetter() {
