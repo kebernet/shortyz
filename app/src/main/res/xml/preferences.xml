@@ -212,9 +212,17 @@
 	
 	<ListPreference
 		android:title="Cleanup Unfinished"
-		android:summary="Determines how old an unfinished puzzle must be before it is archvied/deleted."
+		android:summary="Determines how old an unfinished puzzle must be before it is archived/deleted."
 		android:key="cleanupAge"
 		android:defaultValue="2"
+		android:entries="@array/cleanupAgeLabels"
+		android:entryValues="@array/cleanupAgeValues" />
+
+	<ListPreference
+		android:title="Cleanup Archives"
+		android:summary="Determines how old an archived puzzle must be before it is deleted."
+		android:key="archiveCleanupAge"
+		android:defaultValue="-1"
 		android:entries="@array/cleanupAgeLabels"
 		android:entryValues="@array/cleanupAgeValues" />
 	
