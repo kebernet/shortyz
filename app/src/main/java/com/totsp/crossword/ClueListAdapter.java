@@ -119,8 +119,9 @@ public class ClueListAdapter extends ArrayAdapter {
     public int indexOf(Clue clue) {
         return Arrays.binarySearch(clues, clue,
             new Comparator<Clue>() {
+                @Override
                 public int compare(Clue arg0, Clue arg1) {
-                    return ((Integer) arg0.number).compareTo(arg1.number);
+                    return Integer.compare(arg0.number, arg1.number);
                 }
             });
     }
