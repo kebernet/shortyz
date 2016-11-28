@@ -1,16 +1,23 @@
 package com.totsp.crossword;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,6 +67,7 @@ import java.util.logging.Logger;
 public class BrowseActivity extends ShortyzActivity implements RecyclerItemClickListener.OnItemClickListener{
     private static final String MENU_ARCHIVES = "Archives";
     private static final int DOWNLOAD_DIALOG_ID = 0;
+    private static final int REQUEST_WRITE_STORAGE = 1002;
     private static final long DAY = 24L * 60L * 60L * 1000L;
     private static final Logger LOGGER = Logger.getLogger(BrowseActivity.class.getCanonicalName());
     private Accessor accessor = Accessor.DATE_DESC;
@@ -78,6 +86,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     private boolean viewArchive;
     private MenuItem gamesItem;
     private boolean signedIn;
+    private boolean hasWritePermissions;
     private int playIcon = R.drawable.ic_play_games_badge_green;
     private FloatingActionButton download;
     private int highlightColor;
@@ -402,15 +411,47 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
         }
 
-
-
         highlightColor = getResources().getColor(R.color.accent);
         normalColor = getResources().getColor(R.color.background_material_light);
         primaryTextColor = getResources().getColor(R.color.textColorPrimary);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Allow Permissions")
+                        .setMessage("Please allow writing to storage when prompted. Shortyz needs this permission to store downloaded crossword files and cannot work without it.")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(BrowseActivity.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_WRITE_STORAGE);
+                            }
+                        })
+                        .create()
+                        .show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_WRITE_STORAGE);
+            }
 
+            return;
+        } else {
+            hasWritePermissions = true;
+        }
 
+        startInitialActivityOrFinishLoading();
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_WRITE_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    hasWritePermissions = true;
+                    startInitialActivityOrFinishLoading();
+                }
+        }
+    }
+
+    private void startInitialActivityOrFinishLoading() {
         if (!crosswordsFolder.exists()) {
             this.downloadTen();
 
@@ -612,6 +653,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     }
 
     private void checkDownload() {
+        if (!hasWritePermissions) return;
+
         long lastDL = prefs.getLong("dlLast", 0);
 
         if (prefs.getBoolean("dlOnStartup", true) &&
@@ -708,6 +751,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     }
 
     private void download(final Date d, final List<Downloader> downloaders, final boolean scrape) {
+        if (!hasWritePermissions) return;
+
         final Downloaders dls = new Downloaders(prefs, nm, this);
         LOGGER.info("Downloading from "+downloaders);
         new Thread(new Runnable() {
@@ -729,6 +774,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     }
 
     private void downloadTen() {
+        if (!hasWritePermissions) return;
+
         new Thread(new Runnable() {
                 public void run() {
                     Downloaders dls = new Downloaders(prefs, nm, BrowseActivity.this);
@@ -754,6 +801,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     }
 
     private void render() {
+        if (!hasWritePermissions) return;
+
         if ((this.sources != null) && (this.sources.getAdapter() == null)) {
             final SourceListAdapter adapter = new SourceListAdapter(this, this.sourceList);
             this.sources.setAdapter(adapter);

@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
 
 import com.totsp.crossword.BrowseActivity;
 import com.totsp.crossword.PlayActivity;
@@ -185,14 +186,18 @@ public class Downloaders {
         int i = 1;
         String contentTitle = "Downloading Puzzles";
 
-        Notification not = new Notification(android.R.drawable.stat_sys_download, contentTitle,
-                System.currentTimeMillis());
+		NotificationCompat.Builder not =
+				new NotificationCompat.Builder(context)
+				.setSmallIcon(android.R.drawable.stat_sys_download)
+				.setContentTitle(contentTitle)
+				.setWhen(System.currentTimeMillis());
+
         boolean somethingDownloaded = false;
         File crosswords = new File(Environment.getExternalStorageDirectory(), "crosswords/");
         File archive = new File(Environment.getExternalStorageDirectory(), "crosswords/archive/");
         crosswords.mkdirs();
 
-        if ((crosswords != null) && (crosswords.listFiles() != null)) {
+        if (crosswords.listFiles() != null) {
             for (File isDel : crosswords.listFiles()) {
                 if (isDel.getName()
                              .endsWith(".tmp")) {
@@ -215,10 +220,11 @@ public class Downloaders {
                 String contentText = "Downloading from " + d.getName();
                 Intent notificationIntent = new Intent(context, PlayActivity.class);
                 PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-                not.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+
+				not.setContentText(contentText).setContentIntent(contentIntent);
 
                 if (!this.supressMessages && this.notificationManager != null) {
-                    this.notificationManager.notify(0, not);
+                    this.notificationManager.notify(0, not.build());
                 }
 
                 File downloaded = new File(crosswords, d.createFileName(date));
@@ -362,15 +368,19 @@ public class Downloaders {
 
 	private void postDownloadedGeneral() {
 		String contentTitle = "Downloaded new puzzles!";
-		Notification not = new Notification(
-				android.R.drawable.stat_sys_download_done, contentTitle,
-				System.currentTimeMillis());
+
 		Intent notificationIntent = new Intent(Intent.ACTION_EDIT, null,
 				context, BrowseActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 				notificationIntent, 0);
-		not.setLatestEventInfo(context, contentTitle,
-				"New puzzles were downloaded.", contentIntent);
+
+		Notification not = new NotificationCompat.Builder(context)
+				.setSmallIcon(android.R.drawable.stat_sys_download_done)
+				.setContentTitle(contentTitle)
+				.setContentText("New puzzles were downloaded.")
+				.setContentIntent(contentIntent)
+				.setWhen(System.currentTimeMillis())
+				.build();
 
 		if (this.notificationManager != null) {
 			this.notificationManager.notify(0, not);
@@ -379,15 +389,19 @@ public class Downloaders {
 
 	private void postDownloadedNotification(int i, String name, File puzFile) {
 		String contentTitle = "Downloaded " + name;
-		Notification not = new Notification(
-				android.R.drawable.stat_sys_download_done, contentTitle,
-				System.currentTimeMillis());
+
 		Intent notificationIntent = new Intent(Intent.ACTION_EDIT,
 				Uri.fromFile(puzFile), context, PlayActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 				notificationIntent, 0);
-		not.setLatestEventInfo(context, contentTitle, puzFile.getName(),
-				contentIntent);
+
+		Notification not = new NotificationCompat.Builder(context)
+				.setSmallIcon(android.R.drawable.stat_sys_download_done)
+				.setContentTitle(contentTitle)
+				.setContentText(puzFile.getName())
+				.setContentIntent(contentIntent)
+				.setWhen(System.currentTimeMillis())
+				.build();
 
 		if (this.notificationManager != null) {
 			this.notificationManager.notify(i, not);

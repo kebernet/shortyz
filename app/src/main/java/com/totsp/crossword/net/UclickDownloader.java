@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.logging.Level;
 
 import com.totsp.crossword.io.UclickXMLIO;
+import com.totsp.crossword.versions.AndroidVersionUtils;
 import com.totsp.crossword.versions.DefaultUtil;
 
 
@@ -99,13 +100,12 @@ public class UclickDownloader extends AbstractDownloader {
     }
 
     private File downloadToTempFile(Date date) {
-        DefaultUtil util = new DefaultUtil();
         File f = new File(downloadDirectory, this.createFileName(date));
 
         try {
             URL url = new URL(this.baseUrl + this.createUrlSuffix(date));
             LOG.log(Level.INFO, this.fullName+" "+url.toExternalForm());
-            util.downloadFile(url, f, EMPTY_MAP, false, null);
+            AndroidVersionUtils.Factory.getInstance().downloadFile(url, f, EMPTY_MAP, false, null);
         } catch (Exception e) {
             e.printStackTrace();
             f = null;

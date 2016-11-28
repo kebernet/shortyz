@@ -14,6 +14,7 @@ import android.net.Uri;
 
 import com.totsp.crossword.io.JPZIO;
 import com.totsp.crossword.puz.PuzzleMeta;
+import com.totsp.crossword.versions.AndroidVersionUtils;
 import com.totsp.crossword.versions.DefaultUtil;
 
 public abstract class AbstractJPZDownloader extends AbstractDownloader {
@@ -72,7 +73,7 @@ public abstract class AbstractJPZDownloader extends AbstractDownloader {
 	                return Downloader.DEFERRED_FILE;
 	            }
             } else {
-            	new DefaultUtil().downloadFile(url, f, headers, true, this.getName());
+            	AndroidVersionUtils.Factory.getInstance().downloadFile(url, f, headers, true, this.getName());
             	return f;
             }
         } catch (IOException e) {

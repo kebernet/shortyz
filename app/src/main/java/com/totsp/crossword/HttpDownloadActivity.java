@@ -5,23 +5,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class HttpDownloadActivity extends Activity {
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1001;
+
     private File crosswordsFolder = new File(Environment.getExternalStorageDirectory(), "crosswords");
 
     /**
@@ -61,6 +68,40 @@ public class HttpDownloadActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Allow Permissions")
+                        .setMessage("Please allow writing to storage when prompted. Shortyz needs this permission to store downloaded crossword files and cannot work without it.")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(HttpDownloadActivity.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_EXTERNAL_STORAGE);
+                            }
+                        })
+                        .create()
+                        .show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_EXTERNAL_STORAGE);
+            }
+
+            return;
+        }
+
+        initializeDownload();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initializeDownload();
+                }
+        }
+    }
+
+    private void initializeDownload() {
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             showSDCardHelp();
             finish();
@@ -77,21 +118,20 @@ public class HttpDownloadActivity extends Activity {
         dialog.setMessage("Downloading...\n" + filename);
         dialog.setCancelable(false);
 
-        HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet();
+        OkHttpClient client = new OkHttpClient();
 
         try {
-            request.setURI(new URI(u.toString()));
+            Request request = new Request.Builder()
+                    .url(u.toString())
+                    .build();
 
-            HttpResponse response = client.execute(request);
+            Response response = client.newCall(request).execute();
 
-            if (response.getStatusLine()
-                            .getStatusCode() != 200) {
+            if (response.code() != 200) {
                 throw new IOException("Non 200 downloading...");
             }
 
-            InputStream is = response.getEntity()
-                                     .getContent();
+            InputStream is = response.body().byteStream();
             File puzFile = new File(crosswordsFolder, filename);
             FileOutputStream fos = new FileOutputStream(puzFile);
             copyStream(is, fos);
@@ -102,7 +142,7 @@ public class HttpDownloadActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
 
-            Toast t = Toast.makeText(this, "Unabled to download from\n" + u.toString(), Toast.LENGTH_LONG);
+            Toast t = Toast.makeText(this, "Unable to download from\n" + u.toString(), Toast.LENGTH_LONG);
             t.show();
         }
 

@@ -91,7 +91,7 @@ public abstract class AbstractDownloader implements Downloader {
 	                return Downloader.DEFERRED_FILE;
 	            }
             } else {
-            	new DefaultUtil().downloadFile(url, f, headers, true, this.getName());
+            	AndroidVersionUtils.Factory.getInstance().downloadFile(url, f, headers, true, this.getName());
             	return f;
             }
         } catch (IOException e) {
@@ -107,13 +107,12 @@ public abstract class AbstractDownloader implements Downloader {
 
 
     protected File downloadToTempFile(String fullName, Date date) {
-        DefaultUtil util = new DefaultUtil();
         File downloaded = new File(downloadDirectory, this.createFileName(date));
 
         try {
             URL url = new URL(this.baseUrl + this.createUrlSuffix(date));
             LOG.log(Level.INFO, fullName +" "+url.toExternalForm());
-            util.downloadFile(url, downloaded, EMPTY_MAP, false, null);
+            AndroidVersionUtils.Factory.getInstance().downloadFile(url, downloaded, EMPTY_MAP, false, null);
         } catch (Exception e) {
             e.printStackTrace();
             downloaded.delete();
