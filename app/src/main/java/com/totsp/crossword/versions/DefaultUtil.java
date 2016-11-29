@@ -35,7 +35,7 @@ public abstract class DefaultUtil implements AndroidVersionUtils {
 				.url(url.toString());
 
 		for (Entry<String, String> e : headers.entrySet()){
-			requestBuilder.header(e.getKey(), e.getValue());
+			requestBuilder = requestBuilder.header(e.getKey(), e.getValue());
 		}
 
 		try {
