@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 
 import com.totsp.crossword.PlayActivity;
 
@@ -49,18 +50,20 @@ public class Scrapers {
         int i = 1;
         String contentTitle = "Downloading Scrape Puzzles";
 
-        Notification not = new Notification(android.R.drawable.stat_sys_download, contentTitle,
-                System.currentTimeMillis());
+        NotificationCompat.Builder not = new NotificationCompat.Builder(context)
+                .setSmallIcon(android.R.drawable.stat_sys_download)
+                .setContentTitle(contentTitle)
+                .setWhen(System.currentTimeMillis());
 
         for (AbstractPageScraper scraper : scrapers) {
             try {
                 String contentText = "Downloading from " + scraper.getSourceName();
                 Intent notificationIntent = new Intent(context, PlayActivity.class);
                 PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-                not.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+                not.setContentText(contentText).setContentIntent(contentIntent);
 
                 if (!this.supressMessages && this.notificationManager != null) {
-                    this.notificationManager.notify(0, not);
+                    this.notificationManager.notify(0, not.build());
                 }
 
                 List<File> downloaded = scraper.scrape();
@@ -86,11 +89,17 @@ public class Scrapers {
 
     private void postDownloadedNotification(int i, String name, File puzFile) {
         String contentTitle = "Downloaded Puzzle From " + name;
-        Notification not = new Notification(android.R.drawable.stat_sys_download_done, contentTitle,
-                System.currentTimeMillis());
+
         Intent notificationIntent = new Intent(Intent.ACTION_EDIT, Uri.fromFile(puzFile), context, PlayActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-        not.setLatestEventInfo(context, contentTitle, puzFile.getName(), contentIntent);
+
+        Notification not = new NotificationCompat.Builder(context)
+                .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                .setContentTitle(contentTitle)
+                .setContentText(puzFile.getName())
+                .setContentIntent(contentIntent)
+                .setWhen(System.currentTimeMillis())
+                .build();
 
         if (this.notificationManager != null) {
             this.notificationManager.notify(i, not);

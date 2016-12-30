@@ -353,8 +353,10 @@ public class PlayActivity extends ShortyzActivity {
             this.clue = (TextView) this.findViewById(R.id.clueLine);
             if (clue != null && clue.getVisibility() != View.GONE) {
                 clue.setVisibility(View.GONE);
-                clue = (TextView) utils.onActionBarCustom(this,
-                        R.layout.clue_line_only).findViewById(R.id.clueLine);
+                View custom = utils.onActionBarCustom(this, R.layout.clue_line_only);
+                if (custom != null) {
+                    clue = (TextView) custom.findViewById(R.id.clueLine);
+                }
             }
             if(this.clue != null) {
                 this.clue.setClickable(true);

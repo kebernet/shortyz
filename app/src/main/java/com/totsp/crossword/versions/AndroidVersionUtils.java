@@ -41,33 +41,13 @@ public interface AndroidVersionUtils {
 			System.out.println("Creating utils for version: "
 					+ android.os.Build.VERSION.SDK_INT);
 
-
-			try {
-				if(android.os.Build.VERSION.SDK_INT >= 16){
-					return INSTANCE = (AndroidVersionUtils) Class.forName(
-							"com.totsp.crossword.versions.JellyBeanUtil")
-							.newInstance();
-				}
-				switch (android.os.Build.VERSION.SDK_INT) {
-				case 10:
-				case 9:
-					System.out.println("Using Gingerbread.");
-					return INSTANCE = (AndroidVersionUtils) Class.forName(
-							"com.totsp.crossword.versions.GingerbreadUtil")
-							.newInstance();
-				case 12:
-				case 13:
-				case 14:
-				case 15:
-
-					return INSTANCE = (AndroidVersionUtils) Class.forName(
-							"com.totsp.crossword.versions.HoneycombUtil")
-							.newInstance();
-				default:
-					return INSTANCE = new DefaultUtil();
-				}
-			} catch (Exception e) {
-				return INSTANCE = new DefaultUtil();
+			switch (android.os.Build.VERSION.SDK_INT) {
+			case 10:
+			case 9:
+				System.out.println("Using Gingerbread.");
+				return INSTANCE = new GingerbreadUtil();
+			default:
+				return INSTANCE = new HoneycombUtil();
 			}
 		}
 	}

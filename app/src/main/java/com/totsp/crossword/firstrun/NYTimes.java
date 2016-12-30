@@ -20,8 +20,6 @@ import com.totsp.crossword.net.NYTDownloader;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
 
-import org.apache.http.client.HttpClient;
-
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.regex.Pattern;
