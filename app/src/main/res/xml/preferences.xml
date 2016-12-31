@@ -204,6 +204,13 @@
 	/>
 	
 	<com.jenzz.materialpreference.CheckBoxPreference
+		android:title="Nighttime mode"
+		android:defaultValue="false"
+		android:summary="Use darker colors for use during nighttime."
+		android:key="nighttime"
+	/>
+
+	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Delete on Cleanup"
 		android:defaultValue="false"
 		android:summary="Delete rather than archive old puzzles"
