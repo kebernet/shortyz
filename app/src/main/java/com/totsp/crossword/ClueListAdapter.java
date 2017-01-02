@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,10 +40,10 @@ public class ClueListAdapter extends ArrayAdapter {
         this.clues = clues;
         this.context = context;
         this.across = across;
-        this.highlight = context.getResources().getColor(R.color.accent);
-        this.highlightLine = context.getResources().getColor(R.color.accentText);
-        this.normalLineText = context.getResources().getColor(R.color.textColorPrimary);
-        this.defaultBackground = context.getResources().getColor(R.color.background_material_light);
+        this.highlight = ContextCompat.getColor(context, R.color.accent);
+        this.highlightLine = ContextCompat.getColor(context, R.color.accentText);
+        this.normalLineText = ContextCompat.getColor(context, R.color.textColorPrimary);
+        this.defaultBackground = ContextCompat.getColor(context, R.color.background_light);
 
     }
 

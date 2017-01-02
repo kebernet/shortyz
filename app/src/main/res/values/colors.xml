@@ -6,5 +6,11 @@
     <color name="textColorSecondary">#BEBEBE</color>
     <color name="accentText">#fff</color>
     <color name="transparent">#00000000</color>
-    <color name="background_light">#bbb</color>
+    <color name="background_light">#fafafa</color>
+    <color name="background_dark">#bbb</color>
+    <color name="header_color">#ccc</color>
+    <color name="header_text">#262626</color>
+    <color name="boxColor">#fff</color>
+    <color name="blankColor">#000</color>
+    <color name="errorColor">#f00</color>
 </resources>

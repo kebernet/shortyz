@@ -7,7 +7,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:minWidth="300dp"
-    android:background="@color/background_material_light">
+    android:background="@color/background_light">
 
     <TextView android:id="@+id/clueLine"
         android:textSize="14dp"

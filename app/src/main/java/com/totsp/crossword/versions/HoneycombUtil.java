@@ -1,17 +1,8 @@
 package com.totsp.crossword.versions;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.DownloadManager;
-import android.app.DownloadManager.Request;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -19,7 +10,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import com.totsp.crossword.PuzzleFinishedActivity;
+import com.totsp.crossword.util.NightModeHelper;
 
 
 @TargetApi(11)
@@ -54,6 +45,16 @@ public class HoneycombUtil extends GingerbreadUtil {
             bar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
+    @Override
+    public boolean isNightModeAvailable(){
+		return true;
+	}
+
+	@Override
+    public void toggleNightMode(Activity activity){
+		NightModeHelper.bind(activity).toggle();
+	}
 
     @Override
     public void onActionBarWithText(MenuItem a) {

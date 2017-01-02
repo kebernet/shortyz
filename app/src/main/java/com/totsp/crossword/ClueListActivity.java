@@ -1,8 +1,5 @@
 package com.totsp.crossword;
 
-import java.io.File;
-import java.io.IOException;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -11,6 +8,7 @@ import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -36,6 +34,9 @@ import com.totsp.crossword.view.PlayboardRenderer;
 import com.totsp.crossword.view.ScrollingImageView;
 import com.totsp.crossword.view.ScrollingImageView.ClickListener;
 import com.totsp.crossword.view.ScrollingImageView.Point;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ClueListActivity extends ShortyzActivity {
 	private Configuration configuration;
@@ -87,7 +88,9 @@ public class ClueListActivity extends ShortyzActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		this.renderer = new PlayboardRenderer(ShortyzApplication.BOARD,metrics.density, metrics.widthPixels,
-				!prefs.getBoolean("supressHints", false));
+				!prefs.getBoolean("supressHints", false),
+				ContextCompat.getColor(this, R.color.boxColor), ContextCompat.getColor(this, R.color.blankColor),
+				ContextCompat.getColor(this, R.color.errorColor));
 
 		try {
 			this.configuration = getBaseContext().getResources()

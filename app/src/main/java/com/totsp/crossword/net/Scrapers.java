@@ -1,9 +1,5 @@
 package com.totsp.crossword.net;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,6 +10,10 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.totsp.crossword.PlayActivity;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Scrapers {
@@ -39,9 +39,9 @@ public class Scrapers {
             scrapers.add(new KeglerScraper());
         }
         
-        if (prefs.getBoolean("scrapePeople", true)) {
-            scrapers.add(new PeopleScraper());
-        }
+//        if (prefs.getBoolean("scrapePeople", true)) {
+//            scrapers.add(new PeopleScraper());
+//        }
 
         this.supressMessages = prefs.getBoolean("supressMessages", false);
     }

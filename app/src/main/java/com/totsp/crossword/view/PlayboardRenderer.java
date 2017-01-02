@@ -1,7 +1,5 @@
 package com.totsp.crossword.view;
 
-import java.util.logging.Logger;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,6 +14,8 @@ import com.totsp.crossword.puz.Playboard;
 import com.totsp.crossword.puz.Playboard.Position;
 import com.totsp.crossword.puz.Playboard.Word;
 import com.totsp.crossword.view.ScrollingImageView.Point;
+
+import java.util.logging.Logger;
 
 
 public class PlayboardRenderer {
@@ -38,43 +38,51 @@ public class PlayboardRenderer {
     private float scale = 1.0F;
     private boolean hintHighlight;
     private int widthPixels;
+    private final int boxColor;
+    private final int blankColor;
+    private final int errorColor;
 
-    public PlayboardRenderer(Playboard board, float logicalDensity, int widthPixels, boolean hintHighlight) {
+    public PlayboardRenderer(Playboard board, float logicalDensity, int widthPixels, boolean hintHighlight,
+                             int boxColor, int blankColor, int errorColor) {
+        this.boxColor = boxColor;
+        this.blankColor = blankColor;
+        this.errorColor = errorColor;
+
         this.dpi = Math.round(160F * logicalDensity);
         this.widthPixels = widthPixels;
         this.board = board;
         this.hintHighlight = hintHighlight;
-        blackLine.setColor(Color.BLACK);
+        blackLine.setColor(blankColor);
         blackLine.setStrokeWidth(2.0F);
 
         numberText.setTextAlign(Align.LEFT);
-        numberText.setColor(Color.BLACK);
+        numberText.setColor(blankColor);
         numberText.setAntiAlias(true);
         numberText.setTypeface(Typeface.MONOSPACE);
 
         letterText.setTextAlign(Align.CENTER);
-        letterText.setColor(Color.BLACK);
+        letterText.setColor(blankColor);
         letterText.setAntiAlias(true);
         letterText.setTypeface(Typeface.SANS_SERIF);
 
-        blackBox.setColor(Color.BLACK);
+        blackBox.setColor(blankColor);
 
-        blackCircle.setColor(Color.BLACK);
+        blackCircle.setColor(blankColor);
         blackCircle.setAntiAlias(true);
         blackCircle.setStyle(Style.STROKE);
 
         currentWordHighlight.setColor(Color.parseColor("#FFAE57"));
         currentLetterHighlight.setColor(Color.parseColor("#EB6000"));
-        currentLetterBox.setColor(Color.parseColor("#FFFFFF"));
+        currentLetterBox.setColor(boxColor);
         currentLetterBox.setStrokeWidth(2.0F);
 
         white.setTextAlign(Align.CENTER);
-        white.setColor(Color.WHITE);
+        white.setColor(boxColor);
         white.setAntiAlias(true);
         white.setTypeface(Typeface.SANS_SERIF);
 
         red.setTextAlign(Align.CENTER);
-        red.setColor(Color.RED);
+        red.setColor(errorColor);
         red.setAntiAlias(true);
         red.setTypeface(Typeface.SANS_SERIF);
 

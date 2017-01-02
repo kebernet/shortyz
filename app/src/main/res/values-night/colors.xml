@@ -1,10 +1,16 @@
 <resources>
-    <color name="primary">#34495e</color>
-    <color name="primary_dark">#2c3e50</color>
-    <color name="accent">#2980b9</color>
-    <color name="textColorPrimary">#262626</color>
-    <color name="textColorSecondary">#BEBEBE</color>
-    <color name="accentText">#fff</color>
+    <color name="primary">#000</color>
+    <color name="primary_dark">#222</color>
+    <color name="accent">#c00</color>
+    <color name="textColorPrimary">#d00</color>
+    <color name="textColorSecondary">#900</color>
+    <color name="accentText">#500</color>
     <color name="transparent">#00000000</color>
-    <color name="background_light">#bbb</color>
+    <color name="background_light">#000</color>
+    <color name="background_dark">#000</color>
+    <color name="header_color">#111</color>
+    <color name="header_text">#900</color>
+    <color name="boxColor">#e11</color>
+    <color name="blankColor">#000</color>
+    <color name="errorColor">#00f</color>
 </resources>

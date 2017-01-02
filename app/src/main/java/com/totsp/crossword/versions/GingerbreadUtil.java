@@ -53,6 +53,17 @@ public class GingerbreadUtil extends DefaultUtil {
     public void hideTitleOnPortrait(ActionBarActivity a) {
 
     }
+
+    @Override
+    public void toggleNightMode(Activity activity) {
+
+    }
+
+    @Override
+    public boolean isNightModeAvailable() {
+        return false;
+    }
+
     public View onActionBarCustom(ActionBarActivity a, int id) {
         System.out.println("Setting custom ActionBar view");
         ActionBar bar = a.getSupportActionBar();

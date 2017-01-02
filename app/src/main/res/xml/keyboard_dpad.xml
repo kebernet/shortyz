@@ -55,20 +55,20 @@
     </Row> 
  	<Row android:rowEdgeFlags="bottom"> 
  		<Key android:codes="19"
- 		     android:keyIcon="@drawable/iconup"
-             android:iconPreview="@drawable/iconup"
+ 		     android:keyIcon="@drawable/arrow_up"
+             android:iconPreview="@drawable/arrow_up"
              android:keyWidth="25%p"/>
  		<Key android:codes="20"
- 		     android:keyIcon="@drawable/icondown"
-             android:iconPreview="@drawable/icondown"
+ 		     android:keyIcon="@drawable/arrow_down"
+             android:iconPreview="@drawable/arrow_down"
              android:keyWidth="25%p"/>
  		<Key android:codes="21" 
- 		     android:keyIcon="@drawable/iconleft"
-             android:iconPreview="@drawable/iconleft"
+ 		     android:keyIcon="@drawable/arrow_left"
+             android:iconPreview="@drawable/arrow_left"
              android:keyWidth="25%p"/>
  		<Key android:codes="22"
- 		     android:keyIcon="@drawable/iconright"
-             android:iconPreview="@drawable/iconright"
+ 		     android:keyIcon="@drawable/arrow_right"
+             android:iconPreview="@drawable/arrow_right"
              android:keyWidth="25%p"/>
  	</Row>
    

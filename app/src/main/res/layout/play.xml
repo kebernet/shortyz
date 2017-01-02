@@ -19,7 +19,7 @@
 		android:layout_height="wrap_content"
         android:keyTextColor="@color/textColorPrimary"
         android:keyBackground="@color/transparent"
-        android:background="@color/background_material_light"
+        android:background="@color/background_light"
         android:shadowRadius="0.0"
         android:keyPreviewLayout="@layout/key_preview"
         />

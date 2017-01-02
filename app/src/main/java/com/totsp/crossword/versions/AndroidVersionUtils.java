@@ -1,9 +1,5 @@
 package com.totsp.crossword.versions;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
@@ -14,24 +10,28 @@ import android.view.View;
 
 import com.totsp.crossword.puz.PuzzleMeta;
 
+import java.io.File;
+import java.net.URL;
+import java.util.Map;
+
 public interface AndroidVersionUtils {
 	
-	public void storeMetas(Uri uri, PuzzleMeta meta);
+	void storeMetas(Uri uri, PuzzleMeta meta);
 
-	public void setContext(Context ctx);
+	void setContext(Context ctx);
 
-	public boolean downloadFile(URL url, File destination,
-			Map<String, String> headers, boolean notification, String title);
+	boolean downloadFile(URL url, File destination,
+						 Map<String, String> headers, boolean notification, String title);
 
-	public void finishOnHomeButton(ActionBarActivity a);
+	void finishOnHomeButton(ActionBarActivity a);
 
-	public void holographic(ActionBarActivity playActivity);
+	void holographic(ActionBarActivity playActivity);
 
-	public void onActionBarWithText(MenuItem a);
+	void onActionBarWithText(MenuItem a);
 
-	public void onActionBarWithText(SubMenu reveal);
+	void onActionBarWithText(SubMenu reveal);
 
-	public static class Factory {
+	class Factory {
 		private static AndroidVersionUtils INSTANCE;
 		
 		public static AndroidVersionUtils getInstance() {
@@ -52,15 +52,19 @@ public interface AndroidVersionUtils {
 		}
 	}
 
-	public View onActionBarCustom(ActionBarActivity a, int id);
+	View onActionBarCustom(ActionBarActivity a, int id);
 	
-	public void hideWindowTitle(ActionBarActivity a);
+	void hideWindowTitle(ActionBarActivity a);
 	
-	public void hideActionBar(ActionBarActivity a);
+	void hideActionBar(ActionBarActivity a);
 
-    public void onActionBarWithoutText(MenuItem a);
+    void onActionBarWithoutText(MenuItem a);
 
-    public void hideTitleOnPortrait(ActionBarActivity a);
+    void hideTitleOnPortrait(ActionBarActivity a);
+
+	void toggleNightMode(Activity activity);
+
+	boolean isNightModeAvailable();
 
 	
 }

@@ -44,6 +44,7 @@ import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.puz.PuzzleMeta;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
+import com.totsp.crossword.util.NightModeHelper;
 import com.totsp.crossword.view.CircleProgressBar;
 import com.totsp.crossword.view.recycler.RecyclerItemClickListener;
 import com.totsp.crossword.view.recycler.RemovableRecyclerViewAdapter;
@@ -194,9 +195,12 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        System.setProperty("http.keepAlive", "false");
         utils.onActionBarWithoutText(this.gamesItem = menu.add("Sign In")
                 .setIcon(this.playIcon));
+        if(utils.isNightModeAvailable()) {
+            utils.onActionBarWithoutText(menu.add("Night Mode")
+                    .setIcon(R.drawable.moon));
+        }
         SubMenu sortMenu = menu.addSubMenu("Sort")
                                .setIcon(android.R.drawable.ic_menu_sort_alphabetically);
         sortMenu.add("By Date (Descending)")
@@ -206,7 +210,6 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         sortMenu.add("By Source")
                 .setIcon(android.R.drawable.ic_menu_upload);
         utils.onActionBarWithText(sortMenu);
-
         menu.add("Cleanup")
             .setIcon(android.R.drawable.ic_menu_manage);
         menu.add(MENU_ARCHIVES)
@@ -242,7 +245,9 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     @SuppressWarnings("deprecation")
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	if(item.getTitle().equals("Sign In")){
+        if(item.getTitle().equals("Night Mode")){
+            this.utils.toggleNightMode(this);
+        } else if(item.getTitle().equals("Sign In")){
             if(this.signedIn){
                 System.out.println("Shwoing achievements.");
                 startActivityForResult(this.mHelper.getGamesClient().getAchievementsIntent(), 0);
@@ -411,9 +416,9 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
         }
 
-        highlightColor = getResources().getColor(R.color.accent);
-        normalColor = getResources().getColor(R.color.background_material_light);
-        primaryTextColor = getResources().getColor(R.color.textColorPrimary);
+        highlightColor = ContextCompat.getColor(this, R.color.accent);
+        normalColor = ContextCompat.getColor(this, R.color.background_light);
+        primaryTextColor = ContextCompat.getColor(this, R.color.textColorPrimary);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

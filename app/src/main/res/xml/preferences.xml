@@ -108,11 +108,11 @@
 				android:defaultValue="true"
 				android:summary="Updates Sundays"
 				android:key="downloadWaPoPuzzler" />
-		    <com.jenzz.materialpreference.CheckBoxPreference
-				android:title="People Magazine"
-				android:defaultValue="true"
-				android:summary="Updates Thursdays"
-				android:key="scrapePeople" />
+		    <!--<com.jenzz.materialpreference.CheckBoxPreference-->
+				<!--android:title="People Magazine"-->
+				<!--android:defaultValue="true"-->
+				<!--android:summary="Updates Thursdays"-->
+				<!--android:key="scrapePeople" />-->
 			 <!--<com.jenzz.materialpreference.CheckBoxPreference-->
 				<!--android:title="I Swear"-->
 				<!--android:defaultValue="true"-->
