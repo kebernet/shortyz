@@ -24,7 +24,6 @@ import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
 
 import com.totsp.crossword.io.IO;
-import com.totsp.crossword.puz.Playboard.Clue;
 import com.totsp.crossword.puz.Playboard.Position;
 import com.totsp.crossword.puz.Playboard.Word;
 import com.totsp.crossword.puz.Puzzle;
@@ -104,8 +103,8 @@ public class ClueListActivity extends ShortyzActivity {
         if(ShortyzApplication.BOARD == null || ShortyzApplication.BOARD.getPuzzle() == null){
             finish();
         }
-		this.timer = new ImaginaryTimer(ShortyzApplication.BOARD.getPuzzle()
-				.getTime());
+		this.timer = new ImaginaryTimer(
+				ShortyzApplication.BOARD.getPuzzle().getTime());
 
 		Uri u = this.getIntent().getData();
 
@@ -136,9 +135,6 @@ public class ClueListActivity extends ShortyzActivity {
 					private long lastSwipe = 0;
 
 					public void onKey(int primaryCode, int[] keyCodes) {
-						System.out.println("Got key " + ((char) primaryCode)
-								+ " " + primaryCode);
-
 						long eventTime = System.currentTimeMillis();
 
 						if ((eventTime - lastSwipe) < 500) {
@@ -228,7 +224,7 @@ public class ClueListActivity extends ShortyzActivity {
 		TabSpec ts = tabHost.newTabSpec("TAB1");
 
 		ts.setIndicator("Across",
-				this.getResources().getDrawable(R.drawable.across));
+				ContextCompat.getDrawable(this, R.drawable.across));
 
 		ts.setContent(R.id.acrossList);
 
@@ -236,8 +232,7 @@ public class ClueListActivity extends ShortyzActivity {
 
 		ts = this.tabHost.newTabSpec("TAB2");
 
-		ts.setIndicator("Down", this.getResources()
-				.getDrawable(R.drawable.down));
+		ts.setIndicator("Down", ContextCompat.getDrawable(this, R.drawable.down));
 
 		ts.setContent(R.id.downList);
 		this.tabHost.addTab(ts);
@@ -247,11 +242,11 @@ public class ClueListActivity extends ShortyzActivity {
 		this.across = (ListView) this.findViewById(R.id.acrossList);
 		this.down = (ListView) this.findViewById(R.id.downList);
 
-		across.setAdapter(new ArrayAdapter<Clue>(this,
+		across.setAdapter(new ArrayAdapter<>(this,
 				android.R.layout.simple_list_item_1, ShortyzApplication.BOARD
 						.getAcrossClues()));
 		across.setFocusableInTouchMode(true);
-		down.setAdapter(new ArrayAdapter<Clue>(this,
+		down.setAdapter(new ArrayAdapter<>(this,
 				android.R.layout.simple_list_item_1, ShortyzApplication.BOARD
 						.getDownClues()));
 		across.setOnItemClickListener(new OnItemClickListener() {

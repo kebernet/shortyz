@@ -261,7 +261,15 @@
 		android:summary="Toggles the skipping of filled boxes when you enter a new letter."
 		android:key="skipFilled"
 	/>
-	
+
+	<com.jenzz.materialpreference.CheckBoxPreference
+		android:title="Preserve Correct Boxes when Showing Errors"
+		android:defaultValue="false"
+		android:summary="Keeps you from overwriting a correct box when you are in 'Show Errors' mode."
+		android:key="preserveCorrectLettersInShowErrors"
+		/>
+
+
 	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Space Changes Direction"
 		android:defaultValue="true"

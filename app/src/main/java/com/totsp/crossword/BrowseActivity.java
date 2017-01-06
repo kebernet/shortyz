@@ -671,10 +671,10 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     }
 
     private FileHandle[] getFileHandlesFromDirectory(File directory) {
-        ArrayList<FileHandle> files = new ArrayList<FileHandle>();
-        FileHandle[] puzFiles = null;
+        ArrayList<FileHandle> files = new ArrayList<>();
+        FileHandle[] puzFiles;
 
-        for (File f : directory.listFiles()) {
+        for (File f : (directory == null ? new File[0] : directory.listFiles())) {
             if (f.getName()
                     .endsWith(".puz")) {
                 PuzzleMeta m = null;
@@ -682,7 +682,6 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                 try {
                     m = IO.meta(f);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 

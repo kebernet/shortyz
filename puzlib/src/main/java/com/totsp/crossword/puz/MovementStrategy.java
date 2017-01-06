@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public interface MovementStrategy extends Serializable {
 
-	static class Common {
+    class Common {
 
 		/**
 		 * @return if @param Word (w) is the last word in its direction in the @param board
@@ -297,8 +297,10 @@ public interface MovementStrategy extends Serializable {
 					//edge case - the move next on axis didn't move the position because the skipCompleted
 					//moved to the end of the word, and the next on axis tried to move onto a non-letter space
 					if (skipCompletedLetters && Common.isWordEnd(board.getHighlightLetter(), w)) {
-						if (board.skipCurrentBox(board.getCurrentBox(), skipCompletedLetters)) {
-							this.move(board, skipCompletedLetters);
+                        //noinspection ConstantConditions
+                        if (board.skipCurrentBox(board.getCurrentBox(), skipCompletedLetters)) {
+                            //noinspection ConstantConditions
+                            this.move(board, skipCompletedLetters);
 						}
 					} else {
 						Position newPos = board.getHighlightLetter();
@@ -315,6 +317,15 @@ public interface MovementStrategy extends Serializable {
 			return w;
 		}
 
+		private Box getBoxOrNull(Box[][] boxes, int x, int y){
+			if(boxes.length < x){
+				if(boxes[x].length < y){
+					return boxes[x][y];
+				}
+			}
+			return null;
+		}
+
 		/**
 		 * find the index of the next parallel section where the most whitespaces match
 		 * Precondition: the current word is not on the last row (otherwise there will be an ArrayIndexOutOfBounds)
@@ -326,10 +337,10 @@ public interface MovementStrategy extends Serializable {
 			int curIndex = 0;
 			for (int i = 0; i < w.length; i++) {
 				Box nextBox;
-				if (w.across) {
-					nextBox = boxes[w.start.across + i][w.start.down + 1];
+				if (w.across ) {
+					nextBox = getBoxOrNull(boxes, w.start.across + i, w.start.down + 1);
 				} else {
-					nextBox = boxes[w.start.across + 1][w.start.down + i];
+					nextBox = getBoxOrNull(boxes, w.start.across + 1, w.start.down + i);
 				}
 				if (nextBox != null) {
 					curCount++;
@@ -353,7 +364,6 @@ public interface MovementStrategy extends Serializable {
 			Position p = board.getHighlightLetter();
 			if ((w.across && p.across == w.start.across)
 					|| (!w.across && p.down == w.start.down)) {
-				//board.setHighlightLetter(w.start);
 				Word newWord;
 				Position lastPos = null;
 				if (w.across) {

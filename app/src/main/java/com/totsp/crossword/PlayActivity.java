@@ -219,7 +219,7 @@ public class PlayActivity extends ShortyzActivity {
                 throw new IOException();
             }
 
-            BOARD = new Playboard(puz, movement);
+            BOARD = new Playboard(puz, movement, prefs.getBoolean("preserveCorrectLettersInShowErrors", false));
             RENDERER = new PlayboardRenderer(BOARD, metrics.density, metrics.widthPixels,
                     !prefs.getBoolean("supressHints", false),
                     ContextCompat.getColor(this, R.color.boxColor), ContextCompat.getColor(this, R.color.blankColor),
@@ -690,7 +690,7 @@ public class PlayActivity extends ShortyzActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!puz.isUpdatable()) {
+        if (puz != null && !puz.isUpdatable()) {
             MenuItem showItem = menu.add(
                     this.showErrors ? "Hide Errors" : "Show Errors").setIcon(
                     android.R.drawable.ic_menu_view);

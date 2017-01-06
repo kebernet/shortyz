@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Playboard implements Serializable {
     private HashMap<Integer, Position> acrossWordStarts = new HashMap<Integer, Position>();
     private HashMap<Integer, Position> downWordStarts = new HashMap<Integer, Position>();
@@ -18,6 +19,12 @@ public class Playboard implements Serializable {
     private boolean across = true;
     private boolean showErrors;
     private boolean skipCompletedLetters;
+    private boolean preserveCorrectLettersInShowErrors;
+
+    public Playboard(Puzzle puzzle, MovementStrategy movementStrategy, boolean preserveCorrectLettersInShowErrors){
+        this(puzzle, movementStrategy);
+        this.preserveCorrectLettersInShowErrors = preserveCorrectLettersInShowErrors;
+    }
 
     public Playboard(Puzzle puzzle, MovementStrategy movementStrategy) {
         this(puzzle);
@@ -46,6 +53,10 @@ public class Playboard implements Serializable {
         if (this.boxes[0][0] == null) {
             this.moveRight(false);
         }
+    }
+
+    public void setPreserveCorrectLettersInShowErrors(boolean value){
+        this.preserveCorrectLettersInShowErrors = value;
     }
 
     public void setAcross(boolean across) {
@@ -269,6 +280,9 @@ public class Playboard implements Serializable {
 
     public Box[] getWordBoxes(int number, boolean isAcross) {
         Position start = isAcross ? this.acrossWordStarts.get(number) : this.downWordStarts.get(number);
+        if(start == null) {
+            return new Box[0];
+        }
         int range = this.getWordRange(start, isAcross);
         int across = start.across;
         int down = start.down;
@@ -293,7 +307,7 @@ public class Playboard implements Serializable {
     public int getWordRange(Position start, boolean across) {
         if (across) {
             int col = start.across;
-            Box b = null;
+            Box b;
 
             do {
                 b = null;
@@ -303,14 +317,14 @@ public class Playboard implements Serializable {
                 try {
                     col++;
                     b = this.getBoxes()[checkCol][start.down];
-                } catch (RuntimeException e) {
+                } catch (RuntimeException ignored) {
                 }
             } while (b != null);
 
             return col - start.across;
         } else {
             int row = start.down;
-            Box b = null;
+            Box b;
 
             do {
                 b = null;
@@ -320,7 +334,7 @@ public class Playboard implements Serializable {
                 try {
                     row++;
                     b = this.getBoxes()[start.across][checkRow];
-                } catch (RuntimeException e) {
+                } catch (RuntimeException ignored) {
                 }
             } while (b != null);
 
@@ -346,7 +360,7 @@ public class Playboard implements Serializable {
             currentBox = this.boxes[this.highlightLetter.across][this.highlightLetter.down];
         }
 
-        if (currentBox.getResponse() == currentBox.getSolution() && this.isShowErrors()) {
+        if (preserveCorrectLettersInShowErrors && currentBox.getResponse() == currentBox.getSolution() && this.isShowErrors()) {
             // Prohibit deleting correct letters
         } else {
             currentBox.setResponse(' ');
@@ -389,6 +403,7 @@ public class Playboard implements Serializable {
     public Word moveDown(boolean skipCompleted) {
         Word w = this.getCurrentWord();
 
+        //noinspection EmptyCatchBlock
         try {
             Position newPos = this.moveDown(this.getHighlightLetter(), skipCompleted);
             this.setHighlightLetter(newPos);
@@ -403,6 +418,7 @@ public class Playboard implements Serializable {
         Box value = this.getBoxes()[next.across][next.down];
 
         if ((value == null) || skipCurrentBox(value, skipCompleted)) {
+            //noinspection EmptyCatchBlock
             try {
                 next = moveLeft(next, skipCompleted);
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -415,6 +431,7 @@ public class Playboard implements Serializable {
     public Word moveLeft(boolean skipCompleted) {
         Word w = this.getCurrentWord();
 
+        //noinspection EmptyCatchBlock
         try {
             Position newPos = this.moveLeft(this.getHighlightLetter(), skipCompleted);
             this.setHighlightLetter(newPos);
@@ -528,7 +545,7 @@ public class Playboard implements Serializable {
             return null;
         }
 
-        if (b.getResponse() == b.getSolution() && isShowErrors()) {
+        if (preserveCorrectLettersInShowErrors && b.getResponse() == b.getSolution() && isShowErrors()) {
             // Prohibit replacing correct letters
             return this.getCurrentWord();
         } else {
