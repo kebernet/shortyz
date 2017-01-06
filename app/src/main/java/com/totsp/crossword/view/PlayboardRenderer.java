@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 
 public class PlayboardRenderer {
-    private static final float BASE_BOX_SIZE_INCHES = 0.5F;
+    private static final float BASE_BOX_SIZE_INCHES = 0.25F;
     private static final Logger LOG = Logger.getLogger(PlayboardRenderer.class.getCanonicalName());
     private final Paint blackBox = new Paint();
     private final Paint blackCircle = new Paint();
@@ -34,7 +34,7 @@ public class PlayboardRenderer {
     private final Paint white = new Paint();
     private Bitmap bitmap;
     private Playboard board;
-    private int dpi;
+    private float dpi;
     private float scale = 1.0F;
     private boolean hintHighlight;
     private int widthPixels;
@@ -42,13 +42,13 @@ public class PlayboardRenderer {
     private final int blankColor;
     private final int errorColor;
 
-    public PlayboardRenderer(Playboard board, float logicalDensity, int widthPixels, boolean hintHighlight,
+    public PlayboardRenderer(Playboard board, float dpi, int widthPixels, boolean hintHighlight,
                              int boxColor, int blankColor, int errorColor) {
         this.boxColor = boxColor;
         this.blankColor = blankColor;
         this.errorColor = errorColor;
 
-        this.dpi = Math.round(160F * logicalDensity);
+        this.dpi = dpi;
         this.widthPixels = widthPixels;
         this.board = board;
         this.hintHighlight = hintHighlight;
@@ -93,8 +93,9 @@ public class PlayboardRenderer {
         float retValue;
         LOG.info("Board "+board.getBoxes().length+" widthPixels "+widthPixels);
         // inches * pixels per inch * units
-        if( .75 * dpi * board.getBoxes().length < widthPixels){
-            retValue = (widthPixels /board.getBoxes().length) / BASE_BOX_SIZE_INCHES;
+        float seventyFivePercentWidth = (float) .75 * dpi * (board.getBoxes().length * BASE_BOX_SIZE_INCHES);
+        if( seventyFivePercentWidth < widthPixels){
+            retValue = .75f;
         } else {
             retValue = 1.5F;
         }
@@ -104,7 +105,7 @@ public class PlayboardRenderer {
 
     public float getDeviceMinScale(){
         //inches * (pixels / pixels per inch);
-        float retValue = (0.20F * (160F / dpi)) / BASE_BOX_SIZE_INCHES;
+        float retValue = 0.9F * ((dpi * BASE_BOX_SIZE_INCHES) / dpi);
         LOG.warning("getDeviceMinScale "+retValue);
         return retValue;
     }
@@ -139,7 +140,7 @@ public class PlayboardRenderer {
                 scale = 1.0F;
             }
 
-            int boxSize = (int) (.5 * dpi * scale);
+            int boxSize = (int) (BASE_BOX_SIZE_INCHES * dpi * scale);
 
             if (bitmap == null) {
                 LOG.warning("New bitmap box size "+boxSize);
@@ -262,8 +263,7 @@ public class PlayboardRenderer {
 
     public float zoomReset() {
         this.bitmap = null;
-        this.scale = 0.5F;
-
+        this.scale = 1.0F;
         return scale;
     }
 

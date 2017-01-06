@@ -114,16 +114,16 @@ public class GameHelper implements
     public final static int CLIENT_ALL = CLIENT_GAMES | CLIENT_PLUS | CLIENT_APPSTATE;
 
     // What clients were requested? (bit flags)
-    int mRequestedClients = CLIENT_NONE;
+    private int mRequestedClients = CLIENT_NONE;
 
     // What clients are currently connected? (bit flags)
-    int mConnectedClients = CLIENT_NONE;
+    private int mConnectedClients = CLIENT_NONE;
 
     // What client are we currently connecting?
-    int mClientCurrentlyConnecting = CLIENT_NONE;
+    private int mClientCurrentlyConnecting = CLIENT_NONE;
 
     // Whether to automatically try to sign in on onStart().
-    boolean mAutoSignIn = true;
+    private boolean mAutoSignIn = true;
 
     /*
      * Whether user has specifically requested that the sign-in process begin. If
@@ -131,23 +131,23 @@ public class GameHelper implements
      * Activity is started -- if true, then the user has already clicked a "Sign-In" button or
      * something similar
      */
-    boolean mUserInitiatedSignIn = false;
+    private boolean mUserInitiatedSignIn = false;
 
     // The connection result we got from our last attempt to sign-in.
-    ConnectionResult mConnectionResult = null;
+    private ConnectionResult mConnectionResult = null;
 
     // The error that happened during sign-in.
-    SignInFailureReason mSignInFailureReason = null;
+    private SignInFailureReason mSignInFailureReason = null;
 
     // Print debug logs?
-    boolean mDebugLog = false;
-    String mDebugTag = "GameHelper";
+    private boolean mDebugLog = false;
+    private String mDebugTag = "GameHelper";
 
     /*
      * If we got an invitation id when we connected to the games client, it's here. Otherwise, it's
      * null.
      */
-    String mInvitationId;
+    private String mInvitationId;
 
     /*
      * If we got turn-based match when we connected to the games client, it's here. Otherwise, it's
@@ -156,7 +156,7 @@ public class GameHelper implements
     //TurnBasedMatch mTurnBasedMatch;
 
     // Listener
-    GameHelperListener mListener = null;
+    private GameHelperListener mListener = null;
 
     /**
      * Construct a GameHelper object, initially tied to the given Activity.

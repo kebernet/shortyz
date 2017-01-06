@@ -221,23 +221,21 @@ public class PlayActivity extends ShortyzActivity {
             }
 
             BOARD = new Playboard(puz, movement, prefs.getBoolean("preserveCorrectLettersInShowErrors", false));
-            RENDERER = new PlayboardRenderer(BOARD, metrics.density, metrics.widthPixels,
+            RENDERER = new PlayboardRenderer(BOARD, metrics.densityDpi, metrics.widthPixels,
                     !prefs.getBoolean("supressHints", false),
                     ContextCompat.getColor(this, R.color.boxColor), ContextCompat.getColor(this, R.color.blankColor),
                     ContextCompat.getColor(this, R.color.errorColor));
 
-            float scale = prefs.getFloat("scale", metrics.density);
+            float scale = prefs.getFloat("scale", 1.0F);
 
             if (scale > RENDERER.getDeviceMaxScale()) {
                 scale = RENDERER.getDeviceMaxScale();
-                prefs.edit().putFloat("scale", scale).apply();
-            } else if (scale < .5f) {
-                scale = .25f;
-                prefs.edit().putFloat("scale", .25f).apply();
+            } else if (scale < RENDERER.getDeviceMinScale()) {
+                scale = RENDERER.getDeviceMinScale();
             } else if (Float.isNaN(scale)) {
-                scale = 1f;
-                prefs.edit().putFloat("scale", 1f).apply();
+                scale = 1F;
             }
+            prefs.edit().putFloat("scale", scale).apply();
 
             RENDERER.setScale(scale);
             BOARD.setSkipCompletedLetters(this.prefs.getBoolean("skipFilled",

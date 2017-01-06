@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.totsp.crossword.shortyz"
     android:installLocation="auto"
-    android:versionCode="40302"
-    android:versionName="4.3.2">
+    android:versionCode="40304"
+    android:versionName="4.3.4">
 
     <supports-screens
         android:anyDensity="true"
@@ -16,7 +16,7 @@
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="22" />
+        android:targetSdkVersion="25" />
 
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
