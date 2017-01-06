@@ -93,6 +93,7 @@ public class PlayActivity extends ShortyzActivity {
         public void run() {
             if (timer != null) {
                 getWindow().setTitle(timer.time());
+                //noinspection deprecation
                 getWindow().setFeatureInt(Window.FEATURE_PROGRESS,
                         puz.getPercentComplete() * 100);
             }
@@ -736,17 +737,13 @@ public class PlayActivity extends ShortyzActivity {
 
     private SpannableString createSpannableForMenu(String value){
         SpannableString s = new SpannableString(value);
-        s.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.textColorPrimary)), 0, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.textColorPrimary)), 0, s.length(), 0);
         return s;
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_ENTER) {
-            return true;
-        }
-
-        return false;
+        return keyCode == KeyEvent.KEYCODE_ENTER;
     }
 
     @Override
@@ -914,7 +911,7 @@ public class PlayActivity extends ShortyzActivity {
             BOARD.toggleShowErrors();
             item.setTitle(BOARD.isShowErrors() ? "Hide Errors" : "Show Errors");
             this.prefs.edit().putBoolean("showErrors", BOARD.isShowErrors())
-                    .commit();
+                    .apply();
             this.render();
 
             return true;
@@ -927,7 +924,7 @@ public class PlayActivity extends ShortyzActivity {
             this.boardView.scrollTo(0, 0);
 
             float newScale = RENDERER.zoomIn();
-            this.prefs.edit().putFloat("scale", newScale).commit();
+            this.prefs.edit().putFloat("scale", newScale).apply();
             this.fitToScreen = false;
             boardView.setCurrentScale(newScale);
             this.render();
@@ -937,7 +934,7 @@ public class PlayActivity extends ShortyzActivity {
             this.boardView.scrollTo(0, 0);
 
             float newScale = RENDERER.zoomInMax();
-            this.prefs.edit().putFloat("scale", newScale).commit();
+            this.prefs.edit().putFloat("scale", newScale).apply();
             this.fitToScreen = false;
             boardView.setCurrentScale(newScale);
             this.render();
@@ -947,7 +944,7 @@ public class PlayActivity extends ShortyzActivity {
             this.boardView.scrollTo(0, 0);
 
             float newScale = RENDERER.zoomOut();
-            this.prefs.edit().putFloat("scale", newScale).commit();
+            this.prefs.edit().putFloat("scale", newScale).apply();
             this.fitToScreen = false;
             boardView.setCurrentScale(newScale);
             this.render();
@@ -960,7 +957,7 @@ public class PlayActivity extends ShortyzActivity {
         } else if (item.getTitle().toString().equals("Zoom Reset")) {
             float newScale = RENDERER.zoomReset();
             boardView.setCurrentScale(newScale);
-            this.prefs.edit().putFloat("scale", newScale).commit();
+            this.prefs.edit().putFloat("scale", newScale).apply();
             this.render();
             this.boardView.scrollTo(0, 0);
 
@@ -1011,7 +1008,7 @@ public class PlayActivity extends ShortyzActivity {
         int v = (this.boardView.getWidth() < this.boardView.getHeight()) ? this.boardView
                 .getWidth() : this.boardView.getHeight();
         float newScale = RENDERER.fitTo(v);
-        this.prefs.edit().putFloat("scale", newScale).commit();
+        this.prefs.edit().putFloat("scale", newScale).apply();
         boardView.setCurrentScale(newScale);
         this.render();
     }

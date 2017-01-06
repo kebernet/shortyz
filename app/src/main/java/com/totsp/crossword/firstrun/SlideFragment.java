@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 /**
+ *
  * Created by rcooper on 6/28/15.
  */
 public class SlideFragment extends Fragment {

@@ -28,11 +28,10 @@ import java.util.regex.Pattern;
 import okhttp3.OkHttpClient;
 
 /**
- * Created by rcooper on 6/27/15.
+ *
  */
 public class NYTimes extends SlideFragment {
 
-    public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private View loginForm;
     private Button loginButton;
     private AutoCompleteTextView username;

@@ -1,9 +1,6 @@
 package com.totsp.crossword.firstrun;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +8,7 @@ import android.view.ViewGroup;
 import com.totsp.crossword.shortyz.R;
 
 /**
+ *
  * Created by rcooper on 6/27/15.
  */
 public class Slide1 extends SlideFragment {

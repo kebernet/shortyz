@@ -12,8 +12,6 @@ import com.totsp.crossword.io.IO;
 import com.totsp.crossword.io.JPZIO;
 import com.totsp.crossword.net.Downloader;
 import com.totsp.crossword.puz.Puzzle;
-import com.totsp.crossword.puz.PuzzleMeta;
-import com.totsp.crossword.util.SCollections;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -27,13 +25,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.totsp.crossword.util.SCollections.neverNull;
 
 /**
+ *
  * Created by rcooper on 6/28/15.
  */
 @SuppressWarnings("SimpleDateFormat")
@@ -103,7 +101,7 @@ public class GmailDownloader implements Downloader {
                 for(Map.Entry<String, MessagePart> entry : toDownload.entrySet()){
                     LOGGER.info("==Reading : "+singleFilename);
                     String source = getSender(fetched.getPayload().getHeaders());
-                    String filename = (date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" +
+                    @SuppressWarnings("deprecation") String filename = (date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" +
                             source+"-"+singleFilename.replaceAll(" ", "") + ".puz";
                     File destination = new File(CROSSWORDS, filename);
                     if(!destination.exists()){

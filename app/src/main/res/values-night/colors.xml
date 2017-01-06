@@ -2,7 +2,7 @@
     <color name="primary">#000</color>
     <color name="primary_dark">#222</color>
     <color name="accent">#c00</color>
-    <color name="textColorPrimary">#d00</color>
+    <color name="textColorPrimary">@color/textColorPrimaryNight</color>
     <color name="textColorSecondary">#900</color>
     <color name="accentText">#500</color>
     <color name="transparent">#00000000</color>

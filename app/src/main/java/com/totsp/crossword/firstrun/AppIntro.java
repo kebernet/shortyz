@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.Window;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+@SuppressWarnings("unused")
 public abstract class AppIntro extends FragmentActivity {
     private PagerAdapter mPagerAdapter;
     private ViewPager pager;
@@ -123,7 +125,7 @@ public abstract class AppIntro extends FragmentActivity {
 
         for (int i = 0; i < slidesNumber; i++) {
             ImageView dot = new ImageView(this);
-            dot.setImageDrawable(getResources().getDrawable(R.drawable.indicator_dot_grey));
+            dot.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.indicator_dot_grey));
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -141,7 +143,7 @@ public abstract class AppIntro extends FragmentActivity {
         Resources res = getResources();
         for (int i = 0; i < fragments.size(); i++) {
             int drawableId = (i == index) ? (R.drawable.indicator_dot_white) : (R.drawable.indicator_dot_grey);
-            Drawable drawable = res.getDrawable(drawableId);
+            Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
             dots.get(i).setImageDrawable(drawable);
         }
     }

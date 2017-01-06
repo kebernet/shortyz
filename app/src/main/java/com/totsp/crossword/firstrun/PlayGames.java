@@ -2,18 +2,16 @@ package com.totsp.crossword.firstrun;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.totsp.crossword.GameHelper;
-import com.totsp.crossword.GamesSignIn;
 import com.totsp.crossword.shortyz.R;
 
 /**
+ *
  * Created by rcooper on 6/27/15.
  */
 public class PlayGames extends SlideFragment {

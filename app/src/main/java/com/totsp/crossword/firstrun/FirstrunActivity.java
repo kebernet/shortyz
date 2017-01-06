@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.util.SparseArray;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -18,7 +20,6 @@ import com.totsp.crossword.GameHelper;
 import com.totsp.crossword.gmail.GMConstants;
 import com.totsp.crossword.shortyz.ShortyzApplication;
 
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,13 +49,13 @@ public class FirstrunActivity extends AppIntro implements GameHelper.GameHelperL
     GameHelper.GameHelperListener gameHelperListener;
     GmailListener gmailListener;
     Boolean playServicesAvailable;
-    private HashMap<Integer, PermissionCallback> requestedPermissions = new HashMap<>();
+    private SparseArray<PermissionCallback> requestedPermissions = new SparseArray<>();
 
     @Override
     public void init(Bundle bundle) {
         mHelper = new GameHelper(this);
         if (mDebugLog) {
-            mHelper.enableDebugLog(mDebugLog, mDebugTag);
+            mHelper.enableDebugLog(true, mDebugTag);
         }
         mHelper.setup(this, mRequestedClients);
         addSlide(new Slide1(), this.getApplicationContext());
@@ -71,7 +72,7 @@ public class FirstrunActivity extends AppIntro implements GameHelper.GameHelperL
 
     @Override
     public void onSkipPressed() {
-        ((ShortyzApplication) getApplication()).getSettings().edit().putBoolean("didFirstRun", true).commit();
+        ((ShortyzApplication) getApplication()).getSettings().edit().putBoolean("didFirstRun", true).apply();
         Intent i = new Intent(Intent.ACTION_VIEW, null, this, BrowseActivity.class);
         startActivity(i);
         finish();
@@ -79,7 +80,7 @@ public class FirstrunActivity extends AppIntro implements GameHelper.GameHelperL
 
     @Override
     public void onDonePressed() {
-        ((ShortyzApplication) getApplication()).getSettings().edit().putBoolean("didFirstRun", true).commit();
+        ((ShortyzApplication) getApplication()).getSettings().edit().putBoolean("didFirstRun", true).apply();
         Intent i = new Intent(Intent.ACTION_VIEW, null, this, BrowseActivity.class);
         startActivity(i);
         finish();
@@ -234,7 +235,7 @@ public class FirstrunActivity extends AppIntro implements GameHelper.GameHelperL
         }
     }
 
-    public interface GmailListener {
+    interface GmailListener {
         void onGmailCredentialed();
     }
 
@@ -249,7 +250,7 @@ public class FirstrunActivity extends AppIntro implements GameHelper.GameHelperL
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         PermissionCallback callback = this.requestedPermissions.get(requestCode);
         if (grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -257,10 +258,9 @@ public class FirstrunActivity extends AppIntro implements GameHelper.GameHelperL
         } else {
             callback.fail();
         }
-        return;
     }
 
-    public interface PermissionCallback {
+    interface PermissionCallback {
         void success();
         void fail();
     }
