@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.totsp.crossword.shortyz"
     android:installLocation="auto"
-    android:versionCode="40200"
-    android:versionName="4.2.0">
+    android:versionCode="40300"
+    android:versionName="4.3.0">
 
     <supports-screens
         android:anyDensity="true"
@@ -41,7 +41,8 @@
 
         <activity
             android:name="com.totsp.crossword.HttpDownloadActivity"
-            android:label="Download to Shortyz">
+            android:label="Download to Shortyz"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -58,6 +59,7 @@
             tools:ignore="UnusedAttribute"
             android:name="com.totsp.crossword.PlayActivity"
             android:hardwareAccelerated="false"
+            android:configChanges="keyboard|keyboardHidden|orientation"
             android:label="@string/app_name"
             android:theme="@style/Theme.Shortyz">
             <intent-filter>
@@ -84,6 +86,7 @@
             android:name="com.totsp.crossword.ClueListActivity"
             android:label="Clues"
             android:theme="@style/Theme.Shortyz"
+            android:configChanges="orientation"
             />
         <activity
             android:name="com.totsp.crossword.HTMLActivity"
@@ -93,6 +96,7 @@
         <activity
             android:name="com.totsp.crossword.BrowseActivity"
             android:label="@string/app_name"
+            android:configChanges="orientation"
             android:theme="@style/Theme.Shortyz">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -102,7 +106,7 @@
         </activity>
         <activity
             android:name="com.totsp.crossword.WebBrowserActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="orientation"
             android:label="Browse for Puzzles"
             android:theme="@style/Theme.Shortyz"/>
         <activity
@@ -137,6 +141,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="4d39d433251f1e18f9c088ed8b9ba23da24da28e" />
     </application>
 
 

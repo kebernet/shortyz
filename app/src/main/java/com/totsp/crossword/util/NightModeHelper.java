@@ -93,11 +93,16 @@ public class NightModeHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     public void toggle() {
-        if (getUiNightMode() == Configuration.UI_MODE_NIGHT_YES) {
+        if (isNightMode()) {
             notNight();
         } else {
             night();
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+    public boolean isNightMode(){
+        return getUiNightMode() == Configuration.UI_MODE_NIGHT_YES;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)

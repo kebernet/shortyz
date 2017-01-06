@@ -53,6 +53,7 @@ public class ClueListActivity extends ShortyzActivity {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 		this.configuration = newConfig;
 		try {
 			if (this.prefs.getBoolean("forceKeyboard", false)

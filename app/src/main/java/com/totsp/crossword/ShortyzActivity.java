@@ -1,9 +1,9 @@
 package com.totsp.crossword;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,8 +16,8 @@ import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.ViewConfiguration;
-import android.widget.Toast;
 
+import com.totsp.crossword.util.NightModeHelper;
 import com.totsp.crossword.versions.AndroidVersionUtils;
 
 import java.lang.reflect.Field;
@@ -26,10 +26,17 @@ public class ShortyzActivity extends BaseGameActivity {
 	protected AndroidVersionUtils utils = AndroidVersionUtils.Factory
 			.getInstance();
 	protected SharedPreferences prefs;
+	public NightModeHelper nightMode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        if(this.nightMode == null) {
+            this.nightMode = NightModeHelper.bind(this);
+            this.utils.restoreNightMode(this);
+
+        }
+
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		if (!Environment.MEDIA_MOUNTED.equals(Environment
@@ -65,7 +72,13 @@ public class ShortyzActivity extends BaseGameActivity {
 		}
 	}
 
-	@Override
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        utils.restoreNightMode(this);
+    }
+
+    @Override
 	protected void onResume() {
 		super.onResume();
 		if (!Environment.MEDIA_MOUNTED.equals(Environment

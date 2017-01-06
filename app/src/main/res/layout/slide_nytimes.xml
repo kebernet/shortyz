@@ -68,7 +68,8 @@
                         android:textColor="#000"
                         android:textColorHint="#000000"
                         android:theme="@style/NYT"
-                        android:inputType="textEmailAddress"/>
+                        android:inputType="textEmailAddress"
+                        android:dropDownWidth="225dp"/>
                 </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="125dp"
@@ -106,7 +107,7 @@
             android:paddingLeft="64dp"
             android:paddingRight="64dp"
             android:textSize="16sp"
-            android:text="If you have a NYT subscription, enter your information above."
+            android:text="If you have a NYT subscription, enter your information above. \n (Might ask for a 'Contacts' permission to autocomplete your email address)"
             android:id="@+id/slideText"/>
         <TextView
             android:layout_width="fill_parent"

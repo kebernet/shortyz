@@ -1,14 +1,5 @@
 package com.totsp.crossword.shortyz;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +8,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -28,6 +20,17 @@ import com.totsp.crossword.gmail.GMConstants;
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.Playboard;
 import com.totsp.crossword.view.PlayboardRenderer;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import io.fabric.sdk.android.Fabric;
 
 public class ShortyzApplication extends Application {
 
@@ -46,6 +49,7 @@ public class ShortyzApplication extends Application {
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
 		updateCredential(settings);
 		super.onCreate();
+		Fabric.with(this, new Crashlytics());
 
 		if (Environment.MEDIA_MOUNTED.equals(Environment
 				.getExternalStorageState())) {

@@ -44,7 +44,6 @@ import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.puz.PuzzleMeta;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
-import com.totsp.crossword.util.NightModeHelper;
 import com.totsp.crossword.view.CircleProgressBar;
 import com.totsp.crossword.view.recycler.RecyclerItemClickListener;
 import com.totsp.crossword.view.recycler.RemovableRecyclerViewAdapter;
@@ -199,7 +198,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                 .setIcon(this.playIcon));
         if(utils.isNightModeAvailable()) {
             utils.onActionBarWithoutText(menu.add("Night Mode")
-                    .setIcon(R.drawable.moon));
+                    .setIcon(R.drawable.night_toggle));
         }
         SubMenu sortMenu = menu.addSubMenu("Sort")
                                .setIcon(android.R.drawable.ic_menu_sort_alphabetically);
@@ -465,9 +464,9 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             this.startActivity(i);
 
             return;
-        } else if (prefs.getBoolean("release_4.2.0", true)) {
+        } else if (prefs.getBoolean("release_4.3.0", true)) {
             prefs.edit()
-                    .putBoolean("release_4.2.0", false)
+                    .putBoolean("release_4.3.0", false)
                     .apply();
 
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///android_asset/release.html"), this,
@@ -851,6 +850,11 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         } else {
             this.puzzleList.setAdapter(currentAdapter = this.buildList(null, directory, accessor));
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     private void upgradePreferences() {

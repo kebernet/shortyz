@@ -4,7 +4,7 @@
     android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:background="@color/background_material_light"
+    android:background="@color/background_light"
     android:textColor="@color/textColorPrimary"
     android:textSize="25dp"
     android:textAlignment="center"

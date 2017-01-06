@@ -18,8 +18,7 @@ package com.totsp.crossword;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.appstate.AppStateClient;
 import com.google.android.gms.games.GamesClient;
@@ -42,7 +41,7 @@ import com.google.android.gms.plus.PlusClient;
  *
  * @author Bruno Oliveira (Google)
  */
-public abstract class BaseGameActivity extends ActionBarActivity implements
+public abstract class BaseGameActivity extends AppCompatActivity implements
         GameHelper.GameHelperListener {
 
     // The game helper object. This class is mainly a wrapper around this object.

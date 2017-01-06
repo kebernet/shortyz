@@ -1,5 +1,6 @@
 package com.totsp.crossword.firstrun;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import okhttp3.OkHttpClient;
  */
 public class NYTimes extends SlideFragment {
 
+    public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private View loginForm;
     private Button loginButton;
     private AutoCompleteTextView username;
@@ -38,6 +40,7 @@ public class NYTimes extends SlideFragment {
     private TextView textView;
     private Handler handler = new Handler();
     SharedPreferences prefs;
+    private boolean gotAccountsPermission;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,16 +65,45 @@ public class NYTimes extends SlideFragment {
             }
         });
 
-        this.username.setOnFocusChangeListener(new FocusChangeWrapper(this.username.getOnFocusChangeListener()));
+
         this.password.setOnFocusChangeListener(new FocusChangeWrapper(this.password.getOnFocusChangeListener()));
-        LinkedHashSet<String> emailAddresses = new LinkedHashSet<>();
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS;
+        final LinkedHashSet<String> emailAddresses = new LinkedHashSet<>();
+        final Pattern emailPattern = Patterns.EMAIL_ADDRESS;
         Account[] accounts = AccountManager.get(getActivity()).getAccounts();
         for (Account account : accounts) {
             if (emailPattern.matcher(account.name).matches()) {
                 emailAddresses.add(account.name);
             }
         }
+        this.username.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b && ! gotAccountsPermission){
+                    ((FirstrunActivity) getActivity()).requestPermission(1, Manifest.permission.GET_ACCOUNTS, new FirstrunActivity.PermissionCallback() {
+                                @Override
+                                public void success() {
+                                    gotAccountsPermission = true;
+                                    Account[] accounts = AccountManager.get(getActivity()).getAccounts();
+                                    emailAddresses.clear();
+                                    for (Account account : accounts) {
+                                        if (emailPattern.matcher(account.name).matches()) {
+                                            emailAddresses.add(account.name);
+                                            username.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, emailAddresses.toArray(new String[emailAddresses.size()])));
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void fail() {
+
+                                }
+                            }
+                    );
+
+                }
+            }
+        });
+        this.username.setOnFocusChangeListener(new FocusChangeWrapper(this.username.getOnFocusChangeListener()));
         this.username.setAdapter(new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_list_item_1, emailAddresses.toArray(new String[emailAddresses.size()])));
         return v;
     }

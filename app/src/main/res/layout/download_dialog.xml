@@ -3,7 +3,7 @@
   android:id="@+id/download_root"
   android:layout_width="wrap_content"
   android:layout_height="fill_parent"
-  android:background="@color/background_material_light">
+  android:background="@color/background_light">
 	<LinearLayout
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content"

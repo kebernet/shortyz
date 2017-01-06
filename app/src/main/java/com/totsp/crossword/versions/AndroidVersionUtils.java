@@ -1,13 +1,13 @@
 package com.totsp.crossword.versions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 
+import com.totsp.crossword.ShortyzActivity;
 import com.totsp.crossword.puz.PuzzleMeta;
 
 import java.io.File;
@@ -23,13 +23,15 @@ public interface AndroidVersionUtils {
 	boolean downloadFile(URL url, File destination,
 						 Map<String, String> headers, boolean notification, String title);
 
-	void finishOnHomeButton(ActionBarActivity a);
+	void finishOnHomeButton(AppCompatActivity a);
 
-	void holographic(ActionBarActivity playActivity);
+	void holographic(AppCompatActivity playActivity);
 
 	void onActionBarWithText(MenuItem a);
 
 	void onActionBarWithText(SubMenu reveal);
+
+	void restoreNightMode(ShortyzActivity shortyzActivity);
 
 	class Factory {
 		private static AndroidVersionUtils INSTANCE;
@@ -52,17 +54,17 @@ public interface AndroidVersionUtils {
 		}
 	}
 
-	View onActionBarCustom(ActionBarActivity a, int id);
+	View onActionBarCustom(AppCompatActivity a, int id);
 	
-	void hideWindowTitle(ActionBarActivity a);
+	void hideWindowTitle(AppCompatActivity a);
 	
-	void hideActionBar(ActionBarActivity a);
+	void hideActionBar(AppCompatActivity a);
 
     void onActionBarWithoutText(MenuItem a);
 
-    void hideTitleOnPortrait(ActionBarActivity a);
+    void hideTitleOnPortrait(AppCompatActivity a);
 
-	void toggleNightMode(Activity activity);
+	void toggleNightMode(ShortyzActivity activity);
 
 	boolean isNightModeAvailable();
 

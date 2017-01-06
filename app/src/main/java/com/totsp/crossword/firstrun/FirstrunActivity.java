@@ -4,11 +4,12 @@ import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -17,7 +18,7 @@ import com.totsp.crossword.GameHelper;
 import com.totsp.crossword.gmail.GMConstants;
 import com.totsp.crossword.shortyz.ShortyzApplication;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +48,7 @@ public class FirstrunActivity extends AppIntro implements GameHelper.GameHelperL
     GameHelper.GameHelperListener gameHelperListener;
     GmailListener gmailListener;
     Boolean playServicesAvailable;
+    private HashMap<Integer, PermissionCallback> requestedPermissions = new HashMap<>();
 
     @Override
     public void init(Bundle bundle) {
@@ -234,5 +236,32 @@ public class FirstrunActivity extends AppIntro implements GameHelper.GameHelperL
 
     public interface GmailListener {
         void onGmailCredentialed();
+    }
+
+
+    public void requestPermission(int requestCode, String permission, PermissionCallback callback){
+        ActivityCompat.requestPermissions(this,
+                new String[]{permission},
+                requestCode);
+        this.requestedPermissions.put(requestCode, callback);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        PermissionCallback callback = this.requestedPermissions.get(requestCode);
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+           callback.success();
+        } else {
+            callback.fail();
+        }
+        return;
+    }
+
+    public interface PermissionCallback {
+        void success();
+        void fail();
     }
 }

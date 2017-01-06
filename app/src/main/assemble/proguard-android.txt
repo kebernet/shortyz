@@ -21,6 +21,7 @@
 -keep interface android.support.design.** { *; }
 -keep public class android.support.design.R$* { *; }
 -keep class okhttp3.** { *; }
+-dontwarn com.google.android.gms.**
 
 -dontwarn okio.**
 -dontwarn sun.misc.Unsafe

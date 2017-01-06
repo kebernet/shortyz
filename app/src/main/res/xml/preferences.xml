@@ -93,11 +93,11 @@
 				android:defaultValue="true"
 				android:summary="Updates Thursdays"
 				android:key="downloadJonesin" />
-			<com.jenzz.materialpreference.CheckBoxPreference
-				android:title="New York Times Classic"
-				android:defaultValue="true"
-				android:summary="Updates Mondays"
-				android:key="downloadNYTClassic" />
+			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+				<!--android:title="New York Times Classic"-->
+				<!--android:defaultValue="true"-->
+				<!--android:summary="Updates Mondays"-->
+				<!--android:key="downloadNYTClassic" />-->
 			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
 				<!--android:title="The Onion AV Club"-->
 				<!--android:defaultValue="true"-->

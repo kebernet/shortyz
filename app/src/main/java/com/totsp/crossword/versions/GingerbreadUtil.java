@@ -1,15 +1,15 @@
 package com.totsp.crossword.versions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.Window;
 
+import com.totsp.crossword.ShortyzActivity;
 import com.totsp.crossword.net.DownloadReceiver;
 import com.totsp.crossword.puz.PuzzleMeta;
 
@@ -21,10 +21,10 @@ public class GingerbreadUtil extends DefaultUtil {
         this.ctx = ctx;
     }
 
-    public void finishOnHomeButton(ActionBarActivity a) {
+    public void finishOnHomeButton(AppCompatActivity a) {
     }
 
-    public void holographic(ActionBarActivity playActivity) {
+    public void holographic(AppCompatActivity playActivity) {
     }
 
     public void onActionBarWithText(MenuItem a) {
@@ -33,16 +33,21 @@ public class GingerbreadUtil extends DefaultUtil {
     public void onActionBarWithText(SubMenu reveal) {
     }
 
-	public void storeMetas(Uri uri, PuzzleMeta meta) {
+    @Override
+    public void restoreNightMode(ShortyzActivity shortyzActivity) {
+
+    }
+
+    public void storeMetas(Uri uri, PuzzleMeta meta) {
 		DownloadReceiver.metas.put(uri, meta);
 		
 	}
 	
-	public void hideWindowTitle(ActionBarActivity a) {
+	public void hideWindowTitle(AppCompatActivity a) {
 		a.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	}
 
-	public void hideActionBar(ActionBarActivity a) {
+	public void hideActionBar(AppCompatActivity a) {
 		; //no op;
 	}
 
@@ -50,12 +55,12 @@ public class GingerbreadUtil extends DefaultUtil {
         ; //no op
     }
 
-    public void hideTitleOnPortrait(ActionBarActivity a) {
+    public void hideTitleOnPortrait(AppCompatActivity a) {
 
     }
 
     @Override
-    public void toggleNightMode(Activity activity) {
+    public void toggleNightMode(ShortyzActivity activity) {
 
     }
 
@@ -64,7 +69,7 @@ public class GingerbreadUtil extends DefaultUtil {
         return false;
     }
 
-    public View onActionBarCustom(ActionBarActivity a, int id) {
+    public View onActionBarCustom(AppCompatActivity a, int id) {
         System.out.println("Setting custom ActionBar view");
         ActionBar bar = a.getSupportActionBar();
         if(bar == null){

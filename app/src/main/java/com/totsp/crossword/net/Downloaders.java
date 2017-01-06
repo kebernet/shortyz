@@ -1,17 +1,5 @@
 package com.totsp.crossword.net;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -30,6 +18,18 @@ import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.puz.PuzzleMeta;
 import com.totsp.crossword.shortyz.ShortyzApplication;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Downloaders {
 	private static final Logger LOG = Logger.getLogger("com.totsp.crossword");
@@ -63,9 +63,9 @@ public class Downloaders {
 			downloaders.add(new WaPoPuzzlerDownloader());
 		}
 
-		if (prefs.getBoolean("downloadNYTClassic", true)) {
-			downloaders.add(new NYTClassicDownloader());
-		}
+//		if (prefs.getBoolean("downloadNYTClassic", true)) {
+//			downloaders.add(new NYTClassicDownloader());
+//		}
 
 //		if (prefs.getBoolean("downloadInkwell", true)) {
 //			downloaders.add(new InkwellDownloader());

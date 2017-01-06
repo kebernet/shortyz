@@ -119,6 +119,7 @@ public class PlayActivity extends ShortyzActivity {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         this.configuration = newConfig;
 
         if (this.prefs.getBoolean("forceKeyboard", false)
