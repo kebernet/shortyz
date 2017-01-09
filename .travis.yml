@@ -5,7 +5,9 @@ android:
     - android-25
     - extra-google-play-services
     - extra-google-m2repository
-    - extra-google-android-m2repository
+    - extra-android-m2repository
+    - extra-google-android-support
+    - extra-coogle-google_play_services
   licenses:
     - 'android-sdk-preview-license-52d11cd2'
     - 'android-sdk-license-.+'
