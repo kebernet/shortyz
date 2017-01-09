@@ -1,26 +1,20 @@
-import com.totsp.crossword.io.IO;
+package com.totsp.crossword.io;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;Fpackage com.totsp.crossword.io;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+
+
 /*
  * Copyright 2004-2011 H2 Group. Multiple-Licensed under the H2 License,
  * Version 1.0, and under the Eclipse Public License, Version 1.0
  * (http://h2database.com/html/license.html).
  * Initial Developer: H2 Group
  */
-
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.zip.ZipInputStream;
 
 /**
  * An implementation of the XTEA block cipher algorithm.
