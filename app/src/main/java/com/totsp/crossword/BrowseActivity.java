@@ -861,7 +861,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             if (this.prefs.getBoolean("useNativeKeyboard", false)) {
                 this.prefs.edit()
                           .putString("keyboardType", "NATIVE")
-                          .commit();
+                          .apply();
             } else {
                 Configuration config = getBaseContext()
                                            .getResources()
@@ -871,11 +871,11 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                         (config.navigation == Configuration.NAVIGATION_UNDEFINED)) {
                     this.prefs.edit()
                               .putString("keyboardType", "CONDENSED_ARROWS")
-                              .commit();
+                              .apply();
                 } else {
                     this.prefs.edit()
                               .putString("keyboardType", "CONDENSED")
-                              .commit();
+                              .apply();
                 }
             }
         }

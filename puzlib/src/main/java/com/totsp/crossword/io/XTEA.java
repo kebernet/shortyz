@@ -1,4 +1,8 @@
-package com.totsp.crossword.io;
+import com.totsp.crossword.io.IO;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;Fpackage com.totsp.crossword.io;
 /*
  * Copyright 2004-2011 H2 Group. Multiple-Licensed under the H2 License,
  * Version 1.0, and under the Eclipse Public License, Version 1.0
@@ -38,7 +42,7 @@ public class XTEA  {
         for(int i= key.length() ; i > 0; i--){
             revered += key.charAt(i-1);
         }
-        xtea.setKey(revered.getBytes(StandardCharsets.UTF_8));
+        xtea.setKey(revered.getBytes(Charset.forName("utf-8")));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         IO.copyStream(new FileInputStream("/Users/rcooper/Downloads/cs150608.jpz"), baos);
         byte[] original = baos.toByteArray();
@@ -48,7 +52,7 @@ public class XTEA  {
             xtea.decryptBlock(original, bytes, i);
         }
         System.out.println("Changed: "+Arrays.equals(original, bytes));
-        System.out.println(new String(bytes, StandardCharsets.UTF_8));
+        System.out.println(new String(bytes, Charset.forName("utf-8")));
         for(int i=0; i < bytes.length; i++){
             System.out.print((int) bytes[i]);
         }

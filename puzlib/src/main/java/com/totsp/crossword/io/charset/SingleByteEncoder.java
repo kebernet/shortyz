@@ -69,12 +69,10 @@ public abstract class SingleByteEncoder
         char[] sa = src.array();
         int sp = src.arrayOffset() + src.position();
         int sl = src.arrayOffset() + src.limit();
-        assert (sp <= sl);
         sp = (sp <= sl ? sp : sl);
         byte[] da = dst.array();
         int dp = dst.arrayOffset() + dst.position();
         int dl = dst.arrayOffset() + dst.limit();
-        assert (dp <= dl);
         dp = (dp <= dl ? dp : dl);
 
         try {

@@ -23,16 +23,16 @@ public class ShowHideOnScroll extends ScrollDetector implements Animation.Animat
     }
 
     public void onScrollDown() {
-        if(this.view.getVisibility() != 0) {
-            this.view.setVisibility(0);
+        if(this.view.getVisibility() != View.VISIBLE) {
+            this.view.setVisibility(View.VISIBLE);
             this.animate(this.showAnimationId);
         }
 
     }
 
     public void onScrollUp() {
-        if(this.view.getVisibility() == 0) {
-            this.view.setVisibility(8);
+        if(this.view.getVisibility() == View.VISIBLE) {
+            this.view.setVisibility(View.GONE);
             this.animate(this.hideAnimationId);
         }
 

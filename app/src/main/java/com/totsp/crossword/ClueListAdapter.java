@@ -1,25 +1,22 @@
 package com.totsp.crossword;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.totsp.crossword.puz.Box;
 import com.totsp.crossword.puz.Playboard.Clue;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 
 
 public class ClueListAdapter extends ArrayAdapter {
@@ -122,7 +119,7 @@ public class ClueListAdapter extends ArrayAdapter {
             new Comparator<Clue>() {
                 @Override
                 public int compare(Clue arg0, Clue arg1) {
-                    return Integer.compare(arg0.number, arg1.number);
+                    return Integer.valueOf(arg0.number).compareTo(arg1.number);
                 }
             });
     }

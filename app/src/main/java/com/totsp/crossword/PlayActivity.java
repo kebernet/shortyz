@@ -1131,7 +1131,7 @@ public class PlayActivity extends ShortyzActivity {
         }
 
         if (prefs.getInt("clueSize", 12) != dps) {
-            this.prefs.edit().putInt("clueSize", dps).commit();
+            this.prefs.edit().putInt("clueSize", dps).apply();
         }
     }
 

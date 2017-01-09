@@ -86,7 +86,6 @@ public class Surrogate {
      * Returns the high UTF-16 surrogate for the given UCS-4 character.
      */
     public static char high(int uc) {
-        assert neededFor(uc);
         return (char)(0xd800 | (((uc - UCS4_MIN) >> 10) & 0x3ff));
     }
 
@@ -94,7 +93,6 @@ public class Surrogate {
      * Returns the low UTF-16 surrogate for the given UCS-4 character.
      */
     public static char low(int uc) {
-        assert neededFor(uc);
         return (char)(0xdc00 | ((uc - UCS4_MIN) & 0x3ff));
     }
 
@@ -102,7 +100,6 @@ public class Surrogate {
      * Converts the given surrogate pair into a 32-bit UCS-4 character.
      */
     public static int toUCS4(char c, char d) {
-        assert isHigh(c) && isLow(d);
         return (((c & 0x3ff) << 10) | (d & 0x3ff)) + 0x10000;
     }
 
