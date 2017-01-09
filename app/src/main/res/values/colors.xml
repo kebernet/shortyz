@@ -1,8 +1,8 @@
 <resources>
-    tL               kK6t<color name="primary">#34495e</color>
+    <color name="textColorPrimaryNight">#d00</color>
+    <color name="primary">#34495e</color>
     <color name="primary_dark">#2c3e50</color>
     <color name="accent">#2980b9</color>
-    <!--<color name="textColorPrimary">@color/textColorPrimaryNight</color>-->
     <color name="textColorPrimary">#262626</color>
     <color name="textColorSecondary">#BEBEBE</color>
     <color name="accentText">#fff</color>
