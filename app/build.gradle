@@ -57,8 +57,10 @@ android {
     buildTypes {
         debug {
         }
-        debugSigned {
-            signingConfig signingConfigs.debugSigned
+        if (file(System.getProperty("user.home") + "/androidkeystore").exists()) {
+            debugSigned {
+                signingConfig signingConfigs.debugSigned
+            }
         }
         release {
             signingConfig signingConfigs.release
