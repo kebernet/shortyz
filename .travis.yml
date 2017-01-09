@@ -6,7 +6,6 @@ android:
     - extra-google-play-services
     - extra-google-m2repository
     - extra-google-android-m2repository
-#    - extra-google_apis-google
   licenses:
     - 'android-sdk-preview-license-52d11cd2'
     - 'android-sdk-license-.+'
