@@ -38,11 +38,13 @@ android {
     }
 
     signingConfigs {
-        debugSigned {
-            storeFile file(System.getProperty("user.home") + "/androidkeystore")
-            storePassword props.getProperty("storePassword")
-            keyAlias "robert \"kebernet\" cooper"
-            keyPassword props.getProperty("keyPassword")
+        if (file(System.getProperty("user.home") + "/androidkeystore").exists()) {
+            debugSigned {
+                storeFile file(System.getProperty("user.home") + "/androidkeystore")
+                storePassword props.getProperty("storePassword")
+                keyAlias "robert \"kebernet\" cooper"
+                keyPassword props.getProperty("keyPassword")
+            }
         }
         release {
             storeFile file(System.getProperty("user.home") + "/androidkeystore")
