@@ -79,7 +79,7 @@ public interface MovementStrategy extends Serializable {
 					// special case if this is at the end of the board
 					Position current = board.getHighlightLetter();
 					Box[][] boxes = board.getBoxes();
-					if (boxes[current.across][current.down].getResponse() != ' ') {
+					if (!boxes[current.across][current.down].isBlank()) {
 						board.setHighlightLetter(p);
 					}
 				}

@@ -701,6 +701,7 @@ public class PlayActivity extends ShortyzActivity {
                     android.R.drawable.ic_menu_view);
             reveal.add(createSpannableForMenu("Letter")).setTitleCondensed("Letter");
             reveal.add(createSpannableForMenu("Word")).setTitleCondensed("Word");
+            reveal.add(createSpannableForMenu("Errors")).setTitleCondensed("Errors");
             reveal.add(createSpannableForMenu("Puzzle")).setTitleCondensed("Puzzle");
             if (ShortyzApplication.isTabletish(metrics)) {
                 utils.onActionBarWithText(reveal);
@@ -897,6 +898,11 @@ public class PlayActivity extends ShortyzActivity {
             return true;
         } else if (item.getTitle().toString().equals("Word")) {
             BOARD.revealWord();
+            this.render();
+
+            return true;
+        } else if (item.getTitle().toString().equals("Errors")) {
+            BOARD.revealErrors();
             this.render();
 
             return true;

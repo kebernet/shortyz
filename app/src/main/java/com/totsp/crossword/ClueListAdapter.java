@@ -96,7 +96,7 @@ public class ClueListAdapter extends ArrayAdapter {
                 continue;
             }
 
-            sb.append((b.getResponse() == ' ') ? '_' : b.getResponse())
+            sb.append(b.isBlank() ? '_' : b.getResponse())
               .append(' ');
         }
 

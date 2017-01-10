@@ -3,12 +3,14 @@ package com.totsp.crossword.puz;
 import java.io.Serializable;
 
 public class Box implements Serializable {
+    private static final char BLANK = ' ';
+
     private String responder;
     private boolean across;
     private boolean cheated;
     private boolean down;
     private boolean circled;
-    private char response = ' ';
+    private char response = BLANK;
     private char solution;
     private int clueNumber;
 
@@ -200,4 +202,9 @@ public class Box implements Serializable {
     public String getResponder() {
         return responder;
     }
+
+    /**
+     * @return if the current box is blank
+     */
+    public boolean isBlank() { return getResponse() == BLANK; }
 }

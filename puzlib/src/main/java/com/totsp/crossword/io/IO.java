@@ -436,8 +436,7 @@ public class IO {
 					tmpDos.writeByte('.');
 				} else {
 					byte val = (byte) boxes[x][y].getResponse(); // Character.toString().getBytes("Cp1252")[0];
-					tmpDos.writeByte((boxes[x][y].getResponse() == ' ') ? '-'
-							: val);
+					tmpDos.writeByte((boxes[x][y].isBlank()) ? '-' : val);
 				}
 			}
 		}
