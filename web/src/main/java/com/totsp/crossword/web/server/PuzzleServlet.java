@@ -146,7 +146,7 @@ public class PuzzleServlet extends RemoteServiceServlet implements PuzzleService
         }
 
         CACHE.put("puzzle-list", result);
-        System.out.println("Returing " + result.length);
+        System.out.println("Returning " + result.length);
 
         return result;
     }

@@ -190,7 +190,7 @@ public class DataService {
 
             entityManager.merge(sp);
             t.commit();
-            System.out.println("Savd puzzle UserId:" + userUri + " PuzzleId:" + listingId);
+            System.out.println("Saved puzzle UserId:" + userUri + " PuzzleId:" + listingId);
         } catch (NoResultException nre) {
             SavedPuzzle sp = new SavedPuzzle();
             sp.setPuzzleDate(puzzle.getDate());
