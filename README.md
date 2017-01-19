@@ -1,5 +1,6 @@
-Shortyz Crosswords
+Shortyz Crosswords 
 ==================
+[![Build Status](https://travis-ci.org/kebernet/shortyz.svg?branch=master)](https://travis-ci.org/kebernet/shortyz)
 
 Shortyz is a crossword puzzle application for Android that downloads a number of
 free puzzles, and with a paid subscription, the New York Times.

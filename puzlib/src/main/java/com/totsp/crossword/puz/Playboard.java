@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -355,7 +356,7 @@ public class Playboard implements Serializable {
         Box currentBox = this.boxes[this.highlightLetter.across][this.highlightLetter.down];
         Word wordToReturn = this.getCurrentWord();
 
-        if (currentBox.getResponse() == ' ') {
+        if (currentBox.isBlank()) {
             wordToReturn = this.previousLetter();
             currentBox = this.boxes[this.highlightLetter.across][this.highlightLetter.down];
         }
@@ -596,6 +597,34 @@ public class Playboard implements Serializable {
         return null;
     }
 
+    /**
+     * Reveals the correct answers for any "red" squares on the board.
+     *
+     * This covers hidden and visible incorrect responses, as well as squares that are marked as
+     * "cheated" from previously erased incorrect responses.
+     *
+     * @return
+     */
+    public List<Position> revealErrors() {
+        ArrayList<Position> changes = new ArrayList<Position>();
+
+        for (int across = 0; across < this.boxes.length; across++) {
+            for (int down = 0; down < this.boxes[across].length; down++) {
+                Box b = this.boxes[across][down];
+                if (b == null) { continue; }
+
+                if (b.isCheated() ||
+                        (!b.isBlank() && (b.getSolution() != b.getResponse()))) {
+                    b.setCheated(true);
+                    b.setResponse(b.getSolution());
+                    changes.add(new Position(across, down));
+                }
+            }
+        }
+
+        return changes;
+    }
+
     public List<Position> revealPuzzle() {
         ArrayList<Position> changes = new ArrayList<Position>();
 
@@ -636,7 +665,7 @@ public class Playboard implements Serializable {
     }
 
     public boolean skipCurrentBox(Box b, boolean skipCompleted) {
-        return skipCompleted && (b.getResponse() != ' ') &&
+        return skipCompleted && !b.isBlank() &&
         (!this.isShowErrors() || (b.getResponse() == b.getSolution()));
     }
 

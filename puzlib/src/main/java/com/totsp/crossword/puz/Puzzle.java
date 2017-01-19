@@ -275,7 +275,7 @@ public class Puzzle implements Serializable{
                 if (boxes[x][y] != null) {
                     total++;
 
-                    if (boxes[x][y].getResponse() != ' ') {
+                    if (!boxes[x][y].isBlank()) {
                         filled++;
                     }
                 }
