@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.view.ActionMode;
@@ -32,8 +33,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import android.support.design.widget.FloatingActionButton;
 
 import com.totsp.crossword.firstrun.FirstrunActivity;
 import com.totsp.crossword.io.IO;
@@ -60,6 +59,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -244,11 +244,13 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     @SuppressWarnings("deprecation")
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(item == null || item.getTitle() == null){
+            return false;
+        }
         if(item.getTitle().equals("Night Mode")){
             this.utils.toggleNightMode(this);
         } else if(item.getTitle().equals("Sign In")){
-            if(this.signedIn){
-                System.out.println("Shwoing achievements.");
+            if(this.signedIn && !(this.mHelper == null || this.mHelper.getGamesClient() == null)){
                 startActivityForResult(this.mHelper.getGamesClient().getAchievementsIntent(), 0);
             } else {
                 Intent i = new Intent(this, GamesSignIn.class);
@@ -464,9 +466,9 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             this.startActivity(i);
 
             return;
-        } else if (prefs.getBoolean("release_4.3.0", true)) {
+        } else if (prefs.getBoolean("release_4.3.8", true)) {
             prefs.edit()
-                    .putBoolean("release_4.3.0", false)
+                    .putBoolean("release_4.3.8", false)
                     .apply();
 
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///android_asset/release.html"), this,
@@ -673,20 +675,23 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     private FileHandle[] getFileHandlesFromDirectory(File directory) {
         ArrayList<FileHandle> files = new ArrayList<>();
         FileHandle[] puzFiles;
+        try {
+            for (File f : directory.listFiles()) {
+                if (f.getName()
+                        .endsWith(".puz")) {
+                    PuzzleMeta m = null;
 
-        for (File f : (directory == null ? new File[0] : directory.listFiles())) {
-            if (f.getName()
-                    .endsWith(".puz")) {
-                PuzzleMeta m = null;
+                    try {
+                        m = IO.meta(f);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                try {
-                    m = IO.meta(f);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    files.add(new FileHandle(f, m));
                 }
-
-                files.add(new FileHandle(f, m));
             }
+        } catch(Exception e){
+            LOGGER.log(Level.WARNING, "error listing files!");
         }
 
         puzFiles = files.toArray(new FileHandle[files.size()]);
@@ -905,6 +910,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         }
     }
 
+    @SuppressWarnings("RestrictedApi")
     @Override
     public void onItemLongClick(View v, int position) {
         if (!(v.getTag() instanceof FileHandle)) {
@@ -917,12 +923,17 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     }
 
     private void updateSelection(View v) {
-        if (selected.contains(v.getTag())) {
+        Object oTag = v.getTag();
+        if(oTag == null || !(oTag instanceof FileHandle)){
+            return;
+        }
+        FileHandle tag = (FileHandle) oTag;
+        if (selected.contains(tag)) {
             setListItemColor(v, false);
-            selected.remove(v.getTag());
+            selected.remove(tag);
         } else {
             setListItemColor(v, true);
-            selected.add((FileHandle) v.getTag());
+            selected.add(tag);
         }
         if (selected.isEmpty()) {
             actionMode.finish();

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.totsp.crossword.shortyz"
     android:installLocation="auto"
-    android:versionCode="40307"
-    android:versionName="4.3.7">
+    android:versionCode="40308"
+    android:versionName="4.3.8">
 
     <supports-screens
         android:anyDensity="true"
