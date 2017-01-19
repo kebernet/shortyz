@@ -721,9 +721,11 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             }
         }
 
-        for (FileHandle h : getFileHandlesFromDirectory(this.archiveFolder)) {
-            if (h.getDate().getTime() < archiveMaxAge) {
-                toDelete.add(h);
+        if (archiveMaxAge > 0) {
+            for (FileHandle h : getFileHandlesFromDirectory(this.archiveFolder)) {
+                if (h.getDate().getTime() < archiveMaxAge) {
+                    toDelete.add(h);
+                }
             }
         }
 
