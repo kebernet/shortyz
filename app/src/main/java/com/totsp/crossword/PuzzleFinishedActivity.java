@@ -130,7 +130,7 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
             this.incrementAchievement(R.string.achievement_playing_in_sharpie);
             this.incrementAchievement(R.string.achievement_the_master_and_the_commander);
             this.incrementAchievement(R.string.achievement_are_you_will_shortz);
-            System.out.println("Less than 5 mintues" + (this.finishedTime < TimeUnit.MINUTES.toMillis(5)) );
+            System.out.println("Less than 5 minutes" + (this.finishedTime < TimeUnit.MINUTES.toMillis(5)) );
             if(this.finishedTime < TimeUnit.MINUTES.toMillis(5)){
                 this.doAchievement(R.string.achievement_five_minute_mark);
                 this.incrementAchievement(R.string.achievement_five_by_five);
@@ -143,7 +143,7 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
             this.incrementAchievement(R.string.achievement_complete_50_puzzles);
             this.incrementAchievement(R.string.achievement_century_mark);
             if(this.finishedTime < TimeUnit.MINUTES.toMillis(10)){
-                System.out.println("Less than 10 mintues" + (this.finishedTime < TimeUnit.MINUTES.toMillis(10)) );
+                System.out.println("Less than 10 minutes" + (this.finishedTime < TimeUnit.MINUTES.toMillis(10)) );
                 this.doAchievement(R.string.achievement_fast_on_your_feet);
                 this.incrementAchievement(R.string.achievement_speed_demon);
                 this.incrementAchievement(R.string.achievement_the_burninator);
