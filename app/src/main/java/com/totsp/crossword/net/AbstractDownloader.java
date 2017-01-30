@@ -30,7 +30,7 @@ public abstract class AbstractDownloader implements Downloader {
     protected final AndroidVersionUtils utils = AndroidVersionUtils.Factory.getInstance();
     private String downloaderName;
     protected File tempFolder;
-    protected Date goodThrough = new Date();
+    protected Date now = new Date();
 
     protected AbstractDownloader(String baseUrl, File downloadDirectory, String downloaderName) {
         this.baseUrl = baseUrl;
@@ -43,8 +43,6 @@ public abstract class AbstractDownloader implements Downloader {
     public void setContext(Context ctx) {
         this.utils.setContext(ctx);
     }
-
-
 
     public String createFileName(Date date) {
         return (date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" +
@@ -144,8 +142,15 @@ public abstract class AbstractDownloader implements Downloader {
         return false;
     }
 
+    // By default, assume that "today's" puzzle is available at 12AM in the local time zone.
+    //
+    // This is not correct, as whether a puzzle is available at a given instant should not be
+    // dependent on the user's local time zone.
+    //
+    // TODO: Consider reusing some of that logic in NYTDownloader for other sources with well known
+    // publishing times.
     public Date getGoodThrough(){
-        return this.goodThrough;
+        return now;
     }
 
     public Date getGoodFrom(){

@@ -19,8 +19,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -46,6 +48,7 @@ public class NYTDownloader extends AbstractDownloader {
     private Context context;
     private HashMap<String, String> params = new HashMap<String, String>();
     private NotificationManager nm;
+    protected Calendar injectedCalendar = null;
 
     public NYTDownloader(Context context, NotificationManager nm) {
         super("https://www.nytimes.com/svc/crosswords/v2/puzzle/", DOWNLOAD_DIR, NAME);
@@ -109,10 +112,12 @@ public class NYTDownloader extends AbstractDownloader {
             URL url = new URL(this.baseUrl + urlSuffix);
             OkHttpClient client = this.createClient();
 
+
             Request request = new Request.Builder()
                     .url(url)
                     .header("Referer", PUZZLES_PAGE_URL)
                     .build();
+
 
             Response response = client.newCall(request).execute();
 
@@ -156,6 +161,65 @@ public class NYTDownloader extends AbstractDownloader {
         }
 
         return null;
+    }
+
+    // The NYT puzzles become available by 12AM in America/New York.
+    //
+    // Therefore, we need to return a Date object which represents 12AM or later in local time with
+    // the same year/month/day as the current date in New York.
+    //
+    // To achieve this, we can take the current local time, and adjust it by the difference between
+    // the local time zone and New York.  If the local time zone is ahead of New York, then this
+    // ends up subtracting from the current time (at local 12AM, the puzzle isn't available yet).
+    // If the local time zone is behind New York, then this ends up adding to the current time (the
+    // puzzle is published before 12AM local time).
+    //
+    // TODO: This is likely made easier by using Java 8 time libraries or JodaTime.
+    @Override
+    public Date getGoodThrough() {
+        Calendar goodThrough = injectedCalendar != null ? injectedCalendar : Calendar.getInstance();
+        goodThrough.setTime(now);
+
+        TimeZone nytTime = TimeZone.getTimeZone("America/New_York");
+
+        if (goodThrough.getTimeZone().hasSameRules(nytTime)) {
+            return super.getGoodThrough();
+        }
+
+        int totalOffsetMillis = 0;
+
+        // First, remove the offset between local time and UTC
+        totalOffsetMillis -= goodThrough.getTimeZone().getRawOffset();
+
+        if (goodThrough.getTimeZone().inDaylightTime(goodThrough.getTime())) {
+            totalOffsetMillis -=  goodThrough.getTimeZone().getDSTSavings();
+        }
+
+        // Add the offset from between UTC and America/New York.  Since we're assuming the
+        // puzzle is published at 12AM in America/New York, we don't have to adjust this any
+        // further.
+        totalOffsetMillis += nytTime.getRawOffset();
+
+        if (nytTime.inDaylightTime(goodThrough.getTime())) {
+            totalOffsetMillis += nytTime.getDSTSavings();
+        }
+
+        // For now, only apply the offset if it allows the user to get a puzzle earlier than the
+        // behavior of AbstractDownloader.
+        //
+        // Since the  the puzzle may be published before 12AM New York time, this avoids causing
+        // users in time zones ahead of America/New York from getting the puzzle later than they
+        // otherwise would be able to.
+        //
+        // If we can accurately know when the puzzle is available, it would be useful to apply this
+        // offset even in that case.  We could also consider a time window (e.g. it's published
+        // between 9AM the day before and 12AM the day of).
+        if (totalOffsetMillis > 0) {
+            goodThrough.add(Calendar.MILLISECOND, totalOffsetMillis);
+        return goodThrough.getTime();
+        } else {
+            return super.getGoodThrough();
+        }
     }
 
     public OkHttpClient createClient() throws IOException {

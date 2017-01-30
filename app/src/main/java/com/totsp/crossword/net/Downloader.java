@@ -33,7 +33,8 @@ public interface Downloader {
 
     boolean alwaysRun();
 
-
+    // Returns a Date representing 12AM or later in LOCAL TIME for the most recent publication
+    // available.
     Date getGoodThrough();
 
     Date getGoodFrom();
