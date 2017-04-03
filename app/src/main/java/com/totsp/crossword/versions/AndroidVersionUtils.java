@@ -1,7 +1,9 @@
 package com.totsp.crossword.versions;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -43,13 +45,16 @@ public interface AndroidVersionUtils {
 			System.out.println("Creating utils for version: "
 					+ android.os.Build.VERSION.SDK_INT);
 
-			switch (android.os.Build.VERSION.SDK_INT) {
-			case 10:
-			case 9:
-				System.out.println("Using Gingerbread.");
-				return INSTANCE = new GingerbreadUtil();
-			default:
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				System.out.println("Using Lollipop");
+				return INSTANCE = new LollipopUtil();
+			}
+			else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				System.out.println("Using Honeycomb");
 				return INSTANCE = new HoneycombUtil();
+			} else {
+				System.out.println("Using Gingerbread");
+				return INSTANCE = new GingerbreadUtil();
 			}
 		}
 	}
@@ -68,5 +73,15 @@ public interface AndroidVersionUtils {
 
 	boolean isNightModeAvailable();
 
-	
+	// This has a dependency on JobScheduler which is only available in SDK version 21.
+	//
+	// TODO: It might be possible to replicate this functionality on older versions using
+	// AlarmManager.
+	boolean isBackgroundDownloadAvaliable();
+
+	// Checks whether a background download may have updated the available puzzles, requiring a
+	// UI refresh.
+	boolean checkBackgroundDownload(SharedPreferences prefs, boolean hasWritePermissions);
+
+	void clearBackgroundDownload(SharedPreferences prefs);
 }
