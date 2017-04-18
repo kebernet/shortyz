@@ -60,4 +60,10 @@ public class BrainsOnlyIOTest  extends TestCase {
         }
         fail("Expected brainsonly3.txt to fail to parse");
     }
+
+    public void testParse4() throws Exception {
+        // This is Les Misérables, note the accented "e".
+        Puzzle puz = BrainsOnlyIO.parse(BrainsOnlyIOTest.class.getResourceAsStream("/2017-4-16-Newsday.puz"));
+        assertEquals("''__ Misérables''", puz.findDownClue(29));
+    }
 }
