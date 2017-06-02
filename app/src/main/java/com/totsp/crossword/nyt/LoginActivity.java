@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
+import okhttp3.internal.http.HttpDate;
 
 import static android.view.View.GONE;
 
@@ -111,6 +112,8 @@ public class LoginActivity extends ShortyzActivity {
                         .value(input.getValue());
                 if(input.getMaxAge() != -1){
                      builder = builder.expiresAt(System.currentTimeMillis() + input.getMaxAge());
+                } else {
+                    builder.expiresAt(HttpDate.MAX_DATE);
                 }
                 if(input.getSecure()){
                     builder = builder.secure();
