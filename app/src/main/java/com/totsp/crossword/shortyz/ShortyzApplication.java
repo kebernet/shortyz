@@ -9,6 +9,9 @@ import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
 import com.crashlytics.android.Crashlytics;
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpTransport;
@@ -27,13 +30,18 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import io.fabric.sdk.android.Fabric;
+import okhttp3.CookieJar;
 
 public class ShortyzApplication extends Application {
 
+    private static ShortyzApplication INSTANCE;
+	public static Playboard BOARD;
+	public static PlayboardRenderer RENDERER;
 	public static File DEBUG_DIR;
 	public static File CROSSWORDS = new File(
 			Environment.getExternalStorageDirectory(), "crosswords");
@@ -42,9 +50,11 @@ public class ShortyzApplication extends Application {
 	private static GoogleAccountCredential credential;
 	private static Gmail gmailService;
 	private static SharedPreferences settings;
+	private AtomicReference<PersistentCookieJar> cookieJar = new AtomicReference<>(null);
 
 	@Override
 	public void onCreate() {
+		INSTANCE = this;
 		// Initialize credentials and service object.
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
 		updateCredential(settings);
@@ -80,8 +90,6 @@ public class ShortyzApplication extends Application {
 		}
 	}
 
-	public static Playboard BOARD;
-	public static PlayboardRenderer RENDERER;
 
 	public static Intent sendDebug() {
 		File zip = new File(CROSSWORDS, "debug.stz");
@@ -204,5 +212,17 @@ public class ShortyzApplication extends Application {
 		} else {
 			gmailService = null;
 		}
+	}
+
+	public CookieJar getCookieJar(){
+		if(this.cookieJar.get() == null){
+			this.cookieJar.compareAndSet(null,
+			new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(this)));
+		}
+		return this.cookieJar.get();
+	}
+
+	public static ShortyzApplication getInstance(){
+		return INSTANCE;
 	}
 }

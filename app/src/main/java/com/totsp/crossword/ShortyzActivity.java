@@ -22,7 +22,7 @@ import com.totsp.crossword.versions.AndroidVersionUtils;
 
 import java.lang.reflect.Field;
 
-public class ShortyzActivity extends BaseGameActivity {
+public class 	ShortyzActivity extends BaseGameActivity {
 	protected AndroidVersionUtils utils = AndroidVersionUtils.Factory
 			.getInstance();
 	protected SharedPreferences prefs;

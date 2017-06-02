@@ -18,19 +18,12 @@
 				android:title="New York Times"
 				android:defaultValue="false"
 				android:key="downloadNYT" />
-			<EditTextPreference
-				android:title="Username"
-				android:summary="NYT Username or Email Address"
-				android:key="nytUsername" />
-			<EditTextPreference
-				android:title="Password"
-				android:summary="NYT Password"
-				android:key="nytPassword" 
-				android:password="true"
-			    android:inputType="textPassword" />
 			<Preference
 			 	android:title="Get a Subscription" 
 			 	android:key="nytSubscribe"/>
+			<Preference
+				android:title="Clear Account Info"
+				android:key="nytClear" />
 		</PreferenceScreen>
 		<!--<com.jenzz.materialpreference.CheckBoxPreference-->
 			<!--android:title="Washington Post"-->

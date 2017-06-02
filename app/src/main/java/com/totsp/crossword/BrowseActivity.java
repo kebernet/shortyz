@@ -466,9 +466,9 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             this.startActivity(i);
 
             return;
-        } else if (prefs.getBoolean("release_4.3.8", true)) {
+        } else if (prefs.getBoolean("release_4.3.9", true)) {
             prefs.edit()
-                    .putBoolean("release_4.3.8", false)
+                    .putBoolean("release_4.3.9", false)
                     .apply();
 
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///android_asset/release.html"), this,

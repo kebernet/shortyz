@@ -50,49 +50,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/loginForm" android:theme="@style/NYT">
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal" android:theme="@style/NYT">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="125dp"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/NYT">
-                    <AutoCompleteTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Username"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:id="@+id/username"
-                        android:textColor="#000"
-                        android:textColorHint="#000000"
-                        android:theme="@style/NYT"
-                        android:inputType="textEmailAddress"
-                        android:dropDownWidth="225dp"/>
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="125dp"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/NYT">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:hint="Password"
-                        android:id="@+id/password"
-                        android:password="true"
-                        android:textColor="#000"
-                        android:textColorHint="#000"
-                        android:theme="@style/NYT"
-                        android:inputType="textPassword"/>
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:text="Login"
                 android:id="@+id/loginButton"
                 android:theme="@style/NYT" />
@@ -107,7 +69,7 @@
             android:paddingLeft="64dp"
             android:paddingRight="64dp"
             android:textSize="16sp"
-            android:text="If you have a NYT subscription, enter your information above. \n (Might ask for a 'Contacts' permission to autocomplete your email address)"
+            android:text="Click the button above to login to your NYT account."
             android:id="@+id/slideText"/>
         <TextView
             android:layout_width="fill_parent"

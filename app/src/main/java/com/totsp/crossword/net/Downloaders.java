@@ -15,6 +15,7 @@ import com.totsp.crossword.BrowseActivity;
 import com.totsp.crossword.PlayActivity;
 import com.totsp.crossword.gmail.GmailDownloader;
 import com.totsp.crossword.io.IO;
+import com.totsp.crossword.nyt.ErrorActivity;
 import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.puz.PuzzleMeta;
 import com.totsp.crossword.shortyz.ShortyzApplication;
@@ -133,8 +134,12 @@ public class Downloaders {
 		
 		
 		if (prefs.getBoolean("downloadNYT", false)) {
-			downloaders.add(new NYTDownloader(context, prefs.getString(
-					"nytUsername", ""), prefs.getString("nytPassword", "")));
+			if(!prefs.getBoolean("didNYTLogin", false)){
+				Intent i = new Intent(context, ErrorActivity.class);
+				context.startActivity(i);
+			}
+			downloaders.add(new NYTDownloader(context));
+
 		}
 
 		ShortyzApplication application = (ShortyzApplication) context.getApplication();

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.totsp.crossword.shortyz"
     android:installLocation="auto"
-    android:versionCode="40308"
-    android:versionName="4.3.8">
+    android:versionCode="40309"
+    android:versionName="4.3.9">
 
     <supports-screens
         android:anyDensity="true"
@@ -129,6 +129,14 @@
             android:exported="true"
             android:label="Welcome"
             android:theme="@style/NYT"/>
+
+        <activity android:name="com.totsp.crossword.nyt.LoginActivity"
+            android:theme="@style/Theme.Shortyz"
+            android:exported="true"
+        />
+        <activity android:name="com.totsp.crossword.nyt.ErrorActivity"
+            android:theme="@style/NYT"
+            />
 
 
         <meta-data
