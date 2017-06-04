@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -21,9 +22,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.totsp.crossword.io.IO;
+import com.totsp.crossword.puz.Playboard.Clue;
 import com.totsp.crossword.puz.Playboard.Position;
 import com.totsp.crossword.puz.Playboard.Word;
 import com.totsp.crossword.puz.Puzzle;
@@ -242,13 +245,33 @@ public class ClueListActivity extends ShortyzActivity {
 		this.across = (ListView) this.findViewById(R.id.acrossList);
 		this.down = (ListView) this.findViewById(R.id.downList);
 
-		across.setAdapter(new ArrayAdapter<>(this,
+		across.setAdapter(new ArrayAdapter<Clue>(this,
 				android.R.layout.simple_list_item_1, ShortyzApplication.BOARD
-						.getAcrossClues()));
+				.getAcrossClues()) {
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				TextView base = (TextView) super.getView(position, convertView, parent);
+				if (prefs.getBoolean("showCount", false)) {
+					base.append(" [" + getItem(position).answerLength + "]");
+				}
+				return base;
+			}
+		});
 		across.setFocusableInTouchMode(true);
-		down.setAdapter(new ArrayAdapter<>(this,
+		down.setAdapter(new ArrayAdapter<Clue>(this,
 				android.R.layout.simple_list_item_1, ShortyzApplication.BOARD
-						.getDownClues()));
+						.getDownClues()) {
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				TextView base = (TextView) super.getView(position, convertView, parent);
+				if (prefs.getBoolean("showCount", false)) {
+					base.append(" [" + getItem(position).answerLength + "]");
+				}
+				return base;
+			}
+		});
 		across.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {

@@ -75,6 +75,8 @@ public class Playboard implements Serializable {
             clues[i] = new Clue();
             clues[i].hint = puzzle.getAcrossClues()[i];
             clues[i].number = puzzle.getAcrossCluesLookup()[i];
+            Position p = acrossWordStarts.get(clues[i].number);
+            clues[i].answerLength = this.getBoxes()[p.across][p.down].getAcrossAnswerLength();
         }
 
         return clues;
@@ -91,6 +93,8 @@ public class Playboard implements Serializable {
             Position start = this.getCurrentWordStart();
             c.number = this.getBoxes()[start.across][start.down].getClueNumber();
             c.hint = this.across ? this.puzzle.findAcrossClue(c.number) : this.puzzle.findDownClue(c.number);
+            c.answerLength = this.across ? this.getBoxes()[start.across][start.down].getAcrossAnswerLength() :
+                    this.getBoxes()[start.across][start.down].getDownAnswerLength();
         } catch (Exception e) {
         }
 
@@ -216,6 +220,8 @@ public class Playboard implements Serializable {
             clues[i] = new Clue();
             clues[i].hint = puzzle.getDownClues()[i];
             clues[i].number = puzzle.getDownCluesLookup()[i];
+            Position p = downWordStarts.get(clues[i].number);
+            clues[i].answerLength = this.getBoxes()[p.across][p.down].getDownAnswerLength();
         }
 
         return clues;
@@ -683,6 +689,7 @@ public class Playboard implements Serializable {
     public static class Clue implements Serializable {
         public String hint;
         public int number;
+        public int answerLength;
 
         @Override
         public boolean equals(Object obj) {
@@ -701,6 +708,10 @@ public class Playboard implements Serializable {
             }
 
             if (this.number != other.number) {
+                return false;
+            }
+
+            if (this.answerLength != other.answerLength) {
                 return false;
             }
 

@@ -7,8 +7,10 @@ public class Box implements Serializable {
 
     private String responder;
     private boolean across;
+    private int acrossAnswerLength;
     private boolean cheated;
     private boolean down;
+    private int downAnswerLength;
     private boolean circled;
     private char response = BLANK;
     private char solution;
@@ -113,6 +115,20 @@ public class Box implements Serializable {
     }
 
     /**
+     * @return the length of the across answer that starts in this box; 0 otherwise
+     */
+    public int getAcrossAnswerLength() {
+        return acrossAnswerLength;
+    }
+
+    /**
+     * @param acrossAnswerLength the length of the across answer that starts in this box
+     */
+    public void setAcrossAnswerLength(int acrossAnswerLength) {
+        this.acrossAnswerLength = acrossAnswerLength;
+    }
+
+    /**
      * @return the cheated
      */
     public boolean isCheated() {
@@ -139,7 +155,21 @@ public class Box implements Serializable {
     public void setDown(boolean down) {
         this.down = down;
     }
-    
+
+    /**
+     * @return the length of the down answer that starts in this box; 0 otherwise
+     */
+    public int getDownAnswerLength() {
+        return downAnswerLength;
+    }
+
+    /**
+     * @param downAnswerLength the length of the down answer that starts in this box
+     */
+    public void setDownAnswerLength(int downAnswerLength) {
+        this.downAnswerLength = downAnswerLength;
+    }
+
     /**
      * @return if the box is circled
      */
