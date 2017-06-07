@@ -221,11 +221,11 @@ public class Playboard implements Serializable {
         return clues;
     }
 
-    public Word setHighlightLetter(Position highlightLetter) {
+    public Word setHighlightLetter(Position highlightLetter, boolean toggle) {
         Word w = this.getCurrentWord();
 
         if (highlightLetter.equals(this.highlightLetter)) {
-            this.toggleDirection();
+            if (toggle) this.toggleDirection();
         } else {
             if ((this.boxes.length > highlightLetter.across) && (highlightLetter.across >= 0) &&
                     (this.boxes[highlightLetter.across].length > highlightLetter.down) && (highlightLetter.down >= 0) &&
@@ -235,6 +235,10 @@ public class Playboard implements Serializable {
         }
 
         return w;
+    }
+
+    public Word setHighlightLetter(Position highlightLetter) {
+      return setHighlightLetter(highlightLetter, true);
     }
 
     public Position getHighlightLetter() {
@@ -678,6 +682,22 @@ public class Playboard implements Serializable {
 
     public void toggleShowErrors() {
         this.showErrors = !this.showErrors;
+    }
+
+    // find next blank or error (if showing errors), starting scan at current position
+    public Position getNextBlankOrError() {
+        int across = this.highlightLetter.across;
+        int down   = this.highlightLetter.down;
+        Box b;
+
+        while (across < this.puzzle.getWidth() && down < this.puzzle.getHeight()) {
+            b = this.boxes[across][down];
+            if (b == null) return null;
+            if (!skipCurrentBox(b, true)) return new Position(across, down);
+            if (this.isAcross()) across++; else down++;
+        }
+
+        return null;
     }
 
     public static class Clue implements Serializable {
