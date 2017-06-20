@@ -67,7 +67,7 @@ public class PlayActivity extends ShortyzActivity {
     private static final Logger LOG = Logger.getLogger("com.totsp.crossword");
     private static final int INFO_DIALOG = 0;
     private static final int REVEAL_PUZZLE_DIALOG = 2;
-    static final String ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static final String ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     @SuppressWarnings("rawtypes")
     private AdapterView across;
     @SuppressWarnings("rawtypes")
