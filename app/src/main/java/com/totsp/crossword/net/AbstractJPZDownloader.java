@@ -12,6 +12,7 @@ import java.util.Map;
 
 import android.net.Uri;
 
+import com.totsp.crossword.io.IO;
 import com.totsp.crossword.io.JPZIO;
 import com.totsp.crossword.puz.PuzzleMeta;
 import com.totsp.crossword.versions.AndroidVersionUtils;

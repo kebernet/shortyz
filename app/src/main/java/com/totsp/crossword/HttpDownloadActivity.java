@@ -1,5 +1,7 @@
 package com.totsp.crossword;
 
+import com.totsp.crossword.io.IO;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -134,7 +136,11 @@ public class HttpDownloadActivity extends Activity {
             InputStream is = response.body().byteStream();
             File puzFile = new File(crosswordsFolder, filename);
             FileOutputStream fos = new FileOutputStream(puzFile);
-            copyStream(is, fos);
+            try {
+                copyStream(is, fos);
+            } finally {
+                IO.closeQuietly(is);
+            }
             fos.close();
 
             Intent i = new Intent(Intent.ACTION_EDIT, Uri.fromFile(puzFile), this, PlayActivity.class);

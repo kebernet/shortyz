@@ -673,4 +673,14 @@ public class IO {
 		return totalBytes;
 	}
 
+    public static void closeQuietly(InputStream is) {
+        if (is == null) {
+            return;
+        }
+        try {
+            is.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
 }

@@ -13,10 +13,9 @@ import android.view.Window;
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.PuzzleMeta;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,10 +43,12 @@ public abstract class DefaultUtil implements AndroidVersionUtils {
 			Response response = httpclient.newCall(requestBuilder.build()).execute();
 
 			FileOutputStream fos = new FileOutputStream(destination);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			
-			IO.copyStream(response.body().byteStream(), baos);
-			IO.copyStream(new ByteArrayInputStream(baos.toByteArray()), fos);
+			InputStream is = response.body().byteStream();
+			try {
+				IO.copyStream(is, fos);
+			} finally {
+				IO.closeQuietly(is);
+			}
 			fos.close();
 			return true;
 

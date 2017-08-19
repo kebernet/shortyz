@@ -42,6 +42,8 @@ public abstract class AbstractDownloader implements Downloader {
             } catch (IOException ex) {
                 Logger.getLogger(AbstractDownloader.class.getName()).log(Level.SEVERE, null, ex);
                 return null;
+            } finally {
+                IO.closeQuietly(is);
             }
         }
     }
