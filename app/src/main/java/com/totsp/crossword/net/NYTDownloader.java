@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.nyt.ErrorActivity;
@@ -46,9 +47,6 @@ public class NYTDownloader extends AbstractDownloader {
     private HashMap<String, String> params = new HashMap<String, String>();
     private NotificationManager nm;
 
-    // When we attempt to download a puzzle and our NYT credentials are out of date, if nm is null,
-    // immediately enter the login workflow.  If nm is not null, instead of launching the login
-    // workflow, post a notification to the user which can be used to log in at their convenience.
     public NYTDownloader(Context context, NotificationManager nm) {
         super("https://www.nytimes.com/svc/crosswords/v2/puzzle/", DOWNLOAD_DIR, NAME);
         this.context = context;
@@ -86,6 +84,10 @@ public class NYTDownloader extends AbstractDownloader {
 
     @Override
     protected File download(Date date, String urlSuffix) {
+        // When we attempt to download a puzzle and our NYT credentials are out of date, if nm is null,
+        // immediately enter the login workflow.  If nm is not null, instead of launching the login
+        // workflow, post a notification to the user which can be used to log in at their convenience.
+
         // At the moment, clearing NYT credentials just sets the didNYTLogin preference to false,
         // and doesn't actually clear the credentials.  This means that if we don't gate the
         // download with a request for credentials, we could successfully download (using the old
@@ -115,13 +117,20 @@ public class NYTDownloader extends AbstractDownloader {
             Response response = client.newCall(request).execute();
 
             if(response.code() == 401){
-                PreferenceManager.getDefaultSharedPreferences(context).edit()
-                        .putBoolean("didNYTLogin", false)
-                        .apply();
-                requestCredentialsIfNeeded();
+                if(response.body().string().contains("[\"Not Found\"]")){
+                    Toast.makeText(context, "The NYT Puzzle was not found. Maybe wait 24 hours?", Toast.LENGTH_LONG).show();
+                } else {
+                    PreferenceManager.getDefaultSharedPreferences(context).edit()
+                            .putBoolean("didNYTLogin", false)
+                            .apply();
+                    requestCredentialsIfNeeded();
+                }
                 return null;
             }
             if (response.code() == 200) {
+                PreferenceManager.getDefaultSharedPreferences(context).edit()
+                        .putBoolean("didNYTLogin", true)
+                        .apply();
                 File f = new File(downloadDirectory, this.createFileName(date));
                 FileOutputStream fos = new FileOutputStream(f);
                 IO.copyStream(

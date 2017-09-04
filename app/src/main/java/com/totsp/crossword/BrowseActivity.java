@@ -515,11 +515,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             @SuppressWarnings("deprecation")
 			DownloadPickerDialogBuilder dpd = new DownloadPickerDialogBuilder(this, downloadButtonListener,
                     d.getYear() + 1900, d.getMonth(), d.getDate(),
-                    new Provider<Downloaders>() {
-                        public Downloaders get() {
-                            return new Downloaders(prefs, nm, BrowseActivity.this);
-                        }
-                    });
+                  new Downloaders(prefs, nm, BrowseActivity.this)
+            );
 
             downloadDialog = dpd.getInstance();
 

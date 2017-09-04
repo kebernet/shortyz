@@ -39,12 +39,19 @@ public class Downloaders {
     private NotificationManager notificationManager;
     private boolean supressMessages;
 
+    public Downloaders(SharedPreferences prefs,
+                       NotificationManager notificationManager,
+                       Context context) {
+        this(prefs, notificationManager, context, true);
+    }
+
+
     // Set isInteractive to true if this class can ask for user interaction when needed (e.g. to
     // refresh NYT credentials), false if otherwise.
     public Downloaders(SharedPreferences prefs,
                        NotificationManager notificationManager,
                        Context context,
-                       boolean isInteractive) {
+                       boolean challengeForCredentials) {
         this.notificationManager = notificationManager;
         this.context = context;
 
@@ -139,7 +146,7 @@ public class Downloaders {
         
         if (prefs.getBoolean("downloadNYT", false)) {
             NYTDownloader nyt;
-            if (isInteractive) {
+            if (challengeForCredentials) {
                 nyt = new NYTDownloader(context);
                 nyt.requestCredentialsIfNeeded();
             } else {
@@ -159,11 +166,6 @@ public class Downloaders {
         this.supressMessages = prefs.getBoolean("supressMessages", false);
     }
 
-    public Downloaders(SharedPreferences prefs,
-                       NotificationManager notificationManager,
-                       Context context) {
-        this(prefs, notificationManager, context, true);
-    }
 
     private static Date clearTimeInDate(Date date) {
         Calendar cal = Calendar.getInstance();
