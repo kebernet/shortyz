@@ -1,4 +1,4 @@
-package com.totsp.crossword;
+package com.totsp.crossword.service;
 
 import android.Manifest;
 import android.annotation.TargetApi;

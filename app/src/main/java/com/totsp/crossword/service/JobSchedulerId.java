@@ -1,4 +1,4 @@
-package com.totsp.crossword;
+package com.totsp.crossword.service;
 
 // All JobScheduler Job IDs for this application.
 //

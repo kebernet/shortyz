@@ -2,7 +2,7 @@ package com.totsp.crossword.versions;
 
 import android.content.SharedPreferences;
 
-import com.totsp.crossword.BackgroundDownloadService;
+import com.totsp.crossword.service.BackgroundDownloadService;
 
 public class LollipopUtil extends HoneycombUtil {
 

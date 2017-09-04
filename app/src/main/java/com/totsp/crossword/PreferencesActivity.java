@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.totsp.crossword.firstrun.FirstrunActivity;
 import com.totsp.crossword.gmail.GMConstants;
+import com.totsp.crossword.service.BackgroundDownloadService;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
 import com.totsp.crossword.versions.AndroidVersionUtils;

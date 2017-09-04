@@ -122,7 +122,7 @@
         </receiver>
 
         <service
-            android:name="com.totsp.crossword.BackgroundDownloadService"
+            android:name="com.totsp.crossword.service.BackgroundDownloadService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="true">
         </service>
