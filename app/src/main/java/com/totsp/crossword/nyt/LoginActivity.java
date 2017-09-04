@@ -38,7 +38,7 @@ import static android.view.View.GONE;
 
 public class LoginActivity extends ShortyzActivity {
     private static final Logger LOG = Logger.getLogger(LoginActivity.class.getCanonicalName());
-    private static final String PUZZLES_URL = "https://www.nytimes.com/crosswords/index.html";
+    private static final String PUZZLES_URL = "https://www.nytimes.com/crosswords";
     private static final String LOGIN_URL = "https://myaccount.nytimes.com/auth/login?URI=https%3A%2F%2Fwww.nytimes.com%2Fcrosswords%2Findex.html&OQ=page%3Dhome%26_r%3D1%26page%3Dhome%26";
     protected AndroidVersionUtils utils = AndroidVersionUtils.Factory.getInstance();
 
