@@ -552,6 +552,15 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             }
         }
 
+
+
+        // A background update will commonly happen when the user turns on the preference for the
+        // first time, so check here to ensure the UI is re-rendered when they exit the settings
+        // dialog.
+        if (utils.checkBackgroundDownload(prefs, hasWritePermissions)) {
+            render();
+        }
+
         this.checkDownload();
     }
 
@@ -667,8 +676,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                 ((System.currentTimeMillis() - (long) (12 * 60 * 60 * 1000)) > lastDL)) {
             this.download(new Date(), null, true);
             prefs.edit()
-                 .putLong("dlLast", System.currentTimeMillis())
-                 .apply();
+                    .putLong("dlLast", System.currentTimeMillis())
+                    .apply();
         }
     }
 
@@ -812,6 +821,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
     private void render() {
         if (!hasWritePermissions) return;
+
+        utils.clearBackgroundDownload(prefs);
 
         if ((this.sources != null) && (this.sources.getAdapter() == null)) {
             final SourceListAdapter adapter = new SourceListAdapter(this, this.sourceList);

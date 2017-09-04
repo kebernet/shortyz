@@ -1,6 +1,7 @@
 package com.totsp.crossword.versions;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -78,4 +79,10 @@ public abstract class DefaultUtil implements AndroidVersionUtils {
     public abstract void onActionBarWithoutText(MenuItem a);
 
     public abstract void hideTitleOnPortrait(AppCompatActivity a);
+
+	public abstract boolean isBackgroundDownloadAvaliable();
+
+	public abstract boolean checkBackgroundDownload(SharedPreferences prefs, boolean hasWritePermissions);
+
+	public abstract void clearBackgroundDownload(SharedPreferences prefs);
 }

@@ -1,6 +1,7 @@
 package com.totsp.crossword.versions;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +57,21 @@ public class GingerbreadUtil extends DefaultUtil {
     }
 
     public void hideTitleOnPortrait(AppCompatActivity a) {
+
+    }
+
+    @Override
+    public boolean isBackgroundDownloadAvaliable() {
+        return false;
+    }
+
+    @Override
+    public boolean checkBackgroundDownload(SharedPreferences prefs, boolean hasWritePermissions) {
+        return false;
+    }
+
+    @Override
+    public void clearBackgroundDownload(SharedPreferences prefs) {
 
     }
 
