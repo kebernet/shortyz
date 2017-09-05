@@ -133,8 +133,9 @@ public class BackgroundDownloadService extends JobService {
             }
 
             LOGGER.info("Downloading most recent puzzles");
-
-            Looper.prepare();
+            if(Looper.myLooper() == null) {
+                Looper.prepare();
+            }
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             final Downloaders dls = new Downloaders(prefs, nm, context, false);
