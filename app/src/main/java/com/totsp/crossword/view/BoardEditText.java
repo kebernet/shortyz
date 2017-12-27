@@ -190,26 +190,26 @@ public class BoardEditText extends ScrollingImageView {
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_MENU:
-			return false;
+        switch (keyCode) {
+        case KeyEvent.KEYCODE_MENU:
+            return false;
 
         case KeyEvent.KEYCODE_DPAD_LEFT:
-			if (selection.across > 0) {
-				selection.across--;
-				this.render();
-			}
-			return true;
+            if (selection.across > 0) {
+                selection.across--;
+                this.render();
+            }
+            return true;
 
-		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			if (boxes != null && selection.across < boxes.length - 1) {
-				selection.across++;
-				this.render();
-			}
+        case KeyEvent.KEYCODE_DPAD_RIGHT:
+            if (boxes != null && selection.across < boxes.length - 1) {
+                selection.across++;
+                this.render();
+            }
 
-			return true;
+            return true;
 
-		case KeyEvent.KEYCODE_DEL:
+        case KeyEvent.KEYCODE_DEL:
             if (boxes != null && canDelete(selection)) {
                 boxes[selection.across].setResponse(' ');
                 if (selection.across > 0) {
@@ -219,7 +219,7 @@ public class BoardEditText extends ScrollingImageView {
             }
             return true;
 
-		case KeyEvent.KEYCODE_SPACE:
+        case KeyEvent.KEYCODE_SPACE:
             if (boxes != null && canDelete(selection)) {
                 boxes[selection.across].setResponse(' ');
 
@@ -232,11 +232,11 @@ public class BoardEditText extends ScrollingImageView {
             return true;
         }
 
-		char c = Character
-				.toUpperCase(((this.configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) || this.useNativeKeyboard) ? event
-						.getDisplayLabel() : ((char) keyCode));
+        char c = Character
+                .toUpperCase(((this.configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) || this.useNativeKeyboard) ? event
+                        .getDisplayLabel() : ((char) keyCode));
 
-		if (boxes != null && ALPHA.indexOf(c) != -1) {
+        if (boxes != null && ALPHA.indexOf(c) != -1) {
             c = filterReplacement(c, selection);
 
             if (c != '\0') {
@@ -261,10 +261,10 @@ public class BoardEditText extends ScrollingImageView {
             }
 
             return true;
-		}
+        }
 
-		return super.onKeyUp(keyCode, event);
-	}
+        return super.onKeyUp(keyCode, event);
+    }
 
     private void render() {
         setBitmap(renderer.drawBoxes(boxes, selection));
