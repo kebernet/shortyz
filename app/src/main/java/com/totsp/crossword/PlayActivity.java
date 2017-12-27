@@ -714,6 +714,7 @@ public class PlayActivity extends ShortyzActivity {
         }
 
         menu.add("Clues").setIcon(android.R.drawable.ic_menu_agenda);
+        menu.add("Notes").setIcon(android.R.drawable.ic_menu_agenda);
         Menu clueSize = menu.addSubMenu("Clue Text Size");
         clueSize.add(createSpannableForMenu("Small")).setTitleCondensed("Small");
         clueSize.add(createSpannableForMenu("Medium")).setTitleCondensed("Medium");
@@ -989,6 +990,10 @@ public class PlayActivity extends ShortyzActivity {
             i.setData(Uri.fromFile(baseFile));
             PlayActivity.this.startActivityForResult(i, 0);
 
+            return true;
+        } else if (item.getTitle().toString().equals("Notes")) {
+            Intent i = new Intent(PlayActivity.this, NotesActivity.class);
+            PlayActivity.this.startActivityForResult(i, 0);
             return true;
         } else if (item.getTitle().toString().equals("Help")) {
             Intent i = new Intent(Intent.ACTION_VIEW,

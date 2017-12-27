@@ -88,7 +88,12 @@
             android:label="Clues"
             android:theme="@style/Theme.Shortyz"
             android:configChanges="orientation"
-            />
+        />
+        <activity
+            android:name="com.totsp.crossword.NotesActivity"
+            android:label="Notes"
+            android:theme="@style/Theme.Shortyz"
+        />
         <activity
             android:name="com.totsp.crossword.HTMLActivity"
             android:label="Shortyz"

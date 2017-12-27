@@ -169,7 +169,7 @@ public class PlayboardRenderer {
 
                     int x = col * boxSize;
                     int y = row * boxSize;
-                    this.drawBox(canvas, x, y, row, col, boxSize, boxes[col][row], currentWord);
+                    this.drawBox(canvas, x, y, row, col, boxSize, boxes[col][row], currentWord, this.board.getHighlightLetter());
                 }
             }
 
@@ -191,11 +191,40 @@ public class PlayboardRenderer {
         for (int i = 0; i < word.length; i++) {
             int x = i * boxSize;
             int y = 0;
-            this.drawBox(canvas, x, y, word[i].down, word[i].across, boxSize, boxes[i], null);
+            this.drawBox(canvas, x, y, word[i].down, word[i].across, boxSize, boxes[i], null, this.board.getHighlightLetter());
         }
 
         return bitmap;
     }
+
+    public Bitmap drawBoxes(Box[] boxes, Position highlight) {
+        if (boxes == null || boxes.length == 0) {
+            return null;
+        }
+
+        int boxSize = (int) (BASE_BOX_SIZE_INCHES * this.dpi * scale);
+        Bitmap bitmap = Bitmap.createBitmap((int) (boxes.length * boxSize),
+                                            (int) (boxSize),
+                                            Bitmap.Config.RGB_565);
+        bitmap.eraseColor(Color.BLACK);
+
+        Canvas canvas = new Canvas(bitmap);
+
+        for (int i = 0; i < boxes.length; i++) {
+            int x = (int) (i * boxSize);
+            int y = 0;
+            this.drawBox(canvas,
+                         x, y,
+                         0, i,
+                         boxSize,
+                         boxes[i],
+                         null,
+                         highlight);
+        }
+
+        return bitmap;
+    }
+
 
     public Position findBox(Point p) {
         int boxSize = (int) (BASE_BOX_SIZE_INCHES * dpi * scale);
@@ -277,7 +306,7 @@ public class PlayboardRenderer {
         return scale;
     }
 
-    private void drawBox(Canvas canvas, int x, int y, int row, int col, int boxSize, Box box, Word currentWord) {
+    private void drawBox(Canvas canvas, int x, int y, int row, int col, int boxSize, Box box, Word currentWord, Position highlight) {
         int numberTextSize = boxSize / 4;
         int letterTextSize = Math.round(boxSize * 0.7F);
 
@@ -288,7 +317,6 @@ public class PlayboardRenderer {
         white.setTextSize(letterTextSize);
 
         boolean inCurrentWord = (currentWord != null) && currentWord.checkInWord(col, row);
-        Position highlight = this.board.getHighlightLetter();
 
         Paint thisLetter;
 

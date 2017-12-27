@@ -7,6 +7,7 @@ import com.totsp.crossword.io.versions.IOVersion3;
 import com.totsp.crossword.puz.Box;
 import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.puz.PuzzleMeta;
+import com.totsp.crossword.puz.Note;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -30,11 +31,22 @@ public class IO {
 	public static File TEMP_FOLDER;
 	private static final Charset CHARSET = Charset.forName("Cp1252");
 
-	// Extra Section IDs
+	// Extra Section IDs and markers
+	private static final String GEXT_MARKER = "GEXT";
+	private static final String ANTS_MARKER = "ANTS";
+	private static final String DNTS_MARKER = "DNTS";
 	private static final int GEXT = 0;
+	private static final int ANTS = 1;
+	private static final int DNTS = 2;
 
 	// GEXT section bitmasks
 	private static final byte GEXT_SQUARE_CIRCLED = (byte) 0x80;
+
+	// NOTES CODES
+	private static final byte NOTE_SCRATCH = (byte) 0x01;
+	private static final byte NOTE_TEXT = (byte) 0x02;
+	private static final byte NOTE_ANAGRAM_SRC = (byte) 0x03;
+	private static final byte NOTE_ANAGRAM_SOL = (byte) 0x04;
 
 	static {
 		try {
@@ -203,6 +215,16 @@ public class IO {
 
 						break;
 
+					case ANTS:
+						loadNotesNative(acrossClues.size(), true, puz, input);
+
+						break;
+
+					case DNTS:
+						loadNotesNative(downClues.size(), false, puz, input);
+
+						break;
+
 					default:
 						skipExtraSection(input);
 				}
@@ -262,9 +284,13 @@ public class IO {
 
 		String section = new String(title);
 
-		if ("GEXT".equals(section)) {
+		if (GEXT_MARKER.equals(section)) {
 			return GEXT;
-		}
+		} else if (ANTS_MARKER.equals(section)) {
+            return ANTS;
+        } else if (DNTS_MARKER.equals(section)) {
+            return DNTS;
+        }
 
 		return -1;
 	}
@@ -451,8 +477,20 @@ public class IO {
 
 		writeNullTerminatedString(tmpDos, puz.getNotes());
 
+        Note[] acrossNotes = puz.getAcrossNotes();
+        if (acrossNotes != null) {
+            tmpDos.writeBytes(ANTS_MARKER);
+            saveNotesNative(tmpDos, acrossNotes);
+        }
+
+        Note[] downNotes = puz.getDownNotes();
+        if (downNotes != null) {
+            tmpDos.writeBytes(DNTS_MARKER);
+            saveNotesNative(tmpDos, downNotes);
+        }
+
 		if (puz.getGEXT()) {
-			tmpDos.writeBytes("GEXT");
+			tmpDos.writeBytes(GEXT_MARKER);
 			tmpDos.writeShort(Short.reverseBytes((short) numberOfBoxes));
 
 			// Calculate checksum here so we don't need to find this place in
@@ -673,4 +711,77 @@ public class IO {
 		return totalBytes;
 	}
 
+    /**
+     * Format of a note:
+     *     + 1st byte is number of fields in note
+     *     + Each field is
+     *         + byte identifying field
+     *         + null terminated string which is field value
+     */
+    private static void saveNotesNative(DataOutputStream dos,
+                                        Note[] notes) throws IOException {
+        for (Note note : notes) {
+            String scratch = null;
+            String text = null;
+            String anagramSrc = null;
+            String anagramSol = null;
+
+            if (note != null) {
+                scratch = note.getSratch();
+                text = note.getText();
+                anagramSrc = note.getAnagramSource();
+                anagramSol = note.getAnagramSolution();
+            }
+
+            dos.writeByte(4);
+            dos.writeByte(NOTE_SCRATCH);
+            writeNullTerminatedString(dos, scratch);
+            dos.writeByte(NOTE_TEXT);
+            writeNullTerminatedString(dos, text);
+            dos.writeByte(NOTE_ANAGRAM_SRC);
+            writeNullTerminatedString(dos, anagramSrc);
+            dos.writeByte(NOTE_ANAGRAM_SOL);
+            writeNullTerminatedString(dos, anagramSol);
+        }
+    }
+
+
+    private static void loadNotesNative(int numNotes,
+                                        boolean isAcross,
+                                        Puzzle puz,
+                                        DataInputStream input)
+            throws IOException {
+
+        for (int x = 0; x < numNotes; x++) {
+            String scratch = null;
+            String text = null;
+            String anagramSrc = null;
+            String anagramSol = null;
+
+            byte numFields = input.readByte();
+            for (byte i = 0; i < numFields; i++) {
+                byte field = input.readByte();
+
+                String val = readNullTerminatedString(input);
+
+                switch (field) {
+                case NOTE_SCRATCH:
+                    scratch = val;
+                    break;
+                case NOTE_TEXT:
+                    text = val;
+                    break;
+                case NOTE_ANAGRAM_SRC:
+                    anagramSrc = val;
+                    break;
+                case NOTE_ANAGRAM_SOL:
+                    anagramSol = val;
+                    break;
+                }
+            }
+
+            Note n = new Note(scratch, text, anagramSrc, anagramSol);
+            puz.setNoteRaw(n, x, isAcross);
+        }
+    }
 }

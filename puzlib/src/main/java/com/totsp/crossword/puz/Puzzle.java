@@ -33,7 +33,10 @@ public class Puzzle implements Serializable{
     private boolean hasGEXT;
     private Position position;
     private boolean across = true;
-    
+
+    private Note[] acrossNotes = null;
+    private Note[] downNotes = null;;
+
     // Temporary fields used for unscrambling.
     public int[] unscrambleKey;
     public byte[] unscrambleTmp;
@@ -142,7 +145,7 @@ public class Puzzle implements Serializable{
 
         return result;
     }
-    
+
     /**
      * Initialize the temporary unscramble buffers.  Returns the scrambled solution.
      */
@@ -410,6 +413,68 @@ public class Puzzle implements Serializable{
         return boxes;
     }
 
+    public Note[] getAcrossNotes() {
+        return acrossNotes;
+    }
+
+    public Note[] getDownNotes() {
+        return downNotes;
+    }
+
+    public Note getNote(int clueNum, boolean isAcross) {
+        if (isAcross && acrossNotes == null)
+            return null;
+        else if (!isAcross && downNotes == null)
+            return null;
+
+        if (isAcross) {
+            int idx = Arrays.binarySearch(acrossCluesLookup, clueNum);
+            return (idx < 0) ? null : acrossNotes[idx];
+        } else {
+            int idx = Arrays.binarySearch(downCluesLookup, clueNum);
+            return (idx < 0) ? null : downNotes[idx];
+        }
+    }
+
+    /**
+     * Assumes acrossClues and downClues has been initialised
+     */
+    public void setNote(Note note, int clueNum, boolean isAcross) {
+        if (note == null || note.isEmpty()) {
+            return;
+        }
+
+        int idx = isAcross ? Arrays.binarySearch(acrossCluesLookup, clueNum)
+                           : Arrays.binarySearch(downCluesLookup, clueNum);
+
+        setNoteRaw(note, idx, isAcross);
+    }
+
+    /**
+     * Assumes acrossClues and downClues has been initialised
+     */
+    public void setNoteRaw(Note note, int clueIdx, boolean isAcross) {
+        if (note == null || note.isEmpty()) {
+            return;
+        }
+
+        if (isAcross) {
+            if (clueIdx >= 0 && clueIdx <= acrossClues.length) {
+                if (acrossNotes == null) {
+                    acrossNotes = new Note[acrossClues.length];
+                }
+                acrossNotes[clueIdx] = note;
+            }
+        } else {
+            if (clueIdx >= 0 && clueIdx <= downClues.length) {
+                if (downNotes == null) {
+                    downNotes = new Note[downClues.length];
+                }
+                downNotes[clueIdx] = note;
+            }
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -542,6 +607,14 @@ public class Puzzle implements Serializable{
         	return false;
         }
 
+        if (!Arrays.equals(acrossNotes, other.acrossNotes)) {
+            return false;
+        }
+
+        if (!Arrays.equals(downNotes, other.downNotes)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -573,6 +646,8 @@ public class Puzzle implements Serializable{
         result = (prime * result) + ((title == null) ? 0 : title.hashCode());
         result = (prime * result) + ((version == null) ? 0 : version.hashCode());
         result = (prime * result) + width;
+        result = (prime *result) + Arrays.hashCode(acrossNotes);
+        result = (prime *result) + Arrays.hashCode(downNotes);
 
         return result;
     }
