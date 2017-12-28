@@ -22,7 +22,7 @@ public class Note implements Serializable {
         return text;
     }
 
-    public String getSratch() {
+    public String getScratch() {
         return scratch;
     }
 

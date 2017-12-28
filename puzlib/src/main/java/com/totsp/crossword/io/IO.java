@@ -727,7 +727,7 @@ public class IO {
             String anagramSol = null;
 
             if (note != null) {
-                scratch = note.getSratch();
+                scratch = note.getScratch();
                 text = note.getText();
                 anagramSrc = note.getAnagramSource();
                 anagramSol = note.getAnagramSolution();

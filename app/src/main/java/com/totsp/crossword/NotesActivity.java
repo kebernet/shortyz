@@ -271,7 +271,7 @@ public class NotesActivity extends ShortyzActivity {
 
 		scratchView = (BoardEditText) this.findViewById(R.id.scratchMiniboard);
 		if (note != null) {
-			scratchView.setFromString(note.getSratch());
+			scratchView.setFromString(note.getScratch());
 		}
         scratchView.setRenderer(renderer);
 		scratchView.setLength(curWordLen);
