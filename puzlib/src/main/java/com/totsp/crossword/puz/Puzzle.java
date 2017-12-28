@@ -489,10 +489,6 @@ public class Puzzle implements Serializable{
      * Assumes acrossClues and downClues has been initialised
      */
     public void setNote(Note note, int clueNum, boolean isAcross) {
-        if (note == null || note.isEmpty()) {
-            return;
-        }
-
         int idx = isAcross ? Arrays.binarySearch(acrossCluesLookup, clueNum)
                            : Arrays.binarySearch(downCluesLookup, clueNum);
 
@@ -503,10 +499,6 @@ public class Puzzle implements Serializable{
      * Assumes acrossClues and downClues has been initialised
      */
     public void setNoteRaw(Note note, int clueIdx, boolean isAcross) {
-        if (note == null || note.isEmpty()) {
-            return;
-        }
-
         if (isAcross) {
             if (clueIdx >= 0 && clueIdx <= acrossClues.length) {
                 if (acrossNotes == null) {
