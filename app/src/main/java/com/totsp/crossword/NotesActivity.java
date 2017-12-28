@@ -48,7 +48,7 @@ import com.totsp.crossword.puz.Playboard.Word;
 import com.totsp.crossword.puz.Box;
 
 public class NotesActivity extends ShortyzActivity {
-    private static final Logger LOG = Logger.getLogger(NotesActivity.class.getCanonicalName());
+	private static final Logger LOG = Logger.getLogger(NotesActivity.class.getCanonicalName());
 
 	protected Configuration configuration;
 	protected File baseFile;
@@ -273,7 +273,7 @@ public class NotesActivity extends ShortyzActivity {
 		if (note != null) {
 			scratchView.setFromString(note.getScratch());
 		}
-        scratchView.setRenderer(renderer);
+		scratchView.setRenderer(renderer);
 		scratchView.setLength(curWordLen);
 		scratchView.setContextMenuListener(new ClickListener() {
 			public void onContextMenu(Point e) {
@@ -335,7 +335,7 @@ public class NotesActivity extends ShortyzActivity {
 			}
 		};
 
-        anagramSourceView.setRenderer(renderer);
+		anagramSourceView.setRenderer(renderer);
 		anagramSourceView.setLength(curWordLen);
 		anagramSourceView.setFilters(new BoardEditFilter[]{sourceFilter});
 		anagramSourceView.setContextMenuListener(new ClickListener() {
@@ -391,7 +391,7 @@ public class NotesActivity extends ShortyzActivity {
 			}
 		};
 
-        anagramSolView.setRenderer(renderer);
+		anagramSolView.setRenderer(renderer);
 		anagramSolView.setLength(curWordLen);
 		anagramSolView.setFilters(new BoardEditFilter[]{solFilter});
 		anagramSolView.setContextMenuListener(new ClickListener() {
@@ -595,7 +595,11 @@ public class NotesActivity extends ShortyzActivity {
 			this.keyboardView.setVisibility(View.GONE);
 		}
 
-		this.imageView.setBitmap(renderer.drawWord());
+		boolean displayScratch = prefs.getBoolean("displayScratch", false);
+        boolean displayScratchAcross = displayScratch && !BOARD.isAcross();
+        boolean displayScratchDown = displayScratch && BOARD.isAcross();
+		this.imageView.setBitmap(renderer.drawWord(displayScratchAcross,
+                                                   displayScratchDown));
 	}
 
 	private void copyBoardViewToBoard(final BoardEditText view) {

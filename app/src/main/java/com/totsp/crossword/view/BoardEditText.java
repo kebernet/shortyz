@@ -48,6 +48,7 @@ public class BoardEditText extends ScrollingImageView {
 
     private boolean useNativeKeyboard = false;
     private Configuration configuration;
+    private SharedPreferences prefs;
 
     // we have our own onTap for input, but the activity containing the widget
     // might also need to know about on taps, so override setContextMenuListener
@@ -100,8 +101,7 @@ public class BoardEditText extends ScrollingImageView {
             }
         });
 
-        SharedPreferences prefs
-            = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
         useNativeKeyboard = "NATIVE".equals(prefs.getString("keyboardType", ""));
 
         configuration = context.getResources().getConfiguration();
@@ -267,7 +267,8 @@ public class BoardEditText extends ScrollingImageView {
     }
 
     private void render() {
-        setBitmap(renderer.drawBoxes(boxes, selection));
+        boolean displayScratch = prefs.getBoolean("displayScratch", false);
+        setBitmap(renderer.drawBoxes(boxes, selection, displayScratch, displayScratch));
     }
 
     private boolean canDelete(Position pos) {

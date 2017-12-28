@@ -376,6 +376,13 @@
         android:entries="@array/swipeActionLabels"
         android:entryValues="@array/swipeActionValues" />
 
+    <com.jenzz.materialpreference.CheckBoxPreference
+        android:title="Display Scratch"
+        android:defaultValue="false"
+        android:summary="Display scratch notes on play board."
+        android:key="displayScratch"
+        />
+
 </com.jenzz.materialpreference.PreferenceCategory>
 
 	<Preference

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Box implements Serializable {
     private static final char BLANK = ' ';
+    private static final int NOCLUE = -1;
 
     private String responder;
     private boolean across;
@@ -13,6 +14,10 @@ public class Box implements Serializable {
     private char response = BLANK;
     private char solution;
     private int clueNumber;
+    private int partOfAcrossClueNumber = NOCLUE;
+    private int partOfDownClueNumber = NOCLUE;
+    private int acrossPosition;
+    private int downPosition;
 
     @Override
     public boolean equals(Object obj) {
@@ -66,6 +71,14 @@ public class Box implements Serializable {
             return false;
         }
 
+        if (getPartOfAcrossClueNumber() != other.getPartOfAcrossClueNumber()) {
+            return false;
+        }
+
+        if (getPartOfDownClueNumber() != other.getPartOfDownClueNumber()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -82,6 +95,8 @@ public class Box implements Serializable {
             ((getResponder() == null) ? 0 : getResponder().hashCode());
         result = (prime * result) + getResponse();
         result = (prime * result) + getSolution();
+        result = (prime * result) + getPartOfAcrossClueNumber();
+        result = (prime * result) + getPartOfDownClueNumber();
 
         return result;
     }
@@ -207,4 +222,80 @@ public class Box implements Serializable {
      * @return if the current box is blank
      */
     public boolean isBlank() { return getResponse() == BLANK; }
+
+    /**
+     * @param clueNumber across clue that box is a part of
+     */
+    public void setPartOfAcrossClueNumber(int clueNumber) {
+        this.partOfAcrossClueNumber = clueNumber;
+    }
+
+    /**
+     * @returns across clue that box is a part of (if isPartOfAcross()
+     * returns true)
+     */
+    public int getPartOfAcrossClueNumber() {
+        return partOfAcrossClueNumber;
+    }
+
+    /**
+     * @returns true if box is part of across clue
+     */
+    public boolean isPartOfAcross() {
+        return partOfAcrossClueNumber != NOCLUE;
+    }
+
+    /**
+     * @param clueNumber down clue that box is a part of
+     */
+    public void setPartOfDownClueNumber(int clueNumber) {
+        this.partOfDownClueNumber = clueNumber;
+    }
+
+    /**
+     * @returns down clue that box is a part of (if isPartOfDown()
+     * returns true)
+     */
+    public int getPartOfDownClueNumber() {
+        return partOfDownClueNumber;
+    }
+
+    /**
+     * @returns true if box is part of down clue
+     */
+    public boolean isPartOfDown() {
+        return partOfDownClueNumber != NOCLUE;
+    }
+
+    /**
+     * @param position if part of an across clue, the position in the
+     * across word
+     */
+    public void setAcrossPosition(int position) {
+        this.acrossPosition = position;
+    }
+
+    /**
+     * @return position in the across word if isPartOfAcross returns
+     * true
+     */
+    public int getAcrossPosition() {
+        return acrossPosition;
+    }
+
+    /**
+     * @param position if part of a down clue, the position in the
+     * down word
+     */
+    public void setDownPosition(int position) {
+        this.downPosition = position;
+    }
+
+    /**
+     * @return position in the down word if isPartOfDown returns
+     * true
+     */
+    public int getDownPosition() {
+        return downPosition;
+    }
 }

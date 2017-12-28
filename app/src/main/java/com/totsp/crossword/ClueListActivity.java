@@ -483,6 +483,7 @@ public class ClueListActivity extends ShortyzActivity {
 			this.keyboardView.setVisibility(View.GONE);
 		}
 
-		this.imageView.setBitmap(renderer.drawWord());
+		boolean displayScratch = prefs.getBoolean("displayScratch", false);
+		this.imageView.setBitmap(renderer.drawWord(displayScratch, displayScratch));
 	}
 }

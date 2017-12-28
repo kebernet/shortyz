@@ -122,6 +122,55 @@ public class Puzzle implements Serializable{
                 }
             }
         }
+
+        // set partOfAcross numbers
+        int maxRowLen = -1;
+        for (int row = 0; row < boxes.length; row++) {
+            int lastAcross = -1;
+            int acrossPosition = -1;
+            maxRowLen = java.lang.Math.max(maxRowLen, boxes[row].length);
+            for (int col = 0; col < boxes[row].length; col++) {
+                if (boxes[row][col] == null) {
+                    lastAcross = -1;
+                    continue;
+                }
+
+                if (boxes[row][col].isAcross()) {
+                    lastAcross = boxes[row][col].getClueNumber();
+                    acrossPosition = 0;
+                }
+
+                if (lastAcross > 0) {
+                    boxes[row][col].setPartOfAcrossClueNumber(lastAcross);
+                    boxes[row][col].setAcrossPosition(acrossPosition);
+                    acrossPosition++;
+                }
+            }
+        }
+
+        // set partOfDown numbers
+        for (int col = 0; col < maxRowLen; col++) {
+            int lastDown = -1;
+            int downPosition = -1;
+            for (int row = 0; row < boxes.length; row++) {
+                if (col >= boxes[row].length || boxes[row][col] == null) {
+                    lastDown = -1;
+                    continue;
+                }
+
+                if (boxes[row][col].isDown()) {
+                    lastDown = boxes[row][col].getClueNumber();
+                    downPosition = 0;
+                }
+
+                if (lastDown > -1) {
+                    boxes[row][col].setPartOfDownClueNumber(lastDown);
+                    boxes[row][col].setDownPosition(downPosition);
+                    downPosition++;
+                }
+            }
+        }
+
     }
 
     public Box[][] getBoxes() {

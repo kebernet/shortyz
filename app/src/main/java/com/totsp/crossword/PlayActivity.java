@@ -379,7 +379,8 @@ public class PlayActivity extends ShortyzActivity {
                             try {
                                 Position p = RENDERER.findBox(e);
                                 Word w = BOARD.setHighlightLetter(p);
-                                RENDERER.draw(w);
+                                boolean displayScratch = prefs.getBoolean("displayScratch", false);
+                                RENDERER.draw(w, displayScratch, displayScratch);
                                 PlayActivity.this.openContextMenu(boardView);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -1240,7 +1241,10 @@ public class PlayActivity extends ShortyzActivity {
             c = BOARD.getClue();
         }
 
-        this.boardView.setBitmap(RENDERER.draw(previous), rescale);
+        boolean displayScratch = this.prefs.getBoolean("displayScratch", false);
+        this.boardView.setBitmap(RENDERER.draw(previous,
+                                               displayScratch, displayScratch),
+                                 rescale);
         this.boardView.requestFocus();
         /*
 		 * If we jumped to a new word, ensure the first letter is visible.
