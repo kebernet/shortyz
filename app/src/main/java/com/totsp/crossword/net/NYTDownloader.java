@@ -4,12 +4,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.nyt.ErrorActivity;
+import com.totsp.crossword.puz.PuzzleMeta;
 import com.totsp.crossword.shortyz.ShortyzApplication;
 
 import java.io.File;
@@ -132,6 +134,14 @@ public class NYTDownloader extends AbstractDownloader {
                         .putBoolean("didNYTLogin", true)
                         .apply();
                 File f = new File(downloadDirectory, this.createFileName(date));
+
+                PuzzleMeta meta = new PuzzleMeta();
+                meta.date = date;
+                meta.source = getName();
+                meta.sourceUrl = url.toString();
+                meta.updatable = false;
+                utils.storeMetas(Uri.fromFile(f), meta);
+                
                 FileOutputStream fos = new FileOutputStream(f);
                 IO.copyStream(
                         response.body().byteStream(), fos);
