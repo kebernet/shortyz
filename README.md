@@ -1,6 +1,7 @@
 Shortyz Crosswords 
 ==================
 [![Build Status](https://travis-ci.org/kebernet/shortyz.svg?branch=master)](https://travis-ci.org/kebernet/shortyz)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/kebernet/shortyz.svg?columns=all)](https://waffle.io/kebernet/shortyz)
 
 Shortyz is a crossword puzzle application for Android that downloads a number of
 free puzzles, and with a paid subscription, the New York Times.
