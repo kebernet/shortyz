@@ -15,6 +15,7 @@ import com.totsp.crossword.shortyz.ShortyzApplication;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -133,8 +134,12 @@ public class NYTDownloader extends AbstractDownloader {
                         .apply();
                 File f = new File(downloadDirectory, this.createFileName(date));
                 FileOutputStream fos = new FileOutputStream(f);
-                IO.copyStream(
-                        response.body().byteStream(), fos);
+                InputStream is = response.body().byteStream();
+                try {
+                    IO.copyStream(is, fos);
+                } finally {
+                    IO.closeQuietly(is);
+                }
                 fos.close();
 
                 IO.copyStream(
