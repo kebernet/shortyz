@@ -7,10 +7,12 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +26,8 @@ import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
 
 import com.totsp.crossword.io.IO;
+import com.totsp.crossword.puz.MovementStrategy;
+import com.totsp.crossword.puz.Playboard;
 import com.totsp.crossword.puz.Playboard.Position;
 import com.totsp.crossword.puz.Playboard.Word;
 import com.totsp.crossword.puz.Puzzle;
@@ -49,6 +53,8 @@ public class ClueListActivity extends ShortyzActivity {
 	private TabHost tabHost;
 	private boolean useNativeKeyboard = false;
 	private PlayboardRenderer renderer;
+	private static String MENU_JUMP_FORWARD  = "Jump Forward";
+	private static String MENU_JUMP_BACKWARD = "Jump Backward";
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -70,14 +76,35 @@ public class ClueListActivity extends ShortyzActivity {
 		}
 	}
 
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuItem mi;
+
+		mi = menu.add(MENU_JUMP_BACKWARD).setIcon(android.R.drawable.arrow_up_float);
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			mi.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
+		mi = menu.add(MENU_JUMP_FORWARD).setIcon(android.R.drawable.arrow_down_float);
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			mi.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
+		return true;
+	}
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item == null || item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
+        } else if (item.getTitle().toString().equals(MENU_JUMP_FORWARD)) {
+					jumpToNextUnsolved(true);
+					render();
+					return true;
+				} else if (item.getTitle().toString().equals(MENU_JUMP_BACKWARD)) {
+					jumpToNextUnsolved(false);
+					render();
+					return true;
+				}
+        else return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -255,10 +282,10 @@ public class ClueListActivity extends ShortyzActivity {
 				arg0.setSelected(true);
 				ShortyzApplication.BOARD.jumpTo(arg2, true);
 				imageView.scrollTo(0, 0);
+				skipFilled();
 				render();
 
 				if (prefs.getBoolean("snapClue", false)) {
-					across.setSelectionFromTop(arg2, 5);
 					across.setSelection(arg2);
 				}
 			}
@@ -270,10 +297,10 @@ public class ClueListActivity extends ShortyzActivity {
 						|| (ShortyzApplication.BOARD.getCurrentClueIndex() != arg2)) {
 					ShortyzApplication.BOARD.jumpTo(arg2, true);
 					imageView.scrollTo(0, 0);
+					skipFilled();
 					render();
 
 					if (prefs.getBoolean("snapClue", false)) {
-						across.setSelectionFromTop(arg2, 5);
 						across.setSelection(arg2);
 					}
 				}
@@ -287,10 +314,10 @@ public class ClueListActivity extends ShortyzActivity {
 					final int arg2, long arg3) {
 				ShortyzApplication.BOARD.jumpTo(arg2, false);
 				imageView.scrollTo(0, 0);
+				skipFilled();
 				render();
 
 				if (prefs.getBoolean("snapClue", false)) {
-					down.setSelectionFromTop(arg2, 5);
 					down.setSelection(arg2);
 				}
 			}
@@ -303,10 +330,10 @@ public class ClueListActivity extends ShortyzActivity {
 						|| (ShortyzApplication.BOARD.getCurrentClueIndex() != arg2)) {
 					ShortyzApplication.BOARD.jumpTo(arg2, false);
 					imageView.scrollTo(0, 0);
+					skipFilled();
 					render();
 
 					if (prefs.getBoolean("snapClue", false)) {
-						down.setSelectionFromTop(arg2, 5);
 						down.setSelection(arg2);
 					}
 				}
@@ -315,7 +342,26 @@ public class ClueListActivity extends ShortyzActivity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
-		this.render();
+
+			// Initial position to the clue that is current on the play board
+			(ShortyzApplication.BOARD.isAcross() ? across : down)
+				.setSelection(ShortyzApplication.BOARD.getCurrentClueIndex());
+
+      ShortyzApplication.BOARD.jumpTo(ShortyzApplication.BOARD.getCurrentClueIndex(),
+        ShortyzApplication.BOARD.isAcross());
+
+      skipFilled();
+      this.render();
+	}
+
+	private void skipFilled()
+	{
+		// Position on the first blank in the current word, or on the first
+		// character if there is no blank in the word.
+		Position p = ShortyzApplication.BOARD.getNextBlankOrError();
+		if (p != null) {
+			ShortyzApplication.BOARD.setHighlightLetter(p, false);
+		}
 	}
 
 	@Override
@@ -337,22 +383,15 @@ public class ClueListActivity extends ShortyzActivity {
 
 		case KeyEvent.KEYCODE_DPAD_LEFT:
 
-			if (!ShortyzApplication.BOARD.getHighlightLetter().equals(
-					ShortyzApplication.BOARD.getCurrentWord().start)) {
-				ShortyzApplication.BOARD.previousLetter();
-
-				this.render();
-			}
-
+			MovementStrategy.STOP_ON_END.back(ShortyzApplication.BOARD);
+			this.render();
 			return true;
 
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 
-			if (!ShortyzApplication.BOARD.getHighlightLetter().equals(last)) {
-				ShortyzApplication.BOARD.nextLetter();
-				this.render();
-			}
-
+			MovementStrategy.STOP_ON_END.move(ShortyzApplication.BOARD,
+				ShortyzApplication.BOARD.isSkipCompletedLetters());
+			this.render();
 			return true;
 
 		case KeyEvent.KEYCODE_DEL:
@@ -453,6 +492,49 @@ public class ClueListActivity extends ShortyzActivity {
 				|| (this.configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_UNDEFINED)) {
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(this.imageView.getWindowToken(), 0);
+		}
+	}
+
+	public void jumpToNextUnsolved(boolean forward) {
+		Playboard board = ShortyzApplication.BOARD;
+
+		int clue = board.getCurrentClueIndex();
+		int original_clue = clue;
+
+		boolean acr = board.isAcross();
+		boolean original_acr = acr;
+
+		while (true)
+		{
+			if (forward) {
+				if (clue == (acr ? this.across : this.down).getAdapter().getCount() - 1) {
+					clue = 0;
+					acr = !acr;
+				}
+				else {
+					clue++;
+				}
+			} else {
+				if (clue == 0) {
+					acr = !acr;
+					clue = (acr ? this.across : this.down).getAdapter().getCount() - 1;
+				} else {
+					clue--;
+				}
+			}
+			board.jumpTo(clue, acr);
+			Position p = board.getNextBlankOrError();
+			if (p != null) {
+				board.setHighlightLetter(p, false);
+				imageView.scrollTo(0, 0);
+				this.tabHost.setCurrentTab(acr ? 0 : 1);
+				(acr ? across : down).setSelection(clue);
+				break;
+			}
+			if (clue == original_clue && acr == original_acr) {
+				imageView.scrollTo(0, 0);
+				break;
+			}
 		}
 	}
 
