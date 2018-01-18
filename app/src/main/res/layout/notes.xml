@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/clueLine"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:textSize="12dip"
+		android:minLines="2"
+		android:maxLines="4"
+		android:textColor="#FFFFFF"
+		android:background="#2C2C2C"
+	/>
+
+    <TextView
+        android:id="@+id/boardLab"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/board_lab"
+        android:layout_below="@+id/clueLine"
+    />
+
+    <com.totsp.crossword.view.ScrollingImageView
+        android:id="@+id/miniboard"
+        android:layout_width="fill_parent"
+        android:layout_height="0.3in"
+        android:layout_below="@+id/boardLab"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
+        <requestFocus />
+    </com.totsp.crossword.view.ScrollingImageView>
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/miniboard"
+        android:layout_above="@+id/notesKeyboard"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/scratchLab"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/scratch_lab"
+                android:inputType="text"
+            />
+
+            <com.totsp.crossword.view.BoardEditText
+                android:id="@+id/scratchMiniboard"
+                android:layout_width="fill_parent"
+                android:layout_height="0.3in"
+                android:layout_below="@+id/scratchLab"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+            />
+
+            <TextView
+                android:id="@+id/notesLab"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notes_lab"
+            />
+
+            <EditText
+                android:id="@+id/notesBox"
+                android:layout_width="fill_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1.0"
+                android:gravity="top"
+                android:typeface="monospace"
+            />
+
+            <TextView
+                android:id="@+id/anagramSourceLab"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/anagram_source_lab"
+                android:layout_below="@+id/notesBox"
+            />
+
+            <com.totsp.crossword.view.BoardEditText
+                android:id="@+id/anagramSource"
+                android:layout_width="fill_parent"
+                android:layout_below="@+id/anagramSourceLab"
+                android:layout_height="0.3in"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+            />
+
+            <TextView
+                android:id="@+id/anagramSolutionLab"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/anagram_solution_lab"
+                android:layout_below="@+id/notesBox"
+            />
+
+            <com.totsp.crossword.view.BoardEditText
+                android:id="@+id/anagramSolution"
+                android:layout_width="fill_parent"
+                android:layout_below="@+id/anagramSolutionLab"
+                android:layout_height="0.3in"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+            />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/notesKeyboard"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:keyBackground="@color/transparent"
+        android:keyTextColor="@color/textColorPrimary"
+        android:background="@color/background_material_light"
+        android:shadowRadius="0.0"
+        android:keyPreviewLayout="@layout/key_preview"
+        />
+
+
+</RelativeLayout>

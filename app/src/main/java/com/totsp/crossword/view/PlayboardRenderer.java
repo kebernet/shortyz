@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 
 import com.totsp.crossword.puz.Box;
+import com.totsp.crossword.puz.Note;
 import com.totsp.crossword.puz.Playboard;
 import com.totsp.crossword.puz.Playboard.Position;
 import com.totsp.crossword.puz.Playboard.Word;
@@ -30,6 +31,7 @@ public class PlayboardRenderer {
     private final Paint currentWordHighlight = new Paint();
     private final Paint letterText = new Paint();
     private final Paint numberText = new Paint();
+    private final Paint noteText = new Paint();
     private final Paint red = new Paint();
     private final Paint white = new Paint();
     private Bitmap bitmap;
@@ -59,6 +61,11 @@ public class PlayboardRenderer {
         numberText.setColor(blankColor);
         numberText.setAntiAlias(true);
         numberText.setTypeface(Typeface.MONOSPACE);
+
+        noteText.setTextAlign(Align.LEFT);
+        noteText.setColor(blankColor);
+        noteText.setAntiAlias(true);
+        noteText.setTypeface(Typeface.MONOSPACE);
 
         letterText.setTextAlign(Align.CENTER);
         letterText.setColor(blankColor);
@@ -130,7 +137,8 @@ public class PlayboardRenderer {
         return this.scale;
     }
 
-    public Bitmap draw(Word reset) {
+    public Bitmap draw(Word reset,
+                       boolean displayScratchAcross, boolean displayScratchDown) {
         try {
             Box[][] boxes = this.board.getBoxes();
             boolean renderAll = reset == null;
@@ -169,7 +177,7 @@ public class PlayboardRenderer {
 
                     int x = col * boxSize;
                     int y = row * boxSize;
-                    this.drawBox(canvas, x, y, row, col, boxSize, boxes[col][row], currentWord);
+                    this.drawBox(canvas, x, y, row, col, boxSize, boxes[col][row], currentWord, this.board.getHighlightLetter(), displayScratchAcross, displayScratchDown);
                 }
             }
 
@@ -179,7 +187,7 @@ public class PlayboardRenderer {
         }
     }
 
-    public Bitmap drawWord() {
+    public Bitmap drawWord(boolean displayScratchAcross, boolean displayScratchDown) {
         Position[] word = this.board.getCurrentWordPositions();
         Box[] boxes = this.board.getCurrentWordBoxes();
         int boxSize = (int) (BASE_BOX_SIZE_INCHES * this.dpi * scale) ;
@@ -191,11 +199,44 @@ public class PlayboardRenderer {
         for (int i = 0; i < word.length; i++) {
             int x = i * boxSize;
             int y = 0;
-            this.drawBox(canvas, x, y, word[i].down, word[i].across, boxSize, boxes[i], null);
+            this.drawBox(canvas, x, y, word[i].down, word[i].across, boxSize, boxes[i], null, this.board.getHighlightLetter(), displayScratchAcross, displayScratchDown);
         }
 
         return bitmap;
     }
+
+    public Bitmap drawBoxes(Box[] boxes,
+                            Position highlight,
+                            boolean displayScratchAcross,
+                            boolean displayScratchDown) {
+        if (boxes == null || boxes.length == 0) {
+            return null;
+        }
+
+        int boxSize = (int) (BASE_BOX_SIZE_INCHES * this.dpi * scale);
+        Bitmap bitmap = Bitmap.createBitmap((int) (boxes.length * boxSize),
+                                            (int) (boxSize),
+                                            Bitmap.Config.RGB_565);
+        bitmap.eraseColor(Color.BLACK);
+
+        Canvas canvas = new Canvas(bitmap);
+
+        for (int i = 0; i < boxes.length; i++) {
+            int x = (int) (i * boxSize);
+            int y = 0;
+            this.drawBox(canvas,
+                         x, y,
+                         0, i,
+                         boxSize,
+                         boxes[i],
+                         null,
+                         highlight,
+                         displayScratchAcross, displayScratchDown);
+        }
+
+        return bitmap;
+    }
+
 
     public Position findBox(Point p) {
         int boxSize = (int) (BASE_BOX_SIZE_INCHES * dpi * scale);
@@ -277,18 +318,26 @@ public class PlayboardRenderer {
         return scale;
     }
 
-    private void drawBox(Canvas canvas, int x, int y, int row, int col, int boxSize, Box box, Word currentWord) {
+    private void drawBox(Canvas canvas,
+                         int x, int y,
+                         int row, int col,
+                         int boxSize,
+                         Box box,
+                         Word currentWord,
+                         Position highlight,
+                         boolean displayScratchAcross, boolean displayScratchDown) {
         int numberTextSize = boxSize / 4;
+        int noteTextSize = boxSize / 3;
         int letterTextSize = Math.round(boxSize * 0.7F);
 
         // scale paints
         numberText.setTextSize(numberTextSize);
+        noteText.setTextSize(noteTextSize);
         letterText.setTextSize(letterTextSize);
         red.setTextSize(letterTextSize);
         white.setTextSize(letterTextSize);
 
         boolean inCurrentWord = (currentWord != null) && currentWord.checkInWord(col, row);
-        Position highlight = this.board.getHighlightLetter();
 
         Paint thisLetter;
 
@@ -334,8 +383,41 @@ public class PlayboardRenderer {
                 }
             }
 
-            canvas.drawText(Character.toString(box.getResponse()), x + (boxSize / 2),
-                    y + (int) (letterTextSize * 1.25), thisLetter);
+            if (!box.isBlank()) {
+                canvas.drawText(Character.toString(box.getResponse()),
+                                x + (boxSize / 2),
+                                y + (int) (letterTextSize * 1.25),
+                                thisLetter);
+            } else {
+                if (displayScratchAcross && box.isPartOfAcross()) {
+                    int clueNumber = box.getPartOfAcrossClueNumber();
+                    Note note = board.getPuzzle().getNote(clueNumber, true);
+                    if (note != null) {
+                        String scratch = note.getScratch();
+                        int pos = box.getAcrossPosition();
+                        if (scratch != null && pos < scratch.length()) {
+                            canvas.drawText(Character.toString(scratch.charAt(pos)),
+                                            x + (boxSize / 3),
+                                            y + boxSize - (noteTextSize / 2),
+                                            this.noteText);
+                        }
+                    }
+                }
+                if (displayScratchDown && box.isPartOfDown()) {
+                    int clueNumber = box.getPartOfDownClueNumber();
+                    Note note = board.getPuzzle().getNote(clueNumber, false);
+                    if (note != null) {
+                        String scratch = note.getScratch();
+                        int pos = box.getDownPosition();
+                        if (scratch != null && pos < scratch.length()) {
+                            canvas.drawText(Character.toString(scratch.charAt(pos)),
+                                            x + boxSize - noteTextSize - 2,
+                                            y + 2 + (boxSize / 2),
+                                            this.noteText);
+                        }
+                    }
+                }
+            }
         }
 
         Paint boxColor = (((highlight.across == col) && (highlight.down == row)) && (currentWord != null))

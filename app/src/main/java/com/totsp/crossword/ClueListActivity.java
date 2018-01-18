@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -74,6 +75,10 @@ public class ClueListActivity extends ShortyzActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item == null || item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        } else if (item.getTitle().toString().equals("Notes")) {
+            Intent i = new Intent(ClueListActivity.this, NotesActivity.class);
+            ClueListActivity.this.startActivityForResult(i, 0);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -319,6 +324,12 @@ public class ClueListActivity extends ShortyzActivity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add("Notes").setIcon(android.R.drawable.ic_menu_agenda);
+		return true;
+	}
+
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		Word w = ShortyzApplication.BOARD.getCurrentWord();
 		Position last = new Position(w.start.across
@@ -472,6 +483,7 @@ public class ClueListActivity extends ShortyzActivity {
 			this.keyboardView.setVisibility(View.GONE);
 		}
 
-		this.imageView.setBitmap(renderer.drawWord());
+		boolean displayScratch = prefs.getBoolean("displayScratch", false);
+		this.imageView.setBitmap(renderer.drawWord(displayScratch, displayScratch));
 	}
 }

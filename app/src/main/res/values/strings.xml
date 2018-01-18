@@ -8,4 +8,9 @@
     <string name="done_button">Done</string>
     <string name="across">Across</string>
     <string name="down">Down</string>
+    <string name="anagram_source_lab">Anagram remaining letters:</string>
+    <string name="anagram_solution_lab">Anagram solution:</string>
+    <string name="board_lab">Board:</string>
+    <string name="scratch_lab">Scratch:</string>
+    <string name="notes_lab">Notes:</string>
 </resources>

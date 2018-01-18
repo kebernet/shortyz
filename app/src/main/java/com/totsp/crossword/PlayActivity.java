@@ -379,7 +379,8 @@ public class PlayActivity extends ShortyzActivity {
                             try {
                                 Position p = RENDERER.findBox(e);
                                 Word w = BOARD.setHighlightLetter(p);
-                                RENDERER.draw(w);
+                                boolean displayScratch = prefs.getBoolean("displayScratch", false);
+                                RENDERER.draw(w, displayScratch, displayScratch);
                                 PlayActivity.this.openContextMenu(boardView);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -714,6 +715,7 @@ public class PlayActivity extends ShortyzActivity {
         }
 
         menu.add("Clues").setIcon(android.R.drawable.ic_menu_agenda);
+        menu.add("Notes").setIcon(android.R.drawable.ic_menu_agenda);
         Menu clueSize = menu.addSubMenu("Clue Text Size");
         clueSize.add(createSpannableForMenu("Small")).setTitleCondensed("Small");
         clueSize.add(createSpannableForMenu("Medium")).setTitleCondensed("Medium");
@@ -990,6 +992,10 @@ public class PlayActivity extends ShortyzActivity {
             PlayActivity.this.startActivityForResult(i, 0);
 
             return true;
+        } else if (item.getTitle().toString().equals("Notes")) {
+            Intent i = new Intent(PlayActivity.this, NotesActivity.class);
+            PlayActivity.this.startActivityForResult(i, 0);
+            return true;
         } else if (item.getTitle().toString().equals("Help")) {
             Intent i = new Intent(Intent.ACTION_VIEW,
                     Uri.parse("file:///android_asset/playscreen.html"), this,
@@ -1235,7 +1241,10 @@ public class PlayActivity extends ShortyzActivity {
             c = BOARD.getClue();
         }
 
-        this.boardView.setBitmap(RENDERER.draw(previous), rescale);
+        boolean displayScratch = this.prefs.getBoolean("displayScratch", false);
+        this.boardView.setBitmap(RENDERER.draw(previous,
+                                               displayScratch, displayScratch),
+                                 rescale);
         this.boardView.requestFocus();
         /*
 		 * If we jumped to a new word, ensure the first letter is visible.
