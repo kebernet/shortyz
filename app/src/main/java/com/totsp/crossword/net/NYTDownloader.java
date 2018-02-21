@@ -1,15 +1,17 @@
 package com.totsp.crossword.net;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.os.Handler;
+import android.content.Intent;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.totsp.crossword.io.IO;
-import com.totsp.crossword.puz.Box;
-import com.totsp.crossword.puz.Puzzle;
+import com.totsp.crossword.nyt.ErrorActivity;
+import com.totsp.crossword.shortyz.ShortyzApplication;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,15 +19,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
 
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -37,265 +33,173 @@ import okhttp3.Response;
  * Date = Daily
  */
 public class NYTDownloader extends AbstractDownloader {
-	private static final String[] MONTHS = new String[] { "Jan", "Feb", "Mar",
-			"Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-	public static final String NAME = "New York Times";
-	private static final String LOGIN_URL = "https://myaccount.nytimes.com/auth/login?URI=http://select.nytimes.com/premium/xword/puzzles.html";
-	NumberFormat nf = NumberFormat.getInstance();
-	private Context context;
-	private Handler handler = new Handler();
-	private HashMap<String, String> params = new HashMap<String, String>();
+    private static final long lastDailyPathTime = new Date(2017, 04, 20, 00, 00, 00).getTime();
+    private static final String[] MONTHS = new String[]{"Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    public static final String NAME = "New York Times";
+    private static final String PUZZLES_PAGE_URL = "https://www.nytimes.com/crosswords/index.html?page=home&_r=0";
 
-	public NYTDownloader(Context context, String username, String password) {
-		super("http://www.nytimes.com/svc/crosswords/v2/puzzle/", DOWNLOAD_DIR, NAME);
-		this.context = context;
-		nf.setMinimumIntegerDigits(2);
-		nf.setMaximumFractionDigits(0);
-		params.put("is_continue", "true");
-		params.put("SAVEOPTION", "YES");
-		params.put("URI",
-				"http://www.nytimes.com/crosswords/index.html");
-		params.put("OQ", "");
-		params.put("OP", "");
-		params.put("userid", username);
-		params.put("password", password);
-		params.put("USERID", username);
-		params.put("PASSWORD", password);
-	}
+    private static final String NOTIFICATION_TAG = "NYTDownloader";
+    private static final int LOGIN_NOTIFICATION_ID = 1;
 
-	public int[] getDownloadDates() {
-		return DATE_DAILY;
-	}
+    NumberFormat nf = NumberFormat.getInstance();
+    private Context context;
+    private HashMap<String, String> params = new HashMap<String, String>();
+    private NotificationManager nm;
 
-	public String getName() {
-		return NYTDownloader.NAME;
-	}
+    public NYTDownloader(Context context, NotificationManager nm) {
+        super("https://www.nytimes.com/svc/crosswords/v2/puzzle/", DOWNLOAD_DIR, NAME);
+        this.context = context;
+        nf.setMinimumIntegerDigits(2);
+        nf.setMaximumFractionDigits(0);
+        this.nm = nm;
+    }
 
-	public File download(Date date) {
-		return this.download(date, this.createUrlSuffix(date));
-	}
+    public NYTDownloader(Context context) {
+        this(context, null);
+    }
 
-	public File update(File source) {
-		try {
-			Puzzle oPuz = IO.load(source);
+    public int[] getDownloadDates() {
+        return DATE_DAILY;
+    }
 
-			if (!oPuz.isUpdatable()) {
-				return null;
-			}
+    public String getName() {
+        return NYTDownloader.NAME;
+    }
 
-			System.out.println("Source URL:" + oPuz.getSourceUrl());
+    public File download(Date date) {
+        return this.download(date, this.createUrlSuffix(date));
+    }
 
-			URL url = new URL(oPuz.getSourceUrl());
-			OkHttpClient client = this.login();
+    @Override
+    protected String createUrlSuffix(Date date) {
+//		if(date.getTime() < lastDailyPathTime) {
+        return "daily-" + (date.getYear() + 1900) + "-"
+                + this.nf.format(date.getMonth() + 1) + "-"
+                + this.nf.format(date.getDate()) + ".puz";
+//		} else {
+//			return
+//		}
+    }
 
-			Request get = new Request.Builder().url(url).get().build();
-			Response response = client.newCall(get).execute();
+    @Override
+    protected File download(Date date, String urlSuffix) {
+        // When we attempt to download a puzzle and our NYT credentials are out of date, if nm is null,
+        // immediately enter the login workflow.  If nm is not null, instead of launching the login
+        // workflow, post a notification to the user which can be used to log in at their convenience.
 
-			if (response.code() == 200) {
-				File f = File.createTempFile(
-						"update" + System.currentTimeMillis(), ".tmp");
-				f.deleteOnExit();
+        // At the moment, clearing NYT credentials just sets the didNYTLogin preference to false,
+        // and doesn't actually clear the credentials.  This means that if we don't gate the
+        // download with a request for credentials, we could successfully download (using the old
+        // credentials) when this is not intended by the user.
+        //
+        // For non-background downloads, we do this request when creating the set of downloaders by
+        // not providing a NotificationManager.  During non-interactive downloads (e.g. automatic
+        // background downloads), we don't, so add the check here in order to avoid a confusing
+        // state where we notify both that we need a login but successfully download a puzzle.
+        //
+        // Likely, we want to consolidate the behavior for both cases, as there's a similar problem
+        // when we launch the login workflow (if you skip the credential screen, the puzzle still
+        // downloads successfully).
+        if ((nm != null) && requestCredentialsIfNeeded()) {
+            return null;
+        }
 
-				FileOutputStream fos = new FileOutputStream(f);
-				IO.copyStream(
-						response.body().byteStream(), fos);
-				fos.close();
+        try {
+            URL url = new URL(this.baseUrl + urlSuffix);
+            OkHttpClient client = this.createClient();
 
-				Puzzle nPuz = IO.load(f);
-				System.out.println("Temp puzzle loaded. " + nPuz.getTitle());
+            Request request = new Request.Builder()
+                    .url(url)
+                    .header("Referer", PUZZLES_PAGE_URL)
+                    .build();
 
-				boolean updated = false;
+            Response response = client.newCall(request).execute();
 
-				for (int x = 0; x < oPuz.getBoxes().length; x++) {
-					for (int y = 0; y < oPuz.getBoxes()[x].length; y++) {
-						Box oBox = oPuz.getBoxes()[x][y];
-						Box nBox = nPuz.getBoxes()[x][y];
+            if(response.code() == 401){
+                if(response.body().string().contains("[\"Not Found\"]")){
+                    Toast.makeText(context, "The NYT Puzzle was not found. Maybe wait 24 hours?", Toast.LENGTH_LONG).show();
+                } else {
+                    PreferenceManager.getDefaultSharedPreferences(context).edit()
+                            .putBoolean("didNYTLogin", false)
+                            .apply();
+                    requestCredentialsIfNeeded();
+                }
+                return null;
+            }
+            if (response.code() == 200) {
+                PreferenceManager.getDefaultSharedPreferences(context).edit()
+                        .putBoolean("didNYTLogin", true)
+                        .apply();
+                File f = new File(downloadDirectory, this.createFileName(date));
+                FileOutputStream fos = new FileOutputStream(f);
+                IO.copyStream(
+                        response.body().byteStream(), fos);
+                fos.close();
 
-						if ((oBox != null) && (nBox != null)) {
-							System.out.println(oBox.getSolution() + "="
-									+ nBox.getSolution());
+                IO.copyStream(
+                        new FileInputStream(f),
+                        new FileOutputStream(downloadDirectory
+                                .getAbsolutePath() + "/debug/debug.puz"));
 
-							if (oBox.getSolution() != nBox.getSolution()) {
-								oBox.setSolution(nBox.getSolution());
-								updated = true;
-							}
-						}
-					}
-				}
-                http://www.nytimes.com/crosswords/index.html
-				f.delete();
+                return f;
+            } else {
+                return null;
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-				if (updated) {
-					System.out.println("Saving puzzle as updated.");
-					oPuz.setUpdatable(false);
-					IO.save(oPuz, source);
-				} else {
-					return null;
-				}
+        return null;
+    }
 
-				return source;
-			} else {
-				return null;
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    public OkHttpClient createClient() throws IOException {
+        LOG.info(ShortyzApplication.getInstance().getCookieJar().loadForRequest(HttpUrl.parse("https://www.nytimes.com/svc/crosswords/v2/puzzle/")).toString());
+        OkHttpClient httpclient = new OkHttpClient.Builder()
+                .cookieJar(ShortyzApplication.getInstance().getCookieJar())
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request originalRequest = chain.request();
+                        Request requestWithUserAgent = originalRequest.newBuilder()
+                                .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36")
+                                .build();
+                        return chain.proceed(requestWithUserAgent);
+                    }
+                })
+                .build();
 
-		return null;
-	}
+        return httpclient;
+    }
 
-	@Override
-	protected String createUrlSuffix(Date date) {
-		return "daily-"+(date.getYear() + 1900) + "-"
-				+ this.nf.format(date.getMonth() + 1) + "-"
-				+ this.nf.format(date.getDate()) + ".puz";
-	}
+    // Returns true if credentials are needed and a request was made, false if credentials were
+    // not needed.
+    public boolean requestCredentialsIfNeeded() {
+        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+                "didNYTLogin", false)) {
+            return false;
+        }
 
-	@Override
-	protected File download(Date date, String urlSuffix) {
-		try {
-			URL url = new URL(this.baseUrl + urlSuffix);
-			OkHttpClient client = this.login();
+        Intent loginIntent = new Intent(context, ErrorActivity.class);
 
-			Request request = new Request.Builder()
-					.url(url)
-					.header("Referer", "http://www.nytimes.com/crosswords/index.html")
-					.build();
+        if (nm == null) {
+            context.startActivity(loginIntent);
+        } else {
+            PendingIntent contentIntent = PendingIntent.getActivity(
+                    context, 0, loginIntent, 0);
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(this.context)
+                            .setSmallIcon(android.R.drawable.stat_notify_error)
+                            .setContentTitle("Unable to download New York Times puzzles")
+                            .setContentText("Click to log in again")
+                            .setAutoCancel(true)
+                            .setContentIntent(contentIntent)
+                            .setWhen(System.currentTimeMillis());
+            nm.notify(NOTIFICATION_TAG, LOGIN_NOTIFICATION_ID, builder.build());
+        }
 
-
-			Response response = client.newCall(request).execute();
-
-			if (response.code() == 200) {
-				File f = new File(downloadDirectory, this.createFileName(date));
-				FileOutputStream fos = new FileOutputStream(f);
-				IO.copyStream(
-						response.body().byteStream(), fos);
-				fos.close();
-
-				IO.copyStream(
-						new FileInputStream(f),
-						new FileOutputStream(downloadDirectory
-								.getAbsolutePath() + "/debug/debug.puz"));
-
-				return f;
-			} else {
-				return null;
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	public OkHttpClient login() throws IOException {
-
-        OkHttpClient httpclient =  new OkHttpClient.Builder()
-				.cookieJar(new CookieJar() {
-                    List<Cookie> cookies = new ArrayList<Cookie>();
-					@Override
-					public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-						this.cookies.addAll(cookies);
-					}
-
-					@Override
-					public List<Cookie> loadForRequest(HttpUrl url) {
-						return cookies;
-					}
-				})
-				.addInterceptor(new  Interceptor() {
-
-			@Override
-			public Response intercept(Chain chain) throws IOException {
-				Request originalRequest = chain.request();
-				Request requestWithUserAgent = originalRequest.newBuilder()
-						.header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36")
-						.build();
-				return chain.proceed(requestWithUserAgent);
-			}
-		})
-				.build();
-
-		Request request = new Request.Builder()
-				.url(LOGIN_URL)
-				.get()
-				.build();
-
-
-		Response response = httpclient.newCall(request).execute();
-
-
-		System.out.println("Login form get: " + response.code());
-
-		if (response.code() == 200 && response.body() != null) {
-
-			String resp = response.body().string();
-			String tok = "name=\"token\" value=\"";
-			String expires = "name=\"expires\" value=\"";
-			int tokIndex = resp.indexOf(tok);
-
-			if (tokIndex != -1) {
-				params.put(
-						"token",
-						resp.substring(tokIndex + tok.length(),
-								resp.indexOf("\"", tokIndex + tok.length())));
-				System.out.println("Got token: " + params.get("token"));
-			}
-
-			int expiresIndex = resp.indexOf(expires);
-
-			if (expiresIndex != -1) {
-				params.put(
-						"expires",
-						resp.substring(
-								expiresIndex + expires.length(),
-								resp.indexOf("\"",
-										expiresIndex + expires.length())));
-				System.out.println("Got expires: " + params.get("expires"));
-			}
-		}
-
-		FormBody.Builder requestBuilder = new FormBody.Builder();
-		for (Entry<String, String> e : this.params.entrySet()) {
-			requestBuilder = requestBuilder.add(e.getKey(), e.getValue());
-		}
-
-
-		Request httpost = new Request.Builder().url(LOGIN_URL)
-				.post(requestBuilder.build())
-				.build();
-
-		response = httpclient.newCall(httpost).execute();
-
-		if (response.body() != null) {
-            String resp = response.body().string();
-			new File(this.downloadDirectory, "debug/").mkdirs();
-			IO.copyStream(
-					new ByteArrayInputStream(resp.getBytes()),
-					new FileOutputStream(this.downloadDirectory
-							.getAbsolutePath() + "/debug/authresp.html"));
-
-
-			if (resp.indexOf("The email and password provided do not match an account in our system.") != -1) {
-				this.handler.post(new Runnable() {
-					public void run() {
-						Toast.makeText(
-								context,
-								"New York Times login failure. Is your password correct?",
-								Toast.LENGTH_LONG).show();
-					}
-				});
-
-				return null;
-			}
-		}
-
-		return httpclient;
-	}
+        return true;
+    }
 }

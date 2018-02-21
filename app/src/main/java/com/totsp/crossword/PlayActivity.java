@@ -216,7 +216,7 @@ public class PlayActivity extends ShortyzActivity {
                 }
             }
 
-            if (puz == null) {
+            if (puz == null || puz.getBoxes() == null) {
                 throw new IOException();
             }
 
@@ -721,7 +721,7 @@ public class PlayActivity extends ShortyzActivity {
         Menu zoom = menu.addSubMenu("Zoom");
         zoom.add(createSpannableForMenu("Zoom In")).setTitleCondensed("Zoom In");
 
-        if (RENDERER.getScale() < RENDERER.getDeviceMaxScale())
+        if (RENDERER != null && RENDERER.getScale() < RENDERER.getDeviceMaxScale())
             zoom.add(createSpannableForMenu("Zoom In Max")).setTitleCondensed("Zoom In Max");
 
         zoom.add(createSpannableForMenu("Zoom Out")).setTitleCondensed("Zoom Out");

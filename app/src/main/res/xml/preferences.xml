@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
- 
+
 <com.jenzz.materialpreference.PreferenceCategory
 	android:title="Select Puzzle Sources">
 	<!-- Organized alphabetically and by category. -->
@@ -18,19 +18,12 @@
 				android:title="New York Times"
 				android:defaultValue="false"
 				android:key="downloadNYT" />
-			<EditTextPreference
-				android:title="Username"
-				android:summary="NYT Username or Email Address"
-				android:key="nytUsername" />
-			<EditTextPreference
-				android:title="Password"
-				android:summary="NYT Password"
-				android:key="nytPassword" 
-				android:password="true"
-			    android:inputType="textPassword" />
 			<Preference
 			 	android:title="Get a Subscription" 
 			 	android:key="nytSubscribe"/>
+			<Preference
+				android:title="Clear Account Info"
+				android:key="nytClear" />
 		</PreferenceScreen>
 		<!--<com.jenzz.materialpreference.CheckBoxPreference-->
 			<!--android:title="Washington Post"-->
@@ -188,7 +181,41 @@
 		android:summary="Download today's puzzles when starting the application"
 		android:key="dlOnStartup"
 	/>
-	
+
+	<com.jenzz.materialpreference.CheckBoxPreference
+		android:title="Download new puzzles in background"
+		android:summary="Periodically download new puzzles in the background, even when Shortyz is not in use."
+		android:key="backgroundDownload"
+		android:defaultValue="false"
+		/>
+
+	<PreferenceScreen
+		android:title="Background Download Options"
+		android:summary="Configure background downloads."
+		android:dependency="backgroundDownload"
+		android:key="backgroundDownloadOptions">
+		<com.jenzz.materialpreference.CheckBoxPreference
+			android:title="Download over Wifi only"
+			android:defaultValue="true"
+			android:disableDependentsState="true"
+			android:summaryOn="Only schedule background downloads when Wifi is available."
+			android:summaryOff="Schedule background downloads even when not on Wifi"
+			android:key="backgroundDownloadRequireUnmetered" />
+		<com.jenzz.materialpreference.CheckBoxPreference
+			android:title="Download when roaming"
+			android:defaultValue="false"
+			android:dependency="backgroundDownloadRequireUnmetered"
+			android:summaryOn="Schedule background downloads when roaming"
+			android:summaryOff="Do not schedule background downloads when roaming"
+			android:key="backgroundDownloadAllowRoaming" />
+		<com.jenzz.materialpreference.CheckBoxPreference
+			android:title="Download while charging only"
+			android:defaultValue="false"
+			android:summaryOn="Only schedule background downloads when charging"
+			android:summaryOff="Schedule background downloads when on battery"
+			android:key="backgroundDownloadRequireCharging" />
+	</PreferenceScreen>
+
 	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="No Download Notifications"
 		android:defaultValue="false"

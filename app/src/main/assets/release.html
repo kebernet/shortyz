@@ -11,7 +11,111 @@ body { background: #eeeeee; height: 100%; margin: 0px; }
 </div>
 
 
-<h2>Shortyz 4.3.0</h2>
+<h2>Shortyz 4.4.0</h2>
+
+<p>
+    First, quick update to the NYT login logic so new users can log in again.
+</p>
+
+<p>
+    So hay. Mad props to <a href="https://github.com/jonzolla" target="_blank">jonzolla</a>
+    for the biggest feature
+    contributed to the open source project. He added a BackgroundDownloaderService so if you are on
+    a recent version of Android, the app will wake up your phone and grab the latest puzzles without
+    your clicking the download button or launching the app. Some times you guys blow me away.
+</p>
+<p>
+    Also, there is a setting for that.
+</p>
+<p>
+    Penultimately, I just would love to express my love/hate relationship for you guys. During the
+    whole NYT login debacle, it felt like everyone on the internet emailed me. "OMG, I'M TRYING!"
+    But seriously, none of you were rude. Everyone was understanding and you guys were nice to me
+    for that week. Seriously, you are the best user base in the world.
+</p>
+<p>
+    As an aside, if you work on Google Inbox, it would be LOVELY to be able to select a whole bunch
+    of emails and send the same reply to all of them.
+</p>
+<p>
+    Finally, so a while back when I added Google Play Games achievements I gave you guys
+    some interesting stats about that. Recently I added the Twitter, now Google Fabric.io
+    library to help with crash tracking, but as a side effect, it gives me "Audience Information"
+    that is basically collected from your Twitter and ad network info. I dunno. Black government
+    helicopters.
+</p>
+<p>
+    As I hope you are aware, Shortyz is open source. I don't make any money off the app, nor
+    do I collect/give your information to anyone who doesn't already know it, but I thought you
+    might be interested in learning about yourselves (as Fabric tells me) and your fellow players.
+</p>
+<p>
+    As a Shortyz user, you are:
+    <ul>
+        <li>
+            One of about 15,000-25,000 people that use the app on any given day. You spend about
+            14 minutes using the app. I'm just going to guess that means about one or two puzzles.
+            Three to five if you are badass.
+        </li>
+        <li>
+            63.2% likely to be using a Samsung device. I know this is a thing, but I have always
+            bought the Nexus/Pixel devices from Google, which has been a point of testing failure in
+            the past.
+        </li>
+        <li>
+            42% of you are on Nougat, and 28.9% are on Marshmallow. You upgrade your phones regularly,
+            which is amazing, because the complaints I get about bugs on old versions of Android are
+            loud and frequent. :P
+        </li>
+        <li>
+            You are 68% male and 32% female. Honestly, I don't even know what this means, if it means
+            anything. It is surprising to me, though. Being what people might describe as a "casual"
+            game, I would expect that to almost be reversed.
+        </li>
+        <li>
+            You are much more interested in "politics and current events" and "business and news"
+            that the "average" user. You like "comedy" movies, too. I, again, don't know what that
+            means, but that is what it tells me.
+        </li>
+    </ul>
+</p>
+
+
+<h3>Previously 4.3.9</h3>
+
+<p>This release doesn't contain anything new other than updates for the NYT.</p>
+
+<p>As you may have read on the <a href="https://plus.google.com/b/112662859624418565027" target="_blank">Google+ Page</a>
+    the New York Times started using the Google Re-CAPTCHA on their login screen. This caused Shortyz
+    to no longer be able to log in. I have re-worked the way the NYT download works, so the first
+    time you go to download (or if we ever get a permission denial) it will prompt you to log into
+    via a web interface.
+</p>
+
+<p>Anyway, for NYT users, it should be fairly self explanatory.</p>
+
+<h3>Previously 4.3.8</h3>
+
+<p>Wow this has been a mess. Between a number of bugs (both my fault and Google's :P) and
+issues with the play store, this has been a painful flurry of releases.</p>
+
+<p>Anyway, the color issues are fixed on both old and new devices now, and after reworking
+the zoom math... AGAIN (seriously, how does it seem to get wonk like every other release?),
+I believe we are back to happy.</p>
+
+<p>I appreciate everyone's support these last few days. And as always, checking the
+<a href="https://github.com/kebernet/shortyz/issues">Issue Tracker</a> is a lot more
+    more helpful that emailing me.
+</p>
+
+<p>Shortyz now also includes Crashlytics, the Twitter-derived crash tracker. Particularly
+as the spread of supported Android versions has grown, we have picked up lot of strange and
+new crash problems, and I am wanting to get a better handle on them. I know some of you might
+be shocked to hear this, but Gingerbread is still the single most popular version this app
+is run on, so making sure we still run well for the 13.5% of you on (seriously) old phones
+is important. Hopefully the app is a long less crashy for you.</p>
+
+<h3>Previously 4.3.0</h3>
 
 <p>Long time, no release notes. How are you? Have a good New Years? Sorry for the long time coming,
 I have actually been working on a new Shortyz-related hobby project the last couple of months, so

@@ -93,12 +93,15 @@ public class PlayboardRenderer {
         float retValue;
         LOG.info("Board "+board.getBoxes().length+" widthPixels "+widthPixels);
         // inches * pixels per inch * units
-        float seventyFivePercentWidth = (float) .75 * dpi * (board.getBoxes().length * BASE_BOX_SIZE_INCHES);
-        if( seventyFivePercentWidth < widthPixels){
-            retValue = .75f;
-        } else {
-            retValue = 1.5F;
+        retValue = 2.2F;
+        float puzzleBaseSizeInInches = board.getBoxes().length * BASE_BOX_SIZE_INCHES;
+        //leave a 1/16th in gutter on the puzzle.
+        float fitToScreen =  (dpi * (puzzleBaseSizeInInches + 0.0625F)) / dpi;
+
+        if(retValue < fitToScreen){
+            retValue = fitToScreen;
         }
+
         LOG.warning("getDeviceMaxScale "+retValue);
         return retValue;
     }

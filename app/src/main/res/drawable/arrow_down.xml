@@ -6,5 +6,5 @@
     android:height="34dp">
     <path
         android:pathData="M20 12L18.59 10.59 13 16.17 13 4 11 4 11 16.17 5.42 10.58 4 12l8 8 8 -8z"
-        android:fillColor="@color/textColorPrimary" />
+        android:fillColor="#262626" />
 </vector>
