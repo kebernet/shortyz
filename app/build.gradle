@@ -13,6 +13,7 @@ apply plugin: 'io.fabric'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
+    google()
 }
 
 
@@ -24,8 +25,8 @@ android {
     if (new File(propsPath).exists())
         props.load(new FileInputStream(propsPath))
 
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     lintOptions {
         abortOnError false
@@ -33,7 +34,7 @@ android {
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 25
+        targetSdkVersion 27
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 

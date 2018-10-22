@@ -137,10 +137,13 @@ public class NYTDownloader extends AbstractDownloader {
                         response.body().byteStream(), fos);
                 fos.close();
 
+                File debug = new File(downloadDirectory,"debug/debug.puz");
+
+                debug.getParentFile().mkdirs();
+
                 IO.copyStream(
                         new FileInputStream(f),
-                        new FileOutputStream(downloadDirectory
-                                .getAbsolutePath() + "/debug/debug.puz"));
+                        new FileOutputStream(debug));
 
                 return f;
             } else {
