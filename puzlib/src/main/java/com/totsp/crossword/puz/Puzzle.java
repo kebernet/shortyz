@@ -102,6 +102,11 @@ public class Puzzle implements Serializable{
                 if (!somethingAbove(boxes, row, col)) {
                     if (somethingBelow(boxes, row, col)) {
                         boxes[row][col].setDown(true);
+                        int numBoxesBelow = 1;
+                        while (somethingBelow(boxes, row + numBoxesBelow, col)) {
+                            ++numBoxesBelow;
+                        }
+                        boxes[row][col].setDownAnswerLength(numBoxesBelow + 1);
                     }
                     tickedClue = true;
                 }
@@ -109,6 +114,11 @@ public class Puzzle implements Serializable{
                 if (!somethingLeftOf(boxes, row, col)) {
                     if (somethingRightOf(boxes, row, col)) {
                         boxes[row][col].setAcross(true);
+                        int numBoxesRightOf = 1;
+                        while (somethingRightOf(boxes, row, col + numBoxesRightOf)) {
+                            ++numBoxesRightOf;
+                        }
+                        boxes[row][col].setAcrossAnswerLength(numBoxesRightOf + 1);
                     }
                     tickedClue = true;
                 }
