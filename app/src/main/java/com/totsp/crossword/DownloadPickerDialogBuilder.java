@@ -67,13 +67,13 @@ public class DownloadPickerDialogBuilder {
         View layout = inflater.inflate(R.layout.download_dialog, (ViewGroup) mActivity.findViewById(R.id.download_root));
 
 
-        final DatePicker datePicker = (DatePicker) layout.findViewById(R.id.datePicker);
-        dayOfWeek = (TextView) layout.findViewById(R.id.dayOfWeek);
+        final DatePicker datePicker = layout.findViewById(R.id.datePicker);
+        dayOfWeek = layout.findViewById(R.id.dayOfWeek);
         updateDayOfWeek();
 
         datePicker.init(year, monthOfYear, dayOfMonth, dateChangedListener);
 
-        mPuzzleSelect = (Spinner) layout.findViewById(R.id.puzzleSelect);
+        mPuzzleSelect = layout.findViewById(R.id.puzzleSelect);
         mPuzzleSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

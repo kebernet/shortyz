@@ -73,10 +73,10 @@ public class ClueListAdapter extends ArrayAdapter {
             view = inflater.inflate(R.layout.clue_detail_item, null);
         }
 
-        TextView line = (TextView) view.findViewById(R.id.clueLine);
+        TextView line = view.findViewById(R.id.clueLine);
         line.setTextSize(TypedValue.COMPLEX_UNIT_SP, this.textSize);
 
-        TextView word = (TextView) view.findViewById(R.id.clueWord);
+        TextView word = view.findViewById(R.id.clueWord);
         word.setTextSize(TypedValue.COMPLEX_UNIT_SP, (int) (this.textSize - 1.75));
 
         Clue c = this.clues[position];
@@ -85,7 +85,7 @@ public class ClueListAdapter extends ArrayAdapter {
         Box[] boxes = this.cache.get(c.number);
 
         if (boxes == null) {
-            boxes = ShortyzApplication.BOARD.getWordBoxes(c.number, across);
+            boxes = ShortyzApplication.getInstance().getBoard().getWordBoxes(c.number, across);
             cache.put(c.number, boxes);
         }
 

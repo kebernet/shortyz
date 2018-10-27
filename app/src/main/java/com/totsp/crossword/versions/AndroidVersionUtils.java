@@ -44,8 +44,11 @@ public interface AndroidVersionUtils {
 			}
 			System.out.println("Creating utils for version: "
 					+ android.os.Build.VERSION.SDK_INT);
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				System.out.println("Using Oreo");
+				return INSTANCE = new OreoUtil();
+			}
+			else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 				System.out.println("Using Lollipop");
 				return INSTANCE = new LollipopUtil();
 			}
@@ -84,4 +87,6 @@ public interface AndroidVersionUtils {
 	boolean checkBackgroundDownload(SharedPreferences prefs, boolean hasWritePermissions);
 
 	void clearBackgroundDownload(SharedPreferences prefs);
+
+	void createNotificationChannel(Context context);
 }

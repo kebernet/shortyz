@@ -41,6 +41,7 @@ import com.totsp.crossword.net.Downloaders;
 import com.totsp.crossword.net.Scrapers;
 import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.puz.PuzzleMeta;
+import com.totsp.crossword.shortyz.BuildConfig;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
 import com.totsp.crossword.view.CircleProgressBar;
@@ -466,9 +467,9 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             this.startActivity(i);
 
             return;
-        } else if (prefs.getBoolean("release_4.3.9", true)) {
+        } else if (prefs.getBoolean("release_" + BuildConfig.VERSION_NAME, true)) {
             prefs.edit()
-                    .putBoolean("release_4.3.9", false)
+                    .putBoolean("release_"+BuildConfig.VERSION_NAME, false)
                     .apply();
 
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("file:///android_asset/release.html"), this,

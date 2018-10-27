@@ -87,6 +87,7 @@ public class PuzzleDownloadListener implements DownloadListener {
         File outputFile = new File(crosswords.getAbsolutePath() + "/" + fileName);
         File archiveOutputFile = new File(crosswords.getAbsolutePath() + "/archive/" + fileName);
 
+        FileOutputStream fout = null;
         try {
             InputStream in = OpenHttpConnection(new URL(url), cookies);
 
@@ -96,7 +97,7 @@ public class PuzzleDownloadListener implements DownloadListener {
                 return;
             }
 
-            FileOutputStream fout = new FileOutputStream(outputFile);
+            fout = new FileOutputStream(outputFile);
             byte[] buffer = new byte[1024];
             int len = 0;
             
@@ -118,8 +119,14 @@ public class PuzzleDownloadListener implements DownloadListener {
             }
         } catch (Exception ex) {
             sendMessage("Error downloading puzzle " + fileName);
-
-            return;
+        } finally {
+            if(fout != null){
+                try {
+                    fout.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

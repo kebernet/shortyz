@@ -76,6 +76,11 @@ public class GingerbreadUtil extends DefaultUtil {
     }
 
     @Override
+    public void createNotificationChannel(Context context) {
+
+    }
+
+    @Override
     public void toggleNightMode(ShortyzActivity activity) {
 
     }

@@ -248,7 +248,7 @@ public class Downloaders {
         String contentTitle = "Downloading Puzzles";
 
         NotificationCompat.Builder not =
-                new NotificationCompat.Builder(context)
+                new NotificationCompat.Builder(context, ShortyzApplication.PUZZLE_DOWNLOAD_CHANNEL_ID)
                         .setSmallIcon(android.R.drawable.stat_sys_download)
                         .setContentTitle(contentTitle)
                         .setWhen(System.currentTimeMillis());
@@ -443,7 +443,7 @@ public class Downloaders {
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 notificationIntent, 0);
 
-        Notification not = new NotificationCompat.Builder(context)
+        Notification not = new NotificationCompat.Builder(context, ShortyzApplication.PUZZLE_DOWNLOAD_CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.stat_sys_download_done)
                 .setContentTitle(contentTitle)
                 .setContentText("New puzzles were downloaded.")
@@ -464,7 +464,7 @@ public class Downloaders {
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 notificationIntent, 0);
 
-        Notification not = new NotificationCompat.Builder(context)
+        Notification not = new NotificationCompat.Builder(context, ShortyzApplication.PUZZLE_DOWNLOAD_CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.stat_sys_download_done)
                 .setContentTitle(contentTitle)
                 .setContentText(puzFile.getName())
@@ -476,21 +476,4 @@ public class Downloaders {
             this.notificationManager.notify(i, not);
         }
     }
-
-//    private void postUpdatedNotification(int i, String name, File puzFile) {
-//        String contentTitle = "Updated " + name;
-//        Notification not = new Notification(
-//                android.R.drawable.stat_sys_download_done, contentTitle,
-//                System.currentTimeMillis());
-//        Intent notificationIntent = new Intent(Intent.ACTION_EDIT,
-//                Uri.fromFile(puzFile), context, PlayActivity.class);
-//        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-//                notificationIntent, 0);
-//        not.setLatestEventInfo(context, contentTitle, puzFile.getName(),
-//                contentIntent);
-//
-//        if ((this.notificationManager != null) && !supressMessages) {
-//            this.notificationManager.notify(i, not);
-//        }
-//    }
 }

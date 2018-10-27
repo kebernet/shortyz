@@ -16,10 +16,6 @@
 
 package com.totsp.crossword;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Vector;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -41,9 +37,14 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.GamesClient;
 import com.google.android.gms.games.multiplayer.Invitation;
-//import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
 import com.google.android.gms.plus.PlusClient;
 import com.totsp.crossword.shortyz.R;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Vector;
+
 
 public class GameHelper implements
 		GooglePlayServicesClient.ConnectionCallbacks,
@@ -79,35 +80,35 @@ public class GameHelper implements
     };
 
     // State we are in right now
-    int mState = STATE_UNCONFIGURED;
+    private int mState = STATE_UNCONFIGURED;
 
     // Are we expecting the result of a resolution flow?
-    boolean mExpectingResolution = false;
+    private boolean mExpectingResolution = false;
 
     /**
      * The Activity we are bound to. We need to keep a reference to the Activity
      * because some games methods require an Activity (a Context won't do). We
      * are careful not to leak these references: we release them on onStop().
      */
-    Activity mActivity = null;
+    private Activity mActivity = null;
 
     // OAuth scopes required for the clients. Initialized in setup().
-    String mScopes[];
+    private String mScopes[];
 
     // Request code we use when invoking other Activities to complete the
     // sign-in flow.
-    final static int RC_RESOLVE = 9001;
+    private final static int RC_RESOLVE = 9001;
 
     // Request code when invoking Activities whose result we don't care about.
-    final static int RC_UNUSED = 9002;
+    private final static int RC_UNUSED = 9002;
 
     // Client objects we manage. If a given client is not enabled, it is null.
-    GamesClient mGamesClient = null;
-    PlusClient mPlusClient = null;
-    AppStateClient mAppStateClient = null;
+    private GamesClient mGamesClient = null;
+    private PlusClient mPlusClient = null;
+    private AppStateClient mAppStateClient = null;
 
     // What clients we manage (OR-able values, can be combined as flags)
-    public final static int CLIENT_NONE = 0x00;
+    private final static int CLIENT_NONE = 0x00;
     public final static int CLIENT_GAMES = 0x01;
     public final static int CLIENT_PLUS = 0x02;
     public final static int CLIENT_APPSTATE = 0x04;
@@ -258,9 +259,7 @@ public class GameHelper implements
         }
 
         if (null != additionalScopes) {
-            for (String scope : additionalScopes) {
-                scopesVector.add(scope);
-            }
+            scopesVector.addAll(Arrays.asList(additionalScopes));
         }
 
         mScopes = new String[scopesVector.size()];

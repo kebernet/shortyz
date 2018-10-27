@@ -60,14 +60,15 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.totsp.crossword.shortyz.ShortyzApplication.BOARD;
-import static com.totsp.crossword.shortyz.ShortyzApplication.RENDERER;
 
 public class PlayActivity extends ShortyzActivity {
     private static final Logger LOG = Logger.getLogger("com.totsp.crossword");
     private static final int INFO_DIALOG = 0;
     private static final int REVEAL_PUZZLE_DIALOG = 2;
     static final String ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static final String SHOW_TIMER = "showTimer";
+    public static final String SCALE = "scale";
+    public static final String KEYBOARD_TYPE = "keyboardType";
     @SuppressWarnings("rawtypes")
     private AdapterView across;
     @SuppressWarnings("rawtypes")
@@ -117,6 +118,15 @@ public class PlayActivity extends ShortyzActivity {
             fitToScreen();
         }
     };
+
+
+    private Playboard getBoard(){
+        return ShortyzApplication.getInstance().getBoard();
+    }
+
+    private PlayboardRenderer getRenderer(){
+        return ShortyzApplication.getInstance().getRenderer();
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -171,13 +181,11 @@ public class PlayActivity extends ShortyzActivity {
         this.configuration = getBaseContext().getResources().getConfiguration();
 
         try {
-            if (!prefs.getBoolean("showTimer", false)) {
+            if (!prefs.getBoolean(SHOW_TIMER, false)) {
                 if (ShortyzApplication.isLandscape(metrics)) {
                     if (ShortyzApplication.isMiniTabletish(metrics)) {
                         utils.hideWindowTitle(this);
                     }
-                } else if (android.os.Build.VERSION.SDK_INT < 11) {
-                    utils.hideWindowTitle(this);
                 }
 
             } else {
@@ -220,31 +228,31 @@ public class PlayActivity extends ShortyzActivity {
                 throw new IOException();
             }
 
-            BOARD = new Playboard(puz, movement, prefs.getBoolean("preserveCorrectLettersInShowErrors", false));
-            RENDERER = new PlayboardRenderer(BOARD, metrics.densityDpi, metrics.widthPixels,
+            ShortyzApplication.getInstance().setBoard(new Playboard(puz, movement, prefs.getBoolean("preserveCorrectLettersInShowErrors", false)));
+            ShortyzApplication.getInstance().setRenderer(new PlayboardRenderer(getBoard(), metrics.densityDpi, metrics.widthPixels,
                     !prefs.getBoolean("supressHints", false),
                     ContextCompat.getColor(this, R.color.boxColor), ContextCompat.getColor(this, R.color.blankColor),
-                    ContextCompat.getColor(this, R.color.errorColor));
+                    ContextCompat.getColor(this, R.color.errorColor)));
 
-            float scale = prefs.getFloat("scale", 1.0F);
+            float scale = prefs.getFloat(SCALE, 1.0F);
 
-            if (scale > RENDERER.getDeviceMaxScale()) {
-                scale = RENDERER.getDeviceMaxScale();
-            } else if (scale < RENDERER.getDeviceMinScale()) {
-                scale = RENDERER.getDeviceMinScale();
+            if (scale > getRenderer().getDeviceMaxScale()) {
+                scale = getRenderer().getDeviceMaxScale();
+            } else if (scale < getRenderer().getDeviceMinScale()) {
+                scale = getRenderer().getDeviceMinScale();
             } else if (Float.isNaN(scale)) {
                 scale = 1F;
             }
-            prefs.edit().putFloat("scale", scale).apply();
+            prefs.edit().putFloat(SCALE, scale).apply();
 
-            RENDERER.setScale(scale);
-            BOARD.setSkipCompletedLetters(this.prefs.getBoolean("skipFilled",
+            getRenderer().setScale(scale);
+            getBoard().setSkipCompletedLetters(this.prefs.getBoolean("skipFilled",
                     false));
 
             if (puz.getPercentComplete() != 100) {
                 this.timer = new ImaginaryTimer(puz.getTime());
                 this.timer.start();
-                this.runTimer = prefs.getBoolean("showTimer", false);
+                this.runTimer = prefs.getBoolean(SHOW_TIMER, false);
 
                 if (runTimer) {
                     this.handler.post(this.updateTimeTask);
@@ -255,12 +263,12 @@ public class PlayActivity extends ShortyzActivity {
 
 
             int keyboardType = "CONDENSED_ARROWS".equals(prefs.getString(
-                    "keyboardType", "")) ? R.xml.keyboard_dpad : R.xml.keyboard;
+                    KEYBOARD_TYPE, "")) ? R.xml.keyboard_dpad : R.xml.keyboard;
             Keyboard keyboard = new Keyboard(this, keyboardType);
-            keyboardView = (KeyboardView) this.findViewById(R.id.playKeyboard);
+            keyboardView = this.findViewById(R.id.playKeyboard);
             keyboardView.setKeyboard(keyboard);
             this.useNativeKeyboard = "NATIVE".equals(prefs.getString(
-                    "keyboardType", ""));
+                    KEYBOARD_TYPE, ""));
 
             if (this.useNativeKeyboard) {
                 keyboardView.setVisibility(View.GONE);
@@ -347,12 +355,12 @@ public class PlayActivity extends ShortyzActivity {
                         }
                     });
 
-            this.clue = (TextView) this.findViewById(R.id.clueLine);
+            this.clue = this.findViewById(R.id.clueLine);
             if (clue != null && clue.getVisibility() != View.GONE) {
                 clue.setVisibility(View.GONE);
                 View custom = utils.onActionBarCustom(this, R.layout.clue_line_only);
                 if (custom != null) {
-                    clue = (TextView) custom.findViewById(R.id.clueLine);
+                    clue = custom.findViewById(R.id.clueLine);
                 }
             }
             if(this.clue != null) {
@@ -377,9 +385,9 @@ public class PlayActivity extends ShortyzActivity {
                     handler.post(new Runnable() {
                         public void run() {
                             try {
-                                Position p = RENDERER.findBox(e);
-                                Word w = BOARD.setHighlightLetter(p);
-                                RENDERER.draw(w);
+                                Position p = getRenderer().findBox(e);
+                                Word w = getBoard().setHighlightLetter(p);
+                                getRenderer().draw(w);
                                 PlayActivity.this.openContextMenu(boardView);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -393,14 +401,14 @@ public class PlayActivity extends ShortyzActivity {
                         if (prefs.getBoolean("doubleTap", false)
                                 && ((System.currentTimeMillis() - lastTap) < 300)) {
                             if (fitToScreen) {
-                                RENDERER.setScale(prefs.getFloat("scale", 1F));
+                                getRenderer().setScale(prefs.getFloat(SCALE, 1F));
                                 boardView.setCurrentScale(1F);
-                                BOARD.setHighlightLetter(RENDERER.findBox(e));
+                                getBoard().setHighlightLetter(getRenderer().findBox(e));
                                 render();
                             } else {
                                 int w = boardView.getWidth();
                                 int h = boardView.getHeight();
-                                float scale = RENDERER.fitTo((w < h) ? w : h);
+                                float scale = getRenderer().fitTo((w < h) ? w : h);
                                 boardView.setCurrentScale(scale);
                                 render(true);
                                 boardView.scrollTo(0, 0);
@@ -408,8 +416,8 @@ public class PlayActivity extends ShortyzActivity {
 
                             fitToScreen = !fitToScreen;
                         } else {
-                            Position p = RENDERER.findBox(e);
-                            Word old = BOARD.setHighlightLetter(p);
+                            Position p = getRenderer().findBox(e);
+                            Word old = getBoard().setHighlightLetter(p);
                             PlayActivity.this.render(old);
                         }
 
@@ -452,7 +460,7 @@ public class PlayActivity extends ShortyzActivity {
         revealPuzzleDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        BOARD.revealPuzzle();
+                        getBoard().revealPuzzle();
                         render();
                     }
                 });
@@ -482,13 +490,12 @@ public class PlayActivity extends ShortyzActivity {
                             public void run() {
                                 int w = boardView.getImageView().getWidth();
                                 int h = boardView.getImageView().getHeight();
-                                float scale = RENDERER.fitTo((w < h) ? w : h);
+                                float scale = getRenderer().fitTo((w < h) ? w : h);
                                 prefs.edit()
-                                        .putFloat("scale",
+                                        .putFloat(SCALE,
                                                 scale)
                                         .apply();
-                                BOARD.setHighlightLetter(RENDERER
-                                        .findBox(center));
+                                getBoard().setHighlightLetter(getRenderer().findBox(center));
 
                                 render(true);
                             }
@@ -504,33 +511,33 @@ public class PlayActivity extends ShortyzActivity {
             this.showErrors = false;
         }
 
-        if (BOARD.isShowErrors() != this.showErrors) {
-            BOARD.toggleShowErrors();
+        if (getBoard().isShowErrors() != this.showErrors) {
+            getBoard().toggleShowErrors();
         }
 
 
         this.render(true);
 
-        this.across = (AdapterView) this.findViewById(R.id.acrossList);
-        this.down = (AdapterView) this.findViewById(R.id.downList);
+        this.across = this.findViewById(R.id.acrossList);
+        this.down = this.findViewById(R.id.downList);
         boolean isGal = false;
         if ((this.across == null) && (this.down == null)) {
-            this.across = (AdapterView) this.findViewById(R.id.acrossListGal);
-            this.down = (AdapterView) this.findViewById(R.id.downListGal);
+            this.across = this.findViewById(R.id.acrossListGal);
+            this.down = this.findViewById(R.id.downListGal);
             isGal = true;
         }
 
         if ((across != null) && (down != null)) {
             across.setAdapter(this.acrossAdapter = new ClueListAdapter(this,
-                    BOARD.getAcrossClues(), true));
-            down.setAdapter(this.downAdapter = new ClueListAdapter(this, BOARD
+                    getBoard().getAcrossClues(), true));
+            down.setAdapter(this.downAdapter = new ClueListAdapter(this, getBoard()
                     .getDownClues(), false));
             if (!isGal) {
                 across.setOnItemClickListener(new OnItemClickListener() {
                     public void onItemClick(AdapterView<?> arg0, View arg1,
                                             int arg2, long arg3) {
                         arg0.setSelected(true);
-                        BOARD.jumpTo(arg2, true);
+                        getBoard().jumpTo(arg2, true);
                         render();
                     }
                 });
@@ -539,9 +546,9 @@ public class PlayActivity extends ShortyzActivity {
             across.setOnItemSelectedListener(new OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> arg0, View arg1,
                                            int arg2, long arg3) {
-                    if (!BOARD.isAcross()
-                            || (BOARD.getCurrentClueIndex() != arg2)) {
-                        BOARD.jumpTo(arg2, true);
+                    if (!getBoard().isAcross()
+                            || (getBoard().getCurrentClueIndex() != arg2)) {
+                        getBoard().jumpTo(arg2, true);
                         render();
                     }
                 }
@@ -554,7 +561,7 @@ public class PlayActivity extends ShortyzActivity {
                 down.setOnItemClickListener(new OnItemClickListener() {
                     public void onItemClick(AdapterView<?> arg0, View arg1,
                                             final int arg2, long arg3) {
-                        BOARD.jumpTo(arg2, false);
+                        getBoard().jumpTo(arg2, false);
                         render();
                     }
                 });
@@ -563,9 +570,9 @@ public class PlayActivity extends ShortyzActivity {
             down.setOnItemSelectedListener(new OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> arg0, View arg1,
                                            int arg2, long arg3) {
-                    if (BOARD.isAcross()
-                            || (BOARD.getCurrentClueIndex() != arg2)) {
-                        BOARD.jumpTo(arg2, false);
+                    if (getBoard().isAcross()
+                            || (getBoard().getCurrentClueIndex() != arg2)) {
+                        getBoard().jumpTo(arg2, false);
                         render();
                     }
                 }
@@ -586,38 +593,38 @@ public class PlayActivity extends ShortyzActivity {
             this.allCluesAdapter = new SeparatedListAdapter(this);
             this.allCluesAdapter.addSection(
                     "Across",
-                    this.acrossAdapter = new ClueListAdapter(this, BOARD
+                    this.acrossAdapter = new ClueListAdapter(this, getBoard()
                             .getAcrossClues(), true));
             this.allCluesAdapter.addSection(
                     "Down",
-                    this.downAdapter = new ClueListAdapter(this, BOARD
+                    this.downAdapter = new ClueListAdapter(this, getBoard()
                             .getDownClues(), false));
             allClues.setAdapter(this.allCluesAdapter);
 
             allClues.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> arg0, View arg1,
                                         int clickIndex, long arg3) {
-                    boolean across = clickIndex <= BOARD.getAcrossClues().length + 1;
+                    boolean across = clickIndex <= getBoard().getAcrossClues().length + 1;
                     int index = clickIndex - 1;
-                    if (index > BOARD.getAcrossClues().length) {
-                        index = index - BOARD.getAcrossClues().length - 1;
+                    if (index > getBoard().getAcrossClues().length) {
+                        index = index - getBoard().getAcrossClues().length - 1;
                     }
                     arg0.setSelected(true);
-                    BOARD.jumpTo(index, across);
+                    getBoard().jumpTo(index, across);
                     render();
                 }
             });
             allClues.setOnItemSelectedListener(new OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> arg0, View arg1,
                                            int clickIndex, long arg3) {
-                    boolean across = clickIndex <= BOARD.getAcrossClues().length + 1;
+                    boolean across = clickIndex <= getBoard().getAcrossClues().length + 1;
                     int index = clickIndex - 1;
-                    if (index > BOARD.getAcrossClues().length) {
-                        index = index - BOARD.getAcrossClues().length - 1;
+                    if (index > getBoard().getAcrossClues().length) {
+                        index = index - getBoard().getAcrossClues().length - 1;
                     }
-                    if (!BOARD.isAcross() == across && BOARD.getCurrentClueIndex() != index) {
+                    if (!getBoard().isAcross() == across && getBoard().getCurrentClueIndex() != index) {
                         arg0.setSelected(true);
-                        BOARD.jumpTo(index, across);
+                        getBoard().jumpTo(index, across);
                         render();
                     }
                 }
@@ -626,7 +633,7 @@ public class PlayActivity extends ShortyzActivity {
                 }
             });
         }
-        if (!prefs.getBoolean("showTimer", false)) {
+        if (!prefs.getBoolean(SHOW_TIMER, false)) {
             if (ShortyzApplication.isLandscape(metrics)) {
                 if (ShortyzApplication.isMiniTabletish(metrics) && allClues != null) {
                     utils.hideActionBar(this);
@@ -638,7 +645,7 @@ public class PlayActivity extends ShortyzActivity {
         setTitle(neverNull(puz.getTitle()) + " - " + neverNull(puz.getAuthor())
              + " - 	" + neverNull(puz.getCopyright()));
         this.showCount = prefs.getBoolean("showCount", false);
-        if (this.prefs.getBoolean("fitToScreen", false) || (android.os.Build.VERSION.SDK_INT > 11 && ShortyzApplication.isLandscape(metrics)) && (ShortyzApplication.isTabletish(metrics) || ShortyzApplication.isMiniTabletish(metrics))) {
+        if (this.prefs.getBoolean("fitToScreen", false) || (ShortyzApplication.isLandscape(metrics)) && (ShortyzApplication.isTabletish(metrics) || ShortyzApplication.isMiniTabletish(metrics))) {
             this.handler.postDelayed(new Runnable() {
 
                 public void run() {
@@ -649,10 +656,10 @@ public class PlayActivity extends ShortyzActivity {
                     if (v == 0) {
                         handler.postDelayed(this, 100);
                     }
-                    float newScale = RENDERER.fitTo(v);
+                    float newScale = getRenderer().fitTo(v);
                     boardView.setCurrentScale(newScale);
 
-                    prefs.edit().putFloat("scale", newScale).apply();
+                    prefs.edit().putFloat(SCALE, newScale).apply();
                     render();
                 }
 
@@ -678,7 +685,7 @@ public class PlayActivity extends ShortyzActivity {
 //
 //            menu.add("Zoom In");
 //
-//            if (RENDERER.getScale() < RENDERER.getDeviceMaxScale())
+//            if (getRenderer().getScale() < getRenderer().getDeviceMaxScale())
 //                menu.add("Zoom In Max");
 //
 //            menu.add("Zoom Out");
@@ -721,7 +728,7 @@ public class PlayActivity extends ShortyzActivity {
         Menu zoom = menu.addSubMenu("Zoom");
         zoom.add(createSpannableForMenu("Zoom In")).setTitleCondensed("Zoom In");
 
-        if (RENDERER != null && RENDERER.getScale() < RENDERER.getDeviceMaxScale())
+        if (getRenderer() != null && getRenderer().getScale() < getRenderer().getDeviceMaxScale())
             zoom.add(createSpannableForMenu("Zoom In Max")).setTitleCondensed("Zoom In Max");
 
         zoom.add(createSpannableForMenu("Zoom Out")).setTitleCondensed("Zoom Out");
@@ -755,9 +762,9 @@ public class PlayActivity extends ShortyzActivity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_SEARCH:
                 System.out.println("Next clue.");
-                BOARD.setMovementStrategy(MovementStrategy.MOVE_NEXT_CLUE);
-                previous = BOARD.nextWord();
-                BOARD.setMovementStrategy(this.getMovementStrategy());
+                getBoard().setMovementStrategy(MovementStrategy.MOVE_NEXT_CLUE);
+                previous = getBoard().nextWord();
+                getBoard().setMovementStrategy(this.getMovementStrategy());
                 this.render(previous);
 
                 return true;
@@ -773,7 +780,7 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DPAD_DOWN:
 
                 if ((System.currentTimeMillis() - lastKey) > 50) {
-                    previous = BOARD.moveDown();
+                    previous = getBoard().moveDown();
                     this.render(previous);
                 }
 
@@ -784,7 +791,7 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DPAD_UP:
 
                 if ((System.currentTimeMillis() - lastKey) > 50) {
-                    previous = BOARD.moveUp();
+                    previous = getBoard().moveUp();
                     this.render(previous);
                 }
 
@@ -795,7 +802,7 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DPAD_LEFT:
 
                 if ((System.currentTimeMillis() - lastKey) > 50) {
-                    previous = BOARD.moveLeft();
+                    previous = getBoard().moveLeft();
                     this.render(previous);
                 }
 
@@ -806,7 +813,7 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
 
                 if ((System.currentTimeMillis() - lastKey) > 50) {
-                    previous = BOARD.moveRight();
+                    previous = getBoard().moveRight();
                     this.render(previous);
                 }
 
@@ -815,7 +822,7 @@ public class PlayActivity extends ShortyzActivity {
                 return true;
 
             case KeyEvent.KEYCODE_DPAD_CENTER:
-                previous = BOARD.toggleDirection();
+                previous = getBoard().toggleDirection();
                 this.render(previous);
 
                 return true;
@@ -824,10 +831,10 @@ public class PlayActivity extends ShortyzActivity {
 
                 if ((System.currentTimeMillis() - lastKey) > 150) {
                     if (prefs.getBoolean("spaceChangesDirection", true)) {
-                        previous = BOARD.toggleDirection();
+                        previous = getBoard().toggleDirection();
                         this.render(previous);
                     } else {
-                        previous = BOARD.playLetter(' ');
+                        previous = getBoard().playLetter(' ');
                         this.render(previous);
                     }
                 }
@@ -840,10 +847,10 @@ public class PlayActivity extends ShortyzActivity {
 
                 if ((System.currentTimeMillis() - lastKey) > 150) {
                     if (prefs.getBoolean("enterChangesDirection", true)) {
-                        previous = BOARD.toggleDirection();
+                        previous = getBoard().toggleDirection();
                         this.render(previous);
                     } else {
-                        previous = BOARD.nextWord();
+                        previous = getBoard().nextWord();
                         this.render(previous);
                     }
                 }
@@ -855,7 +862,7 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DEL:
 
                 if ((System.currentTimeMillis() - lastKey) > 150) {
-                    previous = BOARD.deleteLetter();
+                    previous = getBoard().deleteLetter();
                     this.render(previous);
                 }
 
@@ -869,7 +876,7 @@ public class PlayActivity extends ShortyzActivity {
                         .getDisplayLabel() : ((char) keyCode));
 
         if (ALPHA.indexOf(c) != -1) {
-            previous = BOARD.playLetter(c);
+            previous = getBoard().playLetter(c);
             this.render(previous);
 
             return true;
@@ -892,17 +899,17 @@ public class PlayActivity extends ShortyzActivity {
             return true;
         }
         if (item.getTitle().toString().equals("Letter")) {
-            BOARD.revealLetter();
+            getBoard().revealLetter();
             this.render();
 
             return true;
         } else if (item.getTitle().toString().equals("Word")) {
-            BOARD.revealWord();
+            getBoard().revealWord();
             this.render();
 
             return true;
         } else if (item.getTitle().toString().equals("Errors")) {
-            BOARD.revealErrors();
+            getBoard().revealErrors();
             this.render();
 
             return true;
@@ -912,9 +919,9 @@ public class PlayActivity extends ShortyzActivity {
             return true;
         } else if (item.getTitle().toString().equals("Show Errors")
                 || item.getTitle().toString().equals("Hide Errors")) {
-            BOARD.toggleShowErrors();
-            item.setTitle(BOARD.isShowErrors() ? "Hide Errors" : "Show Errors");
-            this.prefs.edit().putBoolean("showErrors", BOARD.isShowErrors())
+            getBoard().toggleShowErrors();
+            item.setTitle(getBoard().isShowErrors() ? "Hide Errors" : "Show Errors");
+            this.prefs.edit().putBoolean("showErrors", getBoard().isShowErrors())
                     .apply();
             this.render();
 
@@ -927,8 +934,8 @@ public class PlayActivity extends ShortyzActivity {
         } else if (item.getTitle().toString().equals("Zoom In")) {
             this.boardView.scrollTo(0, 0);
 
-            float newScale = RENDERER.zoomIn();
-            this.prefs.edit().putFloat("scale", newScale).apply();
+            float newScale = getRenderer().zoomIn();
+            this.prefs.edit().putFloat(SCALE, newScale).apply();
             this.fitToScreen = false;
             boardView.setCurrentScale(newScale);
             this.render();
@@ -937,8 +944,8 @@ public class PlayActivity extends ShortyzActivity {
         } else if (item.getTitle().toString().equals("Zoom In Max")) {
             this.boardView.scrollTo(0, 0);
 
-            float newScale = RENDERER.zoomInMax();
-            this.prefs.edit().putFloat("scale", newScale).apply();
+            float newScale = getRenderer().zoomInMax();
+            this.prefs.edit().putFloat(SCALE, newScale).apply();
             this.fitToScreen = false;
             boardView.setCurrentScale(newScale);
             this.render();
@@ -947,8 +954,8 @@ public class PlayActivity extends ShortyzActivity {
         } else if (item.getTitle().toString().equals("Zoom Out")) {
             this.boardView.scrollTo(0, 0);
 
-            float newScale = RENDERER.zoomOut();
-            this.prefs.edit().putFloat("scale", newScale).apply();
+            float newScale = getRenderer().zoomOut();
+            this.prefs.edit().putFloat(SCALE, newScale).apply();
             this.fitToScreen = false;
             boardView.setCurrentScale(newScale);
             this.render();
@@ -959,9 +966,9 @@ public class PlayActivity extends ShortyzActivity {
 
             return true;
         } else if (item.getTitle().toString().equals("Zoom Reset")) {
-            float newScale = RENDERER.zoomReset();
+            float newScale = getRenderer().zoomReset();
             boardView.setCurrentScale(newScale);
-            this.prefs.edit().putFloat("scale", newScale).apply();
+            this.prefs.edit().putFloat(SCALE, newScale).apply();
             this.render();
             this.boardView.scrollTo(0, 0);
 
@@ -1011,8 +1018,8 @@ public class PlayActivity extends ShortyzActivity {
 
         int v = (this.boardView.getWidth() < this.boardView.getHeight()) ? this.boardView
                 .getWidth() : this.boardView.getHeight();
-        float newScale = RENDERER.fitTo(v);
-        this.prefs.edit().putFloat("scale", newScale).apply();
+        float newScale = getRenderer().fitTo(v);
+        this.prefs.edit().putFloat(SCALE, newScale).apply();
         boardView.setCurrentScale(newScale);
         this.render();
     }
@@ -1078,17 +1085,17 @@ public class PlayActivity extends ShortyzActivity {
     protected void onResume() {
         super.onResume();
         this.resumedOn = System.currentTimeMillis();
-        BOARD.setSkipCompletedLetters(this.prefs
+        getBoard().setSkipCompletedLetters(this.prefs
                 .getBoolean("skipFilled", false));
-        BOARD.setMovementStrategy(this.getMovementStrategy());
+        getBoard().setMovementStrategy(this.getMovementStrategy());
 
         int keyboardType = "CONDENSED_ARROWS".equals(prefs.getString(
-                "keyboardType", "")) ? R.xml.keyboard_dpad : R.xml.keyboard;
+                KEYBOARD_TYPE, "")) ? R.xml.keyboard_dpad : R.xml.keyboard;
         final Keyboard keyboard = new Keyboard(this, keyboardType);
         keyboardView = (KeyboardView) this.findViewById(R.id.playKeyboard);
         keyboardView.setKeyboard(keyboard);
         this.useNativeKeyboard = "NATIVE".equals(prefs.getString(
-                "keyboardType", ""));
+                KEYBOARD_TYPE, ""));
 
         if (this.useNativeKeyboard) {
             keyboardView.setVisibility(View.GONE);
@@ -1108,7 +1115,7 @@ public class PlayActivity extends ShortyzActivity {
             timer.start();
         }
 
-        this.runTimer = prefs.getBoolean("showTimer", false);
+        this.runTimer = prefs.getBoolean(SHOW_TIMER, false);
 
         if (runTimer) {
             this.handler.post(this.updateTimeTask);
@@ -1174,13 +1181,13 @@ public class PlayActivity extends ShortyzActivity {
         dialog.setTitle("Puzzle Info");
         dialog.setContentView(R.layout.puzzle_info_dialog);
 
-        TextView view = (TextView) dialog.findViewById(R.id.puzzle_info_title);
+        TextView view = dialog.findViewById(R.id.puzzle_info_title);
         view.setText(this.puz.getTitle());
-        view = (TextView) dialog.findViewById(R.id.puzzle_info_author);
+        view = dialog.findViewById(R.id.puzzle_info_author);
         view.setText(this.puz.getAuthor());
-        view = (TextView) dialog.findViewById(R.id.puzzle_info_copyright);
+        view = dialog.findViewById(R.id.puzzle_info_copyright);
         view.setText(this.puz.getCopyright());
-        view = (TextView) dialog.findViewById(R.id.puzzle_info_time);
+        view = dialog.findViewById(R.id.puzzle_info_time);
 
         if (timer != null) {
             this.timer.stop();
@@ -1226,16 +1233,16 @@ public class PlayActivity extends ShortyzActivity {
             this.keyboardView.setVisibility(View.GONE);
         }
 
-        Clue c = BOARD.getClue();
-        BOARD.toggleDirection();
-        BOARD.toggleDirection();
+        Clue c = getBoard().getClue();
+        getBoard().toggleDirection();
+        getBoard().toggleDirection();
 
         if (c.hint == null) {
-            BOARD.toggleDirection();
-            c = BOARD.getClue();
+            getBoard().toggleDirection();
+            c = getBoard().getClue();
         }
 
-        this.boardView.setBitmap(RENDERER.draw(previous), rescale);
+        this.boardView.setBitmap(getRenderer().draw(previous), rescale);
         this.boardView.requestFocus();
         /*
 		 * If we jumped to a new word, ensure the first letter is visible.
@@ -1247,18 +1254,18 @@ public class PlayActivity extends ShortyzActivity {
             Point bottomRight;
             Point cursorTopLeft;
             Point cursorBottomRight;
-            cursorTopLeft = RENDERER.findPointTopLeft(BOARD
+            cursorTopLeft = getRenderer().findPointTopLeft(getBoard()
                     .getHighlightLetter());
-            cursorBottomRight = RENDERER.findPointBottomRight(BOARD
+            cursorBottomRight = getRenderer().findPointBottomRight(getBoard()
                     .getHighlightLetter());
 
-            if ((previous != null) && previous.equals(BOARD.getCurrentWord())) {
+            if ((previous != null) && previous.equals(getBoard().getCurrentWord())) {
                 topLeft = cursorTopLeft;
                 bottomRight = cursorBottomRight;
             } else {
-                topLeft = RENDERER
-                        .findPointTopLeft(BOARD.getCurrentWordStart());
-                bottomRight = RENDERER.findPointBottomRight(BOARD
+                topLeft = getRenderer()
+                        .findPointTopLeft(getBoard().getCurrentWordStart());
+                bottomRight = getRenderer().findPointBottomRight(getBoard()
                         .getCurrentWordStart());
             }
 
@@ -1282,19 +1289,19 @@ public class PlayActivity extends ShortyzActivity {
 
         this.clue
                 .setText("("
-                        + (BOARD.isAcross() ? "across" : "down")
+                        + (getBoard().isAcross() ? "across" : "down")
                         + ") "
                         + c.number
                         + ". "
                         + c.hint
                         + (this.showCount ? ("  ["
-                        + BOARD.getCurrentWord().length + "]") : ""));
+                        + getBoard().getCurrentWord().length + "]") : ""));
 
         if (this.allClues != null) {
-            if (BOARD.isAcross()) {
+            if (getBoard().isAcross()) {
                 ClueListAdapter cla = (ClueListAdapter) this.allCluesAdapter.sections
                         .get(0);
-                cla.setActiveDirection(BOARD.isAcross());
+                cla.setActiveDirection(getBoard().isAcross());
                 cla.setHighlightClue(c);
                 this.allCluesAdapter.notifyDataSetChanged();
                 this.allClues.setSelectionFromTop(cla.indexOf(c) + 1,
@@ -1302,21 +1309,21 @@ public class PlayActivity extends ShortyzActivity {
             } else {
                 ClueListAdapter cla = (ClueListAdapter) this.allCluesAdapter.sections
                         .get(1);
-                cla.setActiveDirection(!BOARD.isAcross());
+                cla.setActiveDirection(!getBoard().isAcross());
                 cla.setHighlightClue(c);
                 this.allCluesAdapter.notifyDataSetChanged();
                 this.allClues.setSelectionFromTop(
-                        cla.indexOf(c) + BOARD.getAcrossClues().length + 2,
+                        cla.indexOf(c) + getBoard().getAcrossClues().length + 2,
                         (this.allClues.getHeight() / 2) - 50);
             }
         }
 
         if (this.down != null) {
             this.downAdapter.setHighlightClue(c);
-            this.downAdapter.setActiveDirection(!BOARD.isAcross());
+            this.downAdapter.setActiveDirection(!getBoard().isAcross());
             this.downAdapter.notifyDataSetChanged();
 
-            if (!BOARD.isAcross() && !c.equals(this.down.getSelectedItem())) {
+            if (!getBoard().isAcross() && !c.equals(this.down.getSelectedItem())) {
                 if (this.down instanceof ListView) {
                     ((ListView) this.down).setSelectionFromTop(
                             this.downAdapter.indexOf(c),
@@ -1330,10 +1337,10 @@ public class PlayActivity extends ShortyzActivity {
 
         if (this.across != null) {
             this.acrossAdapter.setHighlightClue(c);
-            this.acrossAdapter.setActiveDirection(BOARD.isAcross());
+            this.acrossAdapter.setActiveDirection(getBoard().isAcross());
             this.acrossAdapter.notifyDataSetChanged();
 
-            if (BOARD.isAcross() && !c.equals(this.across.getSelectedItem())) {
+            if (getBoard().isAcross() && !c.equals(this.across.getSelectedItem())) {
                 if (across instanceof ListView) {
                     ((ListView) this.across).setSelectionFromTop(
                             this.acrossAdapter.indexOf(c),

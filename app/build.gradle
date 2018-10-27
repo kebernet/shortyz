@@ -33,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 27
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
@@ -79,13 +79,13 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
     compile 'com.google.android.gms:play-services:4.0.30'
     compile project(":puzlib")
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.jenzz:materialpreference:1.3'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:design:27.1.1'
     compile ('com.google.api-client:google-api-client:1.21.0'){
         exclude group: 'org.apache.httpcomponents'
     }

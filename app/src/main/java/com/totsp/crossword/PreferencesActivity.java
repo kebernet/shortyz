@@ -111,16 +111,6 @@ public class PreferencesActivity extends PreferenceActivity
                 return true;
             }
         });
-
-//        Preference sendDebug = (Preference) findPreference("sendDebug");
-//        sendDebug.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-//
-//			public boolean onPreferenceClick(Preference preference) {
-//				startActivity(ShortyzApplication.sendDebug());
-//				return true;
-//			}
-//        	
-//        });
     }
 
     protected void onResume() {

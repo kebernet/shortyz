@@ -1,9 +1,5 @@
 package com.totsp.crossword;
 
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.util.concurrent.TimeUnit;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +12,10 @@ import com.totsp.crossword.puz.Box;
 import com.totsp.crossword.puz.Puzzle;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.shortyz.ShortyzApplication;
+
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.concurrent.TimeUnit;
 
 public class PuzzleFinishedActivity extends ShortyzActivity {
 	private static final long SECONDS = 1000;
@@ -36,7 +36,7 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
         setContentView(R.layout.completed);
         this.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         
-        Puzzle puz = ShortyzApplication.BOARD.getPuzzle();
+        Puzzle puz = ShortyzApplication.getInstance().getBoard().getPuzzle();
         
         two_int.setMinimumIntegerDigits(2);
         
@@ -83,19 +83,19 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
             		elapsedString +(cheatedBoxes > 0 ? "but got "+cheatedBoxes +" hints" : "")+" with #Shortyz!";
         }
         
-        TextView elapsedTime = (TextView) this.findViewById(R.id.elapsed);
+        TextView elapsedTime = this.findViewById(R.id.elapsed);
         elapsedTime.setText(elapsedString);
         
-        TextView totalCluesView = (TextView) this.findViewById(R.id.totalClues);
+        TextView totalCluesView = this.findViewById(R.id.totalClues);
         totalCluesView.setText(Integer.toString(totalClues));
         
-        TextView totalBoxesView = (TextView) this.findViewById(R.id.totalBoxes);
+        TextView totalBoxesView = this.findViewById(R.id.totalBoxes);
         totalBoxesView.setText(Integer.toString(totalBoxes));
         
-        TextView cheatedBoxesView = (TextView) this.findViewById(R.id.cheatedBoxes);
+        TextView cheatedBoxesView = this.findViewById(R.id.cheatedBoxes);
         cheatedBoxesView.setText(cheatedString);
         
-        Button share = (Button) this.findViewById(R.id.share);
+        Button share = this.findViewById(R.id.share);
         share.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {
@@ -109,7 +109,7 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
         	
         });
         
-        Button done = (Button) this.findViewById(R.id.done);
+        Button done = this.findViewById(R.id.done);
         done.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {

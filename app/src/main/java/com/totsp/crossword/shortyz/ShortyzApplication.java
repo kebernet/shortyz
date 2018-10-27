@@ -22,12 +22,14 @@ import com.google.api.services.gmail.Gmail;
 import com.totsp.crossword.gmail.GMConstants;
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.Playboard;
+import com.totsp.crossword.versions.AndroidVersionUtils;
 import com.totsp.crossword.view.PlayboardRenderer;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,26 +41,46 @@ import okhttp3.CookieJar;
 
 public class ShortyzApplication extends Application {
 
+	public static String PUZZLE_DOWNLOAD_CHANNEL_ID = "shortyz.downloads";
     private static ShortyzApplication INSTANCE;
-	public static Playboard BOARD;
-	public static PlayboardRenderer RENDERER;
+	private Playboard board;
+	private PlayboardRenderer renderer;
 	public static File DEBUG_DIR;
 	public static File CROSSWORDS = new File(
 			Environment.getExternalStorageDirectory(), "crosswords");
 	final HttpTransport transport = AndroidHttp.newCompatibleTransport();
 	final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-	private static GoogleAccountCredential credential;
-	private static Gmail gmailService;
-	private static SharedPreferences settings;
+	private GoogleAccountCredential credential;
+	private Gmail gmailService;
+	private SharedPreferences settings;
 	private AtomicReference<PersistentCookieJar> cookieJar = new AtomicReference<>(null);
 
-	@Override
+	public void setBoard(Playboard board){
+	    this.board = board;
+    }
+
+    public Playboard getBoard() {
+         return board;
+    }
+
+    public void setRenderer(PlayboardRenderer renderer){
+	    this.renderer = renderer;
+    }
+
+    public PlayboardRenderer getRenderer() {
+        return renderer;
+    }
+
+    @Override
 	public void onCreate() {
 		INSTANCE = this;
 		// Initialize credentials and service object.
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
 		updateCredential(settings);
 		super.onCreate();
+
+		AndroidVersionUtils.Factory.getInstance().createNotificationChannel(this);
+
 		Fabric.with(this, new Crashlytics());
 
 		if (Environment.MEDIA_MOUNTED.equals(Environment
@@ -72,8 +94,9 @@ public class ShortyzApplication extends Application {
 				return;
 			}
 			File info = new File(DEBUG_DIR, "device");
+			PrintWriter writer = null;
 			try {
-				PrintWriter writer = new PrintWriter(new FileWriter(info));
+				writer = new PrintWriter(new FileWriter(info));
 				writer.println("VERSION INT: "
 						+ android.os.Build.VERSION.SDK_INT);
 				writer.println("VERSION STRING: "
@@ -86,6 +109,10 @@ public class ShortyzApplication extends Application {
 				writer.close();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
+			} finally {
+				if(writer != null){
+					writer.close();
+				}
 			}
 		}
 	}
@@ -97,10 +124,10 @@ public class ShortyzApplication extends Application {
 		if (zip.exists()) {
 			zip.delete();
 		}
-
+		ZipOutputStream zos = null;
 		if (debug.exists())
 			try {
-				ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(
+				zos = new ZipOutputStream(new FileOutputStream(
 						zip));
 				zipDir(debug.getAbsolutePath(), zos);
 				zos.close();
@@ -115,11 +142,20 @@ public class ShortyzApplication extends Application {
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
+			} finally {
+				if(zos != null){
+					try {
+						zos.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		return null;
 	}
 
 	public static void zipDir(String dir2zip, ZipOutputStream zos) {
+		FileInputStream fis = null;
 		try {
 			File zipDir = new File(dir2zip);
 			String[] dirList = zipDir.list();
@@ -132,14 +168,23 @@ public class ShortyzApplication extends Application {
 					zipDir(filePath, zos);
 					continue;
 				}
-				FileInputStream fis = new FileInputStream(f);
+				try {
+					fis = new FileInputStream(f);
 
-				ZipEntry anEntry = new ZipEntry(f.getPath());
-				zos.putNextEntry(anEntry);
-				while ((bytesIn = fis.read(readBuffer)) != -1) {
-					zos.write(readBuffer, 0, bytesIn);
+					ZipEntry anEntry = new ZipEntry(f.getPath());
+					zos.putNextEntry(anEntry);
+					while ((bytesIn = fis.read(readBuffer)) != -1) {
+						zos.write(readBuffer, 0, bytesIn);
+					}
+				} finally {
+					if(fis != null){
+						try {
+							fis.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
-				fis.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

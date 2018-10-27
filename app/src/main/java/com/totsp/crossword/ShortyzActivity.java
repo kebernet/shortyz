@@ -16,6 +16,7 @@ import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.ViewConfiguration;
+import android.widget.Toast;
 
 import com.totsp.crossword.util.NightModeHelper;
 import com.totsp.crossword.versions.AndroidVersionUtils;
@@ -106,13 +107,18 @@ public class 	ShortyzActivity extends BaseGameActivity {
 	}
 
 	private void doOrientation() {
-		if ("PORT".equals(prefs.getString("orientationLock", "UNLOCKED"))) {
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		} else if ("LAND"
-				.equals(prefs.getString("orientationLock", "UNLOCKED"))) {
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		} else {
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+		try {
+			if ("PORT".equals(prefs.getString("orientationLock", "UNLOCKED"))) {
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			} else if ("LAND"
+					.equals(prefs.getString("orientationLock", "UNLOCKED"))) {
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			} else {
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+			}
+		} catch(RuntimeException e) {
+			Toast.makeText(this, "Sorry, orientation lock is not supported without " +
+					"fullscreen mode anymore because of an Android change.", Toast.LENGTH_LONG).show();
 		}
 	}
 
