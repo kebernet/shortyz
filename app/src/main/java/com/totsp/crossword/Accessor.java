@@ -14,8 +14,14 @@ public interface Accessor extends Comparator<FileHandle> {
             }
 
             public int compare(FileHandle object1, FileHandle object2) {
-                return object1.getDate()
+                int dateComparison = object1.getDate()
                               .compareTo(object2.getDate());
+
+                if (dateComparison == 0) {
+                    return Accessor.SOURCE.compare(object1, object2);
+                }
+
+                return dateComparison;
             }
         };
 
@@ -28,8 +34,14 @@ public interface Accessor extends Comparator<FileHandle> {
             }
 
             public int compare(FileHandle object1, FileHandle object2) {
-                return object2.getDate()
+                int dateComparison = object2.getDate()
                               .compareTo(object1.getDate());
+
+                if (dateComparison == 0) {
+                    return Accessor.SOURCE.compare(object1, object2);
+                }
+
+                return dateComparison;
             }
         };
 
