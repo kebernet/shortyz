@@ -71,7 +71,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
     private static final int REQUEST_WRITE_STORAGE = 1002;
     private static final long DAY = 24L * 60L * 60L * 1000L;
     private static final Logger LOGGER = Logger.getLogger(BrowseActivity.class.getCanonicalName());
-    private Accessor accessor = Accessor.DATE_DESC;
+    private Accessor accessor = Accessors.DATE_DESC;
     private SeparatedRecyclerViewAdapter currentAdapter = null;
     private Dialog downloadDialog;
     private File archiveFolder = new File(Environment.getExternalStorageDirectory(), "crosswords/archive");
@@ -291,21 +291,21 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             this.startActivity(i);
         } else if (item.getTitle()
                            .equals("By Source")) {
-            this.accessor = Accessor.SOURCE;
+            this.accessor = Accessors.SOURCE;
             prefs.edit()
                  .putInt("sort", 2)
                  .apply();
             this.render();
         } else if (item.getTitle()
                            .equals("By Date (Ascending)")) {
-            this.accessor = Accessor.DATE_ASC;
+            this.accessor = Accessors.DATE_ASC;
             prefs.edit()
                  .putInt("sort", 1)
                  .apply();
             this.render();
         } else if (item.getTitle()
                            .equals("By Date (Descending)")) {
-            this.accessor = Accessor.DATE_DESC;
+            this.accessor = Accessors.DATE_DESC;
             prefs.edit()
                  .putInt("sort", 0)
                  .apply();
@@ -391,17 +391,17 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
         switch (prefs.getInt("sort", 0)) {
         case 2:
-            this.accessor = Accessor.SOURCE;
+            this.accessor = Accessors.SOURCE;
 
             break;
 
         case 1:
-            this.accessor = Accessor.DATE_ASC;
+            this.accessor = Accessors.DATE_ASC;
 
             break;
 
         default:
-            this.accessor = Accessor.DATE_DESC;
+            this.accessor = Accessors.DATE_DESC;
         }
 
 
@@ -986,7 +986,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
             date.setText(df.format(handle.getDate()));
 
-            if (accessor == Accessor.SOURCE) {
+            if (accessor == Accessors.SOURCE) {
                 date.setVisibility(View.VISIBLE);
             } else {
                 date.setVisibility(View.GONE);
