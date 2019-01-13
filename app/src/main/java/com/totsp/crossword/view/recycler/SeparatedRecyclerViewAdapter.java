@@ -26,21 +26,25 @@ public class SeparatedRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         if(viewType == HEADER){
+            // For headers, we can create a simple text holder.
             TextView view = (TextView) LayoutInflater.from(viewGroup.getContext())
                     .inflate(textViewId, viewGroup, false);
             return new SimpleTextViewHolder(view);
         } else {
-            RecyclerView.ViewHolder result = null;
-            while(result == null){
-                for(RecyclerView.Adapter sectionAdapter : sections.values()){
-                    try {
-                        result = sectionAdapter.onCreateViewHolder(viewGroup, viewType);
-                    } catch(Exception e){
-                        e.printStackTrace();
-                    }
+            // For puzzle views, any sectionAdapter can be used to create the view holder, so find
+            // the first one that gives us a result.
+            for(RecyclerView.Adapter sectionAdapter : sections.values()){
+                RecyclerView.ViewHolder result = null;
+                try {
+                    result = sectionAdapter.onCreateViewHolder(viewGroup, viewType);
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+                if (result != null) {
+                    return result;
                 }
             }
-            return result;
+            return null;
         }
     }
 
