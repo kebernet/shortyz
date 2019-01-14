@@ -844,8 +844,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         //Only spawn a thread if there are a lot of puzzles.
         // Using SDK rev as a proxy to decide whether you have a slow processor or not.
 
-        if (((android.os.Build.VERSION.SDK_INT >= 5) && directory.exists() && (directory.list().length > 500)) ||
-                ((android.os.Build.VERSION.SDK_INT < 5) && directory.exists() && (directory.list().length > 160))) {
+        if (directory.exists() && (directory.list().length > 500)) {
             Runnable r = new Runnable() {
                     public void run() {
                         currentAdapter = BrowseActivity.this.buildList(dialog, directory, BrowseActivity.this.accessor);

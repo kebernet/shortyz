@@ -196,8 +196,6 @@ public class ShortyzApplication extends Application {
 	}
 
 	public static boolean isTabletish(DisplayMetrics metrics) {
-		if(android.os.Build.VERSION.SDK_INT > 12) {
-
             double x = Math.pow(metrics.widthPixels / metrics.xdpi, 2);
             double y = Math.pow(metrics.heightPixels / metrics.ydpi, 2);
             double screenInches = Math.sqrt(x + y);
@@ -206,16 +204,10 @@ public class ShortyzApplication extends Application {
             } else {
                 return false;
             }
-        } else {
-			return false;
-		}
 	}
 	
 	public static boolean isMiniTabletish(DisplayMetrics metrics) {
 		switch (android.os.Build.VERSION.SDK_INT) {
-		case 12:
-		case 11:
-		case 13:
 		case 14:
 		case 15:
 		case 16:
