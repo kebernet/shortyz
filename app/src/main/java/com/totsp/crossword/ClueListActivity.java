@@ -89,7 +89,7 @@ public class ClueListActivity extends ShortyzActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		this.renderer = new PlayboardRenderer(ShortyzApplication.getInstance().getBoard(), metrics.densityDpi, metrics.widthPixels,
-				!prefs.getBoolean("supressHints", false),
+				!prefs.getBoolean("supressHints", false), prefs.getBoolean("showErrorsIndicator", false),
 				ContextCompat.getColor(this, R.color.boxColor), ContextCompat.getColor(this, R.color.blankColor),
 				ContextCompat.getColor(this, R.color.errorColor));
 

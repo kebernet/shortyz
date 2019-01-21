@@ -229,6 +229,13 @@
 		android:summary="Prevents the pink boxes indicating 'hints' in the form of reveals or show errors."
 		android:key="supressHints"
 	/>
+
+	<com.jenzz.materialpreference.CheckBoxPreference
+		android:title="Show Errors Indicator"
+		android:defaultValue="false"
+		android:summary="Changes the border of each box to red when 'Show Errors' is enabled."
+		android:key="showErrorsIndicator"
+		/>
 	
 	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Delete on Cleanup"

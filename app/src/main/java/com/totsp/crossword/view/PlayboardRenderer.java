@@ -24,6 +24,7 @@ public class PlayboardRenderer {
     private final Paint blackBox = new Paint();
     private final Paint blackCircle = new Paint();
     private final Paint blackLine = new Paint();
+    private final Paint redLine = new Paint();
     private final Paint cheated = new Paint();
     private final Paint currentLetterBox = new Paint();
     private final Paint currentLetterHighlight = new Paint();
@@ -37,12 +38,13 @@ public class PlayboardRenderer {
     private float dpi;
     private float scale = 1.0F;
     private boolean hintHighlight;
+    private boolean indicateShowErrors;
     private int widthPixels;
     private final int boxColor;
     private final int blankColor;
     private final int errorColor;
 
-    public PlayboardRenderer(Playboard board, float dpi, int widthPixels, boolean hintHighlight,
+    public PlayboardRenderer(Playboard board, float dpi, int widthPixels, boolean hintHighlight, boolean indicateShowErrors,
                              int boxColor, int blankColor, int errorColor) {
         this.boxColor = boxColor;
         this.blankColor = blankColor;
@@ -52,8 +54,11 @@ public class PlayboardRenderer {
         this.widthPixels = widthPixels;
         this.board = board;
         this.hintHighlight = hintHighlight;
+        this.indicateShowErrors = indicateShowErrors;
         blackLine.setColor(blankColor);
         blackLine.setStrokeWidth(2.0F);
+        redLine.setColor(errorColor);
+        redLine.setStrokeWidth(2.0F);
 
         numberText.setTextAlign(Align.LEFT);
         numberText.setColor(blankColor);
@@ -294,7 +299,10 @@ public class PlayboardRenderer {
 
         Rect r = new Rect(x + 1, y + 1, (x + boxSize) - 1, (y + boxSize) - 1);
 
+        Paint boxBorderLine;
+
         if (box == null) {
+            boxBorderLine = this.blackLine;
             canvas.drawRect(r, this.blackBox);
         } else {
             // Background colors
@@ -310,6 +318,13 @@ public class PlayboardRenderer {
                 canvas.drawRect(r, this.cheated);
             } else {
                 canvas.drawRect(r, this.white);
+            }
+
+            // Borderline colors
+            if (this.board.isShowErrors() && this.indicateShowErrors) {
+                boxBorderLine = this.redLine;
+            } else {
+                boxBorderLine = this.blackLine;
             }
 
             if (box.isAcross() || box.isDown()) {
@@ -339,7 +354,7 @@ public class PlayboardRenderer {
         }
 
         Paint boxColor = (((highlight.across == col) && (highlight.down == row)) && (currentWord != null))
-                ? this.currentLetterBox : this.blackLine;
+                ? this.currentLetterBox : boxBorderLine;
 
         // Draw left
         if ((col != (highlight.across + 1)) || (row != highlight.down)) {

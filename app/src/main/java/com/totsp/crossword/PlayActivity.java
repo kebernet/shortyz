@@ -230,7 +230,7 @@ public class PlayActivity extends ShortyzActivity {
 
             ShortyzApplication.getInstance().setBoard(new Playboard(puz, movement, prefs.getBoolean("preserveCorrectLettersInShowErrors", false)));
             ShortyzApplication.getInstance().setRenderer(new PlayboardRenderer(getBoard(), metrics.densityDpi, metrics.widthPixels,
-                    !prefs.getBoolean("supressHints", false),
+                    !prefs.getBoolean("supressHints", false), prefs.getBoolean("showErrorsIndicator", false),
                     ContextCompat.getColor(this, R.color.boxColor), ContextCompat.getColor(this, R.color.blankColor),
                     ContextCompat.getColor(this, R.color.errorColor)));
 
