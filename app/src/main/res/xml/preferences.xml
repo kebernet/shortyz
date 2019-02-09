@@ -233,7 +233,7 @@
 	<com.jenzz.materialpreference.CheckBoxPreference
 		android:title="Show Errors Indicator"
 		android:defaultValue="false"
-		android:summary="Changes the border of each box to red when 'Show Errors' is enabled."
+		android:summary="Changes the border color of the boxes in the selected word when 'Show Errors' is enabled."
 		android:key="showErrorsIndicator"
 		/>
 	
