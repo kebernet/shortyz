@@ -24,7 +24,7 @@ public class PlayboardRenderer {
     private final Paint blackBox = new Paint();
     private final Paint blackCircle = new Paint();
     private final Paint blackLine = new Paint();
-    private final Paint redLine = new Paint();
+    private final Paint blueLine = new Paint();
     private final Paint cheated = new Paint();
     private final Paint currentLetterBox = new Paint();
     private final Paint currentLetterHighlight = new Paint();
@@ -57,8 +57,8 @@ public class PlayboardRenderer {
         this.indicateShowErrors = indicateShowErrors;
         blackLine.setColor(blankColor);
         blackLine.setStrokeWidth(2.0F);
-        redLine.setColor(errorColor);
-        redLine.setStrokeWidth(2.0F);
+        blueLine.setColor(Color.parseColor("#0000ff"));
+        blueLine.setStrokeWidth(4.0F);
 
         numberText.setTextAlign(Align.LEFT);
         numberText.setColor(blankColor);
@@ -321,8 +321,8 @@ public class PlayboardRenderer {
             }
 
             // Borderline colors
-            if (this.board.isShowErrors() && this.indicateShowErrors) {
-                boxBorderLine = this.redLine;
+            if (this.board.isShowErrors() && this.indicateShowErrors && inCurrentWord) {
+                boxBorderLine = this.blueLine;
             } else {
                 boxBorderLine = this.blackLine;
             }
