@@ -1,7 +1,6 @@
 package com.totsp.crossword.nyt;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -63,19 +62,14 @@ public class LoginActivity extends ShortyzActivity {
 
 
         webview.setWebViewClient(new WebViewClient(){
-
-            ProgressDialog dialog;
-
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                dialog = ProgressDialog.show(LoginActivity.this, "Please wait...", null, true);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                dialog.dismiss();
                 if(url.startsWith(PUZZLES_URL)){
                     String string = CookieManager.getInstance().getCookie(url);
                     LOG.info("Got cookie string: "+string);
