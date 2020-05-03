@@ -1,8 +1,5 @@
 package com.totsp.crossword.view;
 
-import java.util.Timer;
-import java.util.logging.Logger;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
@@ -11,6 +8,9 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import java.util.Timer;
+import java.util.logging.Logger;
 
 
 @SuppressWarnings("deprecation")
@@ -35,18 +35,16 @@ public class ScrollingImageView extends FrameLayout implements OnGestureListener
         imageView = new ImageView(context);
         
 
-        if (android.os.Build.VERSION.SDK_INT >= 8) {
-            try {
-                aux = (AuxTouchHandler) Class.forName("com.totsp.crossword.view.MultitouchHandler")
-                                             .newInstance();
-                aux.init(this);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+        try {
+            aux = (AuxTouchHandler) Class.forName("com.totsp.crossword.view.MultitouchHandler")
+                                         .newInstance();
+            aux.init(this);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,7 +1,10 @@
 package com.totsp.crossword.versions;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -11,15 +14,49 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.totsp.crossword.ShortyzActivity;
+import com.totsp.crossword.net.DownloadReceiver;
+import com.totsp.crossword.puz.PuzzleMeta;
 
 
 @TargetApi(11)
-public class HoneycombUtil extends GingerbreadUtil {
+public class HoneycombUtil extends DefaultUtil {
 	
 	{
 		System.out.println("Honeycomb Utils.");
 	}
-	
+
+
+    protected Context ctx;
+
+    public void setContext(Context ctx) {
+        this.ctx = ctx;
+    }
+
+    public void storeMetas(Uri uri, PuzzleMeta meta) {
+        DownloadReceiver.metas.put(uri, meta);
+
+    }
+
+    @Override
+    public boolean isBackgroundDownloadAvaliable() {
+        return false;
+    }
+
+    @Override
+    public boolean checkBackgroundDownload(SharedPreferences prefs, boolean hasWritePermissions) {
+        return false;
+    }
+
+    @Override
+    public void clearBackgroundDownload(SharedPreferences prefs) {
+
+    }
+
+    @Override
+    public void createNotificationChannel(Context context) {
+
+    }
+
 	@Override
     public void finishOnHomeButton(final AppCompatActivity a) {
 		ActionBar bar = a.getSupportActionBar();

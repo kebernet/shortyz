@@ -19,7 +19,6 @@ import com.totsp.crossword.puz.PuzzleMeta;
 import com.totsp.crossword.shortyz.ShortyzApplication;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -282,58 +281,6 @@ public class Downloaders {
                 newlyDownloaded.add(downloaded);
             }
 
-        }
-
-        { // DO UPDATES
-
-            ArrayList<File> checkUpdate = new ArrayList<File>();
-
-            try {
-                for (File file : crosswords.listFiles()) {
-                    if (file.getName()
-                            .endsWith(".shortyz")) {
-                        File puz = new File(file.getAbsolutePath().substring(0,
-                                file.getAbsolutePath().lastIndexOf('.') + 1) + "puz");
-                        System.out.println(puz.getAbsolutePath());
-
-                        if (!newlyDownloaded.contains(puz)) {
-                            checkUpdate.add(puz);
-                        }
-                    }
-                }
-
-                archive.mkdirs();
-
-                for (File file : archive.listFiles()) {
-                    if (file.getName()
-                            .endsWith(".shortyz")) {
-                        checkUpdate.add(new File(file.getAbsolutePath().substring(0,
-                                file.getAbsolutePath().lastIndexOf('.') + 1) + "puz"));
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            for (File file : checkUpdate) {
-                try {
-                    IO.meta(file);
-
-                    //                    if ((meta != null) && meta.updatable && (nyt != null) &&
-                    //                            nyt.getName().equals(meta.source)) {
-                    //                        System.out.println("Trying update for " + file);
-                    //
-                    //                        File updated = nyt.update(file);
-                    //
-                    //                        if (updated != null) {
-                    //                            this.postUpdatedNotification(i, nyt.getName(),
-                    //                                updated);
-                    //                        }
-                    //                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         if (this.notificationManager != null) {

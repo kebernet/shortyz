@@ -56,8 +56,8 @@ public interface AndroidVersionUtils {
 				System.out.println("Using Honeycomb");
 				return INSTANCE = new HoneycombUtil();
 			} else {
-				System.out.println("Using Gingerbread");
-				return INSTANCE = new GingerbreadUtil();
+				System.out.println("Unsupported Version");
+				return INSTANCE = null;
 			}
 		}
 	}

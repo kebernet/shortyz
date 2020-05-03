@@ -1,8 +1,5 @@
 package com.totsp.crossword.net;
 
-import java.io.File;
-import java.net.URI;
-
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Query;
@@ -13,6 +10,9 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 
+import java.io.File;
+import java.net.URI;
+
 public class DownloadReceiverGinger extends BroadcastReceiver {
 
 	@Override
@@ -22,9 +22,8 @@ public class DownloadReceiverGinger extends BroadcastReceiver {
 				.getSystemService(Context.DOWNLOAD_SERVICE);
 		long id = intent.getLongExtra("extra_download_id", -1);
 
-		if (android.os.Build.VERSION.SDK_INT >= 11
-				&& !"application/x-crossword".equals(mgr
-						.getMimeTypeForDownloadedFile(id))) {
+		if (!"application/x-crossword".equals(
+				mgr.getMimeTypeForDownloadedFile(id))) {
 			return;
 		}
 		Uri uri = null;
