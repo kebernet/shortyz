@@ -1,11 +1,18 @@
 package com.totsp.crossword.shortyz.test;
+;
 
-import android.test.AndroidTestCase;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.totsp.crossword.net.AbstractPageScraper;
 
-public class PageScraperTest extends AndroidTestCase{
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
+
+@RunWith(AndroidJUnit4.class)
+public class PageScraperTest  {
+
+	@Test
 	public void testParse() throws Exception {
 
 		String testString = "<a href=\"http://code.google.com/some/test/puzzle.puz\"> test puzzle</a>\n<a href=\"http://code.google.com/some/test/puzzle2.puz\"> test2 puzzle</a>";
@@ -13,7 +20,8 @@ public class PageScraperTest extends AndroidTestCase{
 		System.out.println(AbstractPageScraper.puzzleURLs(testString));
 
 	}
-	
+
+	@Test
 	public void testBEQ() throws Exception {
 		
 		AbstractPageScraper scraper = new TestScraper();
