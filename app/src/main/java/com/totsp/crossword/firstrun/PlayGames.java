@@ -2,24 +2,78 @@ package com.totsp.crossword.firstrun;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.totsp.crossword.GameHelper;
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.games.AchievementsClient;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.totsp.crossword.shortyz.R;
 
 /**
  *
  * Created by rcooper on 6/27/15.
  */
-public class PlayGames extends SlideFragment {
+public class PlayGames extends SlideFragment  {
 
+    private static final String TAG = "Play Games";
     private View signInButton;
     private TextView text;
+    private AchievementsClient mAchievementsClient;
+    private GoogleSignInClient mGoogleSignInClient;
+
 
     public PlayGames() {
+    }
+
+    protected boolean isSignedIn() {
+        return GoogleSignIn.getLastSignedInAccount(this.getContext()) != null;
+    }
+
+    private void onConnected(GoogleSignInAccount googleSignInAccount) {
+        Log.d(TAG, "onConnected(): connected to Google APIs");
+
+        this.mAchievementsClient = Games.getAchievementsClient(this.getContext(), googleSignInAccount);
+        this.onSignInSucceeded();
+        done();
+    }
+
+    protected void onSignInSucceeded(){
+
+    }
+
+    private void onDisconnected() {
+        Log.d(TAG, "onDisconnected()");
+        this.signInButton.setVisibility(View.VISIBLE);
+        mAchievementsClient = null;
+    }
+
+    protected void signInSilently() {
+        Log.d(TAG, "signInSilently()");
+
+        mGoogleSignInClient.silentSignIn().addOnCompleteListener(this.getActivity(),
+                new OnCompleteListener<GoogleSignInAccount>() {
+                    @Override
+                    public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInSilently(): success");
+                            onConnected(task.getResult());
+                        } else {
+                            Log.d(TAG, "signInSilently(): failure", task.getException());
+                            onDisconnected();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -27,6 +81,9 @@ public class PlayGames extends SlideFragment {
         if(thisView != null){
             return thisView;
         }
+
+        this.mGoogleSignInClient = GoogleSignIn.getClient(this.getContext(),
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
         View v = inflater.inflate(R.layout.slide_playgames, container, false);
         initView(v);
         text = (TextView) v.findViewById(R.id.slideText);
@@ -34,27 +91,15 @@ public class PlayGames extends SlideFragment {
 
             public void onClick(View view) {
                 // start the sign-in flow
-                ((FirstrunActivity) getActivity()).beginUserInitiatedSignIn();
+                signInSilently();
             }
 
         });
-        if(((FirstrunActivity) getActivity()).isSignedIn() ){
+        if(isSignedIn()){
             done();
         } else {
             this.signInButton.setVisibility(View.VISIBLE);
         }
-        ((FirstrunActivity) getActivity()).setGameHelperListener(new GameHelper.GameHelperListener() {
-
-            @Override
-            public void onSignInFailed() {
-                signInButton.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onSignInSucceeded() {
-                done();
-            }
-        });
         return v;
     }
 

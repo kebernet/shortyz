@@ -1,6 +1,5 @@
 package com.totsp.crossword.shortyz;
 
-import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -8,7 +7,8 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
-import com.crashlytics.android.Crashlytics;
+import androidx.multidex.MultiDexApplication;
+
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
@@ -19,6 +19,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.gmail.Gmail;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.totsp.crossword.gmail.GMConstants;
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.Playboard;
@@ -36,10 +37,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import io.fabric.sdk.android.Fabric;
 import okhttp3.CookieJar;
 
-public class ShortyzApplication extends Application {
+public class ShortyzApplication extends MultiDexApplication {
 
 	public static String PUZZLE_DOWNLOAD_CHANNEL_ID = "shortyz.downloads";
     private static ShortyzApplication INSTANCE;
@@ -81,7 +81,7 @@ public class ShortyzApplication extends Application {
 
 		AndroidVersionUtils.Factory.getInstance().createNotificationChannel(this);
 
-		Fabric.with(this, new Crashlytics());
+		FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
 
 		if (Environment.MEDIA_MOUNTED.equals(Environment
 				.getExternalStorageState())) {

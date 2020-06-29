@@ -1,0 +1,7 @@
+<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settings_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:name="com.totsp.crossword.SettingsFragment"
+    android:orientation="vertical">
+</androidx.fragment.app.FragmentContainerView>

@@ -3,10 +3,11 @@ package com.totsp.crossword.versions;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.Window;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.PuzzleMeta;

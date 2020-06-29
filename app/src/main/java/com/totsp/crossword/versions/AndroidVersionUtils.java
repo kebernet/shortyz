@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.totsp.crossword.ShortyzActivity;
 import com.totsp.crossword.puz.PuzzleMeta;

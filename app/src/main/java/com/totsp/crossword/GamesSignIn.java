@@ -21,20 +21,20 @@ public class GamesSignIn extends ShortyzActivity  {
 
 			public void onClick(View view) {
 				// start the sign-in flow
-	            beginUserInitiatedSignIn();
+	            signInSilently();
 			}
 			
 		});
         (this.signOutButton = findViewById(R.id.sign_out_button)).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                signOut();
+                mGoogleSignInClient.signOut();
                 finish();
             }
         });
         (findViewById(R.id.dont_want_play)).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if(signInButton.getVisibility() == View.VISIBLE){
-                    signOut();
+                    mGoogleSignInClient.signOut();
                 }
                 prefs.edit().putBoolean("no_play_games", Boolean.TRUE).apply();
                 finish();

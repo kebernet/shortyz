@@ -1,18 +1,23 @@
 buildscript {
     repositories {
-        maven { url 'https://maven.fabric.io/public' }
+       google()
+        mavenCentral()
+        jcenter()
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
+    jcenter()
+    mavenCentral()
     google()
 }
 
@@ -25,17 +30,19 @@ android {
     if (new File(propsPath).exists())
         props.load(new FileInputStream(propsPath))
 
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 27
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -79,70 +86,30 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:recyclerview-v7:27.1.1'
-    compile 'com.google.android.gms:play-services:4.0.30'
-    compile project(":puzlib")
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.jenzz:materialpreference:1.3'
-    compile 'com.android.support:design:27.1.1'
-    compile ('com.google.api-client:google-api-client:1.21.0'){
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "com.google.android.gms:play-services-games:19.0.0"
+    implementation "com.google.android.gms:play-services-auth:18.0.0"
+    implementation project(":puzlib")
+    implementation "androidx.preference:preference:1.1.1"
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation ('com.google.api-client:google-api-client:1.30.9'){
         exclude group: 'org.apache.httpcomponents'
     }
-    compile ('com.google.api-client:google-api-client-android:1.21.0'){
+    implementation ('com.google.api-client:google-api-client-android:1.30.9'){
         exclude group: 'org.apache.httpcomponents'
     }
-    compile ('com.google.api-client:google-api-client-gson:1.21.0'){
+    implementation ('com.google.api-client:google-api-client-gson:1.30.9'){
         exclude group: 'org.apache.httpcomponents'
     }
-    compile ('com.google.apis:google-api-services-gmail:v1-rev29-1.20.0'){
+    implementation ('com.google.apis:google-api-services-gmail:v1-rev29-1.20.0'){
         exclude group: 'org.apache.httpcomponents'
     }
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.1'
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true;
-    }
+    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:4.3.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
 }
 
-task prepareChrome << {
-    def slurp = new XmlSlurper().parse(file("src/main/AndroidManifest.xml"))
-    def versionCode = slurp.'@android:versionCode'.text()
-    def versionName = slurp.'@android:versionName'.text()
-    copy {
-        from("src/main/chrome") {
-            include "**/*.json"
-            include "**/*.html"
-            filter {
-                it.replaceAll('@@versionCode@@', versionCode)
-                        .replaceAll('@@versionName@@', versionName)
-            }
-        }
-        into "build/chrome"
-    }
-    copy {
-        from("src/main/chrome") {
-            exclude "**/*.json"
-            exclude "**/*.html"
-        }
-        into "build/chrome"
-    }
-}
-
-task assembleChrome << {
-    copy {
-        from "build/outputs/apk/app-release.apk"
-        into "build/chrome/vendor/chromium/crx"
-    }
-}
-tasks.assembleChrome.dependsOn "prepareChrome"
-tasks.assembleChrome.dependsOn "assembleRelease"
-
-task packageChrome(type: Zip) {
-    from "build/chrome"
-    archiveName "shortyz-chrome.zip"
-}
-tasks.packageChrome.dependsOn assembleChrome
-
-tasks.build.dependsOn packageChrome

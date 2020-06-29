@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
+<androidx.preference.PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
 
-<com.jenzz.materialpreference.PreferenceCategory
+<androidx.preference.PreferenceCategory
 	android:title="Select Puzzle Sources">
 	<!-- Organized alphabetically and by category. -->
-	<PreferenceScreen
+	<androidx.preference.PreferenceScreen
 		android:title="Daily Crosswords"
 		android:summary="Puzzles which update daily."
 		android:key="selectDaily"
 		>
-		<PreferenceScreen
+		<androidx.preference.PreferenceScreen
 			android:title="New York Times"
 			android:summary="Requires subscription."
 			android:key="selectNYTimes">
-			<com.jenzz.materialpreference.CheckBoxPreference
+			<androidx.preference.CheckBoxPreference
 				android:title="New York Times"
 				android:defaultValue="false"
 				android:key="downloadNYT" />
-			<Preference
+			<androidx.preference.Preference
 			 	android:title="Get a Subscription" 
 			 	android:key="nytSubscribe"/>
-			<Preference
+			<androidx.preference.Preference
 				android:title="Clear Account Info"
 				android:key="nytClear" />
-		</PreferenceScreen>
-		<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+		</androidx.preference.PreferenceScreen>
+		<!--<androidx.preference.CheckBoxPreference-->
 			<!--android:title="Washington Post"-->
 			<!--android:defaultValue="true"-->
 			<!--android:key="downloadWaPo" />-->
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Newsday"
 			android:defaultValue="true"
 			android:key="downloadNewsday" />
@@ -38,206 +38,206 @@
 			android:defaultValue="true"
 			android:summary="Also known as CrosSynergy"
 			android:key="downloadChron" /-->
- 		<CheckBoxPreference
+ 		<androidx.preference.CheckBoxPreference
  			android:title="Joseph Crosswords"
  			android:defaultValue="true"
  			android:summary="Updates Monday-Saturday"
  			android:key="downloadJoseph" />
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Los Angeles Times"
 			android:defaultValue="true"
 			android:key="downloadLat" />
- 		<CheckBoxPreference
+ 		<androidx.preference.CheckBoxPreference
  			android:title="Sheffer Crosswords"
  			android:defaultValue="true"
  			android:summary="Updates Monday-Saturday"
  			android:key="downloadSheffer" />
-		<CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Thinks.com"
 			android:defaultValue="true"
 			android:key="downloadThinks" />
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Universal Crossword"
 			android:defaultValue="true"
 			android:key="downloadUniversal" />
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="USA Today"
 			android:defaultValue="true"
 			android:summary="Updates Monday-Saturday"
 			android:key="downloadUSAToday" />
-	</PreferenceScreen>
-	<PreferenceScreen
+	</androidx.preference.PreferenceScreen>
+	<androidx.preference.PreferenceScreen
 		android:title="Weekly Crosswords"
 		android:summary="Puzzles which update weekly."
 		android:key="selectWeekly">
-		<com.jenzz.materialpreference.PreferenceCategory android:title="Regular Sized">
+		<androidx.preference.PreferenceCategory android:title="Regular Sized">
 			<!--CheckBoxPreference
 				android:title="Brendan Emmett Quigley"
 				android:defaultValue="true"
 				android:summary="Updates Mondays &amp; Thursdays - brendanemmettquigley.com"
 				android:key="scrapeBEQ" /-->
-			<com.jenzz.materialpreference.CheckBoxPreference
+			<androidx.preference.CheckBoxPreference
 				android:title="Ink Well"
 				android:defaultValue="true"
 				android:summary="Updates Fridays"
 				android:key="downloadInkwell" />
-			<com.jenzz.materialpreference.CheckBoxPreference
+			<androidx.preference.CheckBoxPreference
 				android:title="Jonesin' Crosswords"
 				android:defaultValue="true"
 				android:summary="Updates Thursdays"
 				android:key="downloadJonesin" />
-			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+			<!--<androidx.preference.CheckBoxPreference-->
 				<!--android:title="New York Times Classic"-->
 				<!--android:defaultValue="true"-->
 				<!--android:summary="Updates Mondays"-->
 				<!--android:key="downloadNYTClassic" />-->
-			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+			<!--<androidx.preference.CheckBoxPreference-->
 				<!--android:title="The Onion AV Club"-->
 				<!--android:defaultValue="true"-->
 				<!--android:summary="Updates Wednesdays"-->
 				<!--android:key="downloadAvClub" />-->
-			<com.jenzz.materialpreference.CheckBoxPreference
+			<androidx.preference.CheckBoxPreference
 				android:title="Washington Post Puzzler"
 				android:defaultValue="true"
 				android:summary="Updates Sundays"
 				android:key="downloadWaPoPuzzler" />
-		    <!--<com.jenzz.materialpreference.CheckBoxPreference-->
+		    <!--<androidx.preference.CheckBoxPreference-->
 				<!--android:title="People Magazine"-->
 				<!--android:defaultValue="true"-->
 				<!--android:summary="Updates Thursdays"-->
 				<!--android:key="scrapePeople" />-->
-			 <!--<com.jenzz.materialpreference.CheckBoxPreference-->
+			 <!--<androidx.preference.CheckBoxPreference-->
 				<!--android:title="I Swear"-->
 				<!--android:defaultValue="true"-->
 				<!--android:summary="Updates Fridays"-->
 				<!--android:key="downloadISwear" />-->
-		</com.jenzz.materialpreference.PreferenceCategory>
-		<com.jenzz.materialpreference.PreferenceCategory android:title="Large Sized">
-			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+		</androidx.preference.PreferenceCategory>
+		<androidx.preference.PreferenceCategory android:title="Large Sized">
+			<!--<androidx.preference.CheckBoxPreference-->
 				<!--android:title="Boston Globe"-->
 				<!--android:defaultValue="true"-->
 				<!--android:summary="Updates Sundays"-->
 				<!--android:key="downloadGlobe" />-->
-			<com.jenzz.materialpreference.CheckBoxPreference
+			<androidx.preference.CheckBoxPreference
 				android:title="Chron. of Higher Ed."
 				android:defaultValue="true"
 				android:summary="Updates Fridays (Currently Biweekly)"
 				android:key="downloadCHE" />
-			<com.jenzz.materialpreference.CheckBoxPreference
+			<androidx.preference.CheckBoxPreference
 				android:title="LAT Sunday Calendar"
 				android:defaultValue="true"
 				android:summary="Updates Sundays"
 				android:key="downloadLACal" />
-			<!--<com.jenzz.materialpreference.CheckBoxPreference-->
+			<!--<androidx.preference.CheckBoxPreference-->
 				<!--android:title="Philadelphia Inquirer"-->
 				<!--android:defaultValue="true"-->
 				<!--android:summary="Updates Sundays - By Merl Reagle"-->
 				<!--android:key="downloadPhilly" />-->
-			<com.jenzz.materialpreference.CheckBoxPreference
+			<androidx.preference.CheckBoxPreference
 				android:title="Premier Crosswords"
 				android:defaultValue="true"
 				android:summary="Updates Sundays"
 				android:key="downloadPremier" />
-			<com.jenzz.materialpreference.CheckBoxPreference
+			<androidx.preference.CheckBoxPreference
 				android:title="The Wall Street Journal"
 				android:defaultValue="true"
 				android:summary="Updates Fridays"
 				android:key="downloadWsj" />
-		</com.jenzz.materialpreference.PreferenceCategory>
-	</PreferenceScreen>
-	<PreferenceScreen
+		</androidx.preference.PreferenceCategory>
+	</androidx.preference.PreferenceScreen>
+	<androidx.preference.PreferenceScreen
 		android:title="Experimental Sources"
 		android:summary="May or may not function correctly."
 		android:key="selectExperimental">
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Cru Puzzle Workshop"
 			android:defaultValue="false"
 			android:summary="NYT Cru Cryptic Fan Puzzles\nhttp://web.me.com/joecab/nytcru/\n(Please Read the help item below)"
 			android:key="scrapeCru" />
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Kegler's Kryptics"
 			android:defaultValue="false"
 			android:summary="Ron &quot;Kegler&quot; Sweet's Cryptic Archive\nhttp://www.lafn.org/~keglerron/kegler.html\n(Please Read the help item below)"
 			android:key="scrapeKegler" />
-		<com.jenzz.materialpreference.Preference
+		<androidx.preference.Preference
 		 	android:title="About These Sources"
 		 	android:key="aboutScrapes" />
-	</PreferenceScreen>
-</com.jenzz.materialpreference.PreferenceCategory>
+	</androidx.preference.PreferenceScreen>
+</androidx.preference.PreferenceCategory>
 	
-<com.jenzz.materialpreference.PreferenceCategory
+<androidx.preference.PreferenceCategory
 	android:title="Application Settings">
 		
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Fit to screen when starting"
 		android:defaultValue="false"
 		android:summary="Best-fits the puzzle when you start."
 		android:key="fitToScreen"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Automatic Download"
 		android:defaultValue="true"
 		android:summary="Download today's puzzles when starting the application"
 		android:key="dlOnStartup"
 	/>
 
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Download new puzzles in background"
 		android:summary="Periodically download new puzzles in the background, even when Shortyz is not in use."
 		android:key="backgroundDownload"
 		android:defaultValue="false"
 		/>
 
-	<PreferenceScreen
+	<androidx.preference.PreferenceScreen
 		android:title="Background Download Options"
 		android:summary="Configure background downloads."
 		android:dependency="backgroundDownload"
 		android:key="backgroundDownloadOptions">
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Download over Wifi only"
 			android:defaultValue="true"
 			android:disableDependentsState="true"
 			android:summaryOn="Only schedule background downloads when Wifi is available."
 			android:summaryOff="Schedule background downloads even when not on Wifi"
 			android:key="backgroundDownloadRequireUnmetered" />
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Download when roaming"
 			android:defaultValue="false"
 			android:dependency="backgroundDownloadRequireUnmetered"
 			android:summaryOn="Schedule background downloads when roaming"
 			android:summaryOff="Do not schedule background downloads when roaming"
 			android:key="backgroundDownloadAllowRoaming" />
-		<com.jenzz.materialpreference.CheckBoxPreference
+		<androidx.preference.CheckBoxPreference
 			android:title="Download while charging only"
 			android:defaultValue="false"
 			android:summaryOn="Only schedule background downloads when charging"
 			android:summaryOff="Schedule background downloads when on battery"
 			android:key="backgroundDownloadRequireCharging" />
-	</PreferenceScreen>
+	</androidx.preference.PreferenceScreen>
 
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="No Download Notifications"
 		android:defaultValue="false"
 		android:summary="Prevents a notification for each puzzle downloaded from appearing in the notifications list."
 		android:key="supressMessages"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="No Hint Highlighting"
 		android:defaultValue="false"
 		android:summary="Prevents the pink boxes indicating 'hints' in the form of reveals or show errors."
 		android:key="supressHints"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Delete on Cleanup"
 		android:defaultValue="false"
 		android:summary="Delete rather than archive old puzzles"
 		android:key="deleteOnCleanup"
 	/>
 	
-	<ListPreference
+	<androidx.preference.ListPreference
 		android:title="Cleanup Unfinished"
 		android:summary="Determines how old an unfinished puzzle must be before it is archived/deleted."
 		android:key="cleanupAge"
@@ -245,7 +245,7 @@
 		android:entries="@array/cleanupAgeLabels"
 		android:entryValues="@array/cleanupAgeValues" />
 
-	<ListPreference
+	<androidx.preference.ListPreference
 		android:title="Cleanup Archives"
 		android:summary="Determines how old an archived puzzle must be before it is deleted."
 		android:key="archiveCleanupAge"
@@ -253,28 +253,28 @@
 		android:entries="@array/cleanupAgeLabels"
 		android:entryValues="@array/cleanupAgeValues" />
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Snap to Current Word"
 		android:defaultValue="true"
 		android:summary="Toggles the auto-scrolling of the playboard to the current play position"
 		android:key="ensureVisible"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Show Length"
 		android:defaultValue="false"
 		android:summary="Shows the number of letters in the answer on the clue line"
 		android:key="showCount"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Scroll To Clue"
 		android:defaultValue="false"
 		android:summary="Toggles the auto-scrolling to the selected clue in the clues list mode. (Works like Shortyz 1)"
 		android:key="snapClue"
 	/>
 	
-	<ListPreference
+	<androidx.preference.ListPreference
 		android:title="Movement Style"
 		android:summary="Select what happens when you type past the end of a word."
 		android:key="movementStrategy"
@@ -282,14 +282,14 @@
 		android:entries="@array/movementStrategyLabels"
 		android:entryValues="@array/movementStrategyValues" />
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Skip Filled Boxes"
 		android:defaultValue="false"
 		android:summary="Toggles the skipping of filled boxes when you enter a new letter."
 		android:key="skipFilled"
 	/>
 
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Preserve Correct Boxes when Showing Errors"
 		android:defaultValue="false"
 		android:summary="Keeps you from overwriting a correct box when you are in 'Show Errors' mode."
@@ -297,42 +297,42 @@
 		/>
 
 
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Space Changes Direction"
 		android:defaultValue="true"
 		android:summary="Spacebar changed direction rather than blanking the box."
 		android:key="spaceChangesDirection"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Enter Changes Direction"
 		android:defaultValue="true"
 		android:summary="Enter changes direction rather than moving to the next clue."
 		android:key="enterChangesDirection"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Double Tap Zoom"
 		android:defaultValue="false"
 		android:summary="Double tap toggles between fit to screen, and your default zoom."
 		android:key="doubleTap"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Show Timer"
 		android:defaultValue="false"
 		android:summary="Shows your puzzle time.\nYou must leave and re-enter a puzzle to apply."
 		android:key="showTimer"
 	/>
 	
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Full Screen"
 		android:defaultValue="false"
 		android:summary="Hides the notification bar.\nYou must leave and re-enter a puzzle to apply."
 		android:key="fullScreen"
 	/>
 	
-	<ListPreference
+	<androidx.preference.ListPreference
 		android:title="Keyboard Style"
 		android:summary="Select soft keyboard layout."
 		android:key="keyboardType"
@@ -340,7 +340,7 @@
 		android:entries="@array/keyboardTypeLabels"
 		android:entryValues="@array/keyboardTypeValues" />
 		
-	<com.jenzz.materialpreference.CheckBoxPreference
+	<androidx.preference.CheckBoxPreference
 		android:title="Force Keyboard"
 		android:defaultValue="false"
 		android:summary="Forces the keyboard to always be on screen. \n Good for some generic tablets"
@@ -361,14 +361,14 @@
 		android:key="fullScreen"
 	/-->
 
-    <com.jenzz.materialpreference.CheckBoxPreference
+    <androidx.preference.CheckBoxPreference
         android:title="Disable Swipe"
         android:defaultValue="false"
         android:summary="Disables swiping to dismiss on the list view."
         android:key="disableSwipe"
         />
 
-    <ListPreference
+    <androidx.preference.ListPreference
         android:title="Swipe Action"
         android:summary="Select delete or archive on swipe"
         android:key="swipeAction"
@@ -376,13 +376,13 @@
         android:entries="@array/swipeActionLabels"
         android:entryValues="@array/swipeActionValues" />
 
-</com.jenzz.materialpreference.PreferenceCategory>
+</androidx.preference.PreferenceCategory>
 
 	<Preference
 		android:title="Clear Gmail Account"
 		android:key="clearGmail" />
 	
-	<PreferenceCategory
+	<androidx.preference.PreferenceCategory
 		android:title="About Shortyz">
 	
 	<Preference
@@ -402,5 +402,5 @@
 <!-- 	 	android:title="Send Debug Package"  -->
 <!-- 	 	android:key="sendDebug"/> -->
  	
-	</PreferenceCategory>
-</PreferenceScreen>
+	</androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

@@ -2,13 +2,14 @@ package com.totsp.crossword.versions;
 
 import android.annotation.TargetApi;
 import android.content.res.Configuration;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.totsp.crossword.ShortyzActivity;
 
@@ -26,12 +27,13 @@ public class HoneycombUtil extends GingerbreadUtil {
 		if(bar == null){
 			return;
 		}
+
 		bar.setDisplayHomeAsUpEnabled(true);
 		View home = a.findViewById(android.R.id.home);
         if(home != null){
 	        home.setOnClickListener(new OnClickListener() {
 	                public void onClick(View arg0) {
-	                    a.finish();
+	                    a.onBackPressed();
 	                }
 	            });
         }
@@ -42,7 +44,7 @@ public class HoneycombUtil extends GingerbreadUtil {
     public void holographic(AppCompatActivity a) {
         ActionBar bar = a.getSupportActionBar();
         if (bar != null) {
-            bar.setDisplayHomeAsUpEnabled(true);
+            bar.setHomeButtonEnabled(true);
         }
     }
 

@@ -30,3 +30,4 @@ gen
 /*.iws
 local.properties
 fabric.properties
+/app/google-services.json

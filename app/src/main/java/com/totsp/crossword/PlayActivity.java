@@ -13,7 +13,6 @@ import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -36,6 +35,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.puz.MovementStrategy;
@@ -927,7 +928,7 @@ public class PlayActivity extends ShortyzActivity {
 
             return true;
         } else if (item.getTitle().toString().equals("Settings")) {
-            Intent i = new Intent(this, PreferencesActivity.class);
+            Intent i = new Intent(this, SettingsActivity.class);
             this.startActivity(i);
 
             return true;
@@ -1026,6 +1027,7 @@ public class PlayActivity extends ShortyzActivity {
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         this.render();
     }
 

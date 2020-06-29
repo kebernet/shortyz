@@ -15,14 +15,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.view.ActionMode;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +26,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.view.ActionMode;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.totsp.crossword.firstrun.FirstrunActivity;
 import com.totsp.crossword.io.IO;
 import com.totsp.crossword.net.Downloader;
@@ -222,6 +223,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         return true;
     }
 
+    @Override
     public void onSignInSucceeded(){
         this.playIcon = R.drawable.ic_play_games_badge_white;
         if(this.gamesItem != null){
@@ -251,8 +253,8 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         if(item.getTitle().equals("Night Mode")){
             this.utils.toggleNightMode(this);
         } else if(item.getTitle().equals("Sign In")){
-            if(this.signedIn && !(this.mHelper == null || this.mHelper.getGamesClient() == null)){
-                startActivityForResult(this.mHelper.getGamesClient().getAchievementsIntent(), 0);
+            if(this.signedIn && !(this.isSignedIn())){
+                this.showAchievements();
             } else {
                 Intent i = new Intent(this, GamesSignIn.class);
                 this.startActivity(i);
@@ -265,7 +267,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             return true;
         } else if (item.getTitle()
                            .equals("Settings")) {
-            Intent i = new Intent(this, PreferencesActivity.class);
+            Intent i = new Intent(this, SettingsActivity.class);
             this.startActivity(i);
 
             return true;
@@ -325,6 +327,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             // If the user hit close in the browser download activity, we close the dialog.
             downloadDialog.dismiss();
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -385,7 +388,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             }
         });
         helper.attachToRecyclerView(this.puzzleList);
-        this.sources = (ListView) this.findViewById(R.id.sourceList);
+        this.sources = this.findViewById(R.id.sourceList);
         upgradePreferences();
         this.nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -405,7 +408,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         }
 
 
-        download = (FloatingActionButton) this.findViewById(R.id.button_floating_action);
+        download = this.findViewById(R.id.button_floating_action);
         if(download != null) {
             download.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -492,7 +495,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
 
             DownloadPickerDialogBuilder.OnDownloadSelectedListener downloadButtonListener = new DownloadPickerDialogBuilder.OnDownloadSelectedListener() {
                     public void onDownloadSelected(Date d, List<Downloader> downloaders, int selected) {
-                        List<Downloader> toDownload = new LinkedList<Downloader>();
+                        List<Downloader> toDownload = new LinkedList<>();
                         boolean scrape;
                         LOGGER.info("Downloaders: " + selected + " of " + downloaders);
 
@@ -537,7 +540,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
                 try {
                     lastOpenedHandle.meta = IO.meta(lastOpenedHandle.file);
 
-                    CircleProgressBar bar = (CircleProgressBar) lastOpenedView.findViewById(R.id.puzzle_progress);
+                    CircleProgressBar bar = lastOpenedView.findViewById(R.id.puzzle_progress);
 
                     if (lastOpenedHandle.meta.updatable) {
                         bar.setPercentComplete(-1);
@@ -566,7 +569,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         directory.mkdirs();
 
         long incept = System.currentTimeMillis();
-        ArrayList<FileHandle> files = new ArrayList<FileHandle>();
+        ArrayList<FileHandle> files = new ArrayList<>();
         FileHandle[] puzFiles = null;
 
         if (!directory.exists()) {
@@ -638,7 +641,7 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
             if (!((lastHeader == null) || lastHeader.equals(check))) {
                 FileAdapter fa = new FileAdapter(current);
                 adapter.addSection(lastHeader, fa);
-                current = new ArrayList<FileHandle>();
+                current = new ArrayList<>();
             }
 
             lastHeader = check;
@@ -648,13 +651,14 @@ public class BrowseActivity extends ShortyzActivity implements RecyclerItemClick
         if (lastHeader != null) {
             FileAdapter fa = new FileAdapter(current);
             adapter.addSection(lastHeader, fa);
-            current = new ArrayList<FileHandle>();
+
         }
 
         if (this.sources != null) {
-            this.sourceList.clear();
+            ArrayList<String> sourceList = new ArrayList<>(this.sourceList);
             this.sourceList.addAll(sourcesTemp);
-            Collections.sort(this.sourceList);
+            Collections.sort(sourceList);
+            this.sourceList = sourceList;
             this.handler.post(new Runnable(){
             	public void run(){
             		((SourceListAdapter) sources.getAdapter()).notifyDataSetInvalidated();

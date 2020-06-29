@@ -8,7 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v4.app.NotificationCompat;
+
+import androidx.core.app.NotificationCompat;
 
 import com.totsp.crossword.BrowseActivity;
 import com.totsp.crossword.PlayActivity;
@@ -442,38 +443,45 @@ public class Downloaders {
                 context, BrowseActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 notificationIntent, 0);
+        try {
+            Notification not = new NotificationCompat.Builder(context, ShortyzApplication.PUZZLE_DOWNLOAD_CHANNEL_ID)
+                    .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                    .setContentTitle(contentTitle)
+                    .setContentText("New puzzles were downloaded.")
+                    .setContentIntent(contentIntent)
+                    .setWhen(System.currentTimeMillis())
+                    .build();
 
-        Notification not = new NotificationCompat.Builder(context, ShortyzApplication.PUZZLE_DOWNLOAD_CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.stat_sys_download_done)
-                .setContentTitle(contentTitle)
-                .setContentText("New puzzles were downloaded.")
-                .setContentIntent(contentIntent)
-                .setWhen(System.currentTimeMillis())
-                .build();
-
-        if (this.notificationManager != null) {
-            this.notificationManager.notify(0, not);
+            if (this.notificationManager != null) {
+                this.notificationManager.notify(0, not);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 
     private void postDownloadedNotification(int i, String name, File puzFile) {
-        String contentTitle = "Downloaded " + name;
+        try {
+            String contentTitle = "Downloaded " + name;
 
-        Intent notificationIntent = new Intent(Intent.ACTION_EDIT,
-                Uri.fromFile(puzFile), context, PlayActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                notificationIntent, 0);
+            Intent notificationIntent = new Intent(Intent.ACTION_EDIT,
+                    Uri.fromFile(puzFile), context, PlayActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                    notificationIntent, 0);
 
-        Notification not = new NotificationCompat.Builder(context, ShortyzApplication.PUZZLE_DOWNLOAD_CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.stat_sys_download_done)
-                .setContentTitle(contentTitle)
-                .setContentText(puzFile.getName())
-                .setContentIntent(contentIntent)
-                .setWhen(System.currentTimeMillis())
-                .build();
+            Notification not = new NotificationCompat.Builder(context, ShortyzApplication.PUZZLE_DOWNLOAD_CHANNEL_ID)
+                    .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                    .setContentTitle(contentTitle)
+                    .setContentText(puzFile.getName())
+                    .setContentIntent(contentIntent)
+                    .setWhen(System.currentTimeMillis())
+                    .build();
 
-        if (this.notificationManager != null) {
-            this.notificationManager.notify(i, not);
+            if (this.notificationManager != null) {
+                this.notificationManager.notify(i, not);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 }

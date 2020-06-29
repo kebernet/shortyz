@@ -2,12 +2,13 @@ package com.totsp.crossword;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 
+import androidx.appcompat.app.ActionBar;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.totsp.crossword.shortyz.R;
 import com.totsp.crossword.versions.AndroidVersionUtils;
 import com.totsp.crossword.view.recycler.ShowHideOnScroll;

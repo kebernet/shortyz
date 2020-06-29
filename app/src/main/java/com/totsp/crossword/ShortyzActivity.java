@@ -15,23 +15,45 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ViewConfiguration;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.games.AchievementsClient;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.LeaderboardsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.totsp.crossword.util.NightModeHelper;
 import com.totsp.crossword.versions.AndroidVersionUtils;
 
 import java.lang.reflect.Field;
 
-public class 	ShortyzActivity extends BaseGameActivity {
+public class ShortyzActivity extends AppCompatActivity {
+	private static final String TAG =  ShortyzActivity.class.getSimpleName();
 	protected AndroidVersionUtils utils = AndroidVersionUtils.Factory
 			.getInstance();
 	protected SharedPreferences prefs;
 	public NightModeHelper nightMode;
 
+	protected GoogleSignInClient mGoogleSignInClient;
+	private static final int RC_ACHIEVEMENT_UI = 9003;
+	protected LeaderboardsClient mLeaderboardsClient;
+	protected AchievementsClient mAchievementsClient;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mGoogleSignInClient = GoogleSignIn.getClient(this,
+				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
         if(this.nightMode == null) {
             this.nightMode = NightModeHelper.bind(this);
             this.utils.restoreNightMode(this);
@@ -117,21 +139,61 @@ public class 	ShortyzActivity extends BaseGameActivity {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 			}
 		} catch(RuntimeException e) {
-			Toast.makeText(this, "Sorry, orientation lock is not supported without " +
-					"fullscreen mode anymore because of an Android change.", Toast.LENGTH_LONG).show();
+
 		}
 	}
 
-    public void onSignInFailed() {
-        //Toast.makeText(this, "Not signed in.", Toast.LENGTH_SHORT);
-    }
+	protected void showAchievements() {
+		Games.getAchievementsClient(this, GoogleSignIn.getLastSignedInAccount(this))
+				.getAchievementsIntent()
+				.addOnSuccessListener(new OnSuccessListener<Intent>() {
+					@Override
+					public void onSuccess(Intent intent) {
+						startActivityForResult(intent, RC_ACHIEVEMENT_UI);
+					}
+				});
+	}
 
-    public void onSignInSucceeded() {
-        //Toast.makeText(this, "Signed in", Toast.LENGTH_SHORT);
-        if(this.mHelper != null && !this.mHelper.getGamesClient().isConnected()){
-            this.mHelper.getGamesClient().connect();
-        }
-    }
+	protected boolean isSignedIn() {
+		return GoogleSignIn.getLastSignedInAccount(this) != null;
+	}
+
+	private void onConnected(GoogleSignInAccount googleSignInAccount) {
+		Log.d(TAG, "onConnected(): connected to Google APIs");
+
+		this.mAchievementsClient = Games.getAchievementsClient(this, googleSignInAccount);
+		this.mLeaderboardsClient = Games.getLeaderboardsClient(this, googleSignInAccount);
+		this.onSignInSucceeded();
+	}
+
+	protected void onSignInSucceeded(){
+
+	}
+
+	private void onDisconnected() {
+		Log.d(TAG, "onDisconnected()");
+
+		mAchievementsClient = null;
+		mLeaderboardsClient = null;
+	}
+
+	protected void signInSilently() {
+		Log.d(TAG, "signInSilently()");
+
+		mGoogleSignInClient.silentSignIn().addOnCompleteListener(this,
+				new OnCompleteListener<GoogleSignInAccount>() {
+					@Override
+					public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+						if (task.isSuccessful()) {
+							Log.d(TAG, "signInSilently(): success");
+							onConnected(task.getResult());
+						} else {
+							Log.d(TAG, "signInSilently(): failure", task.getException());
+							onDisconnected();
+						}
+					}
+				});
+	}
 
     protected Bitmap createBitmap(String fontFile, String character){
         DisplayMetrics metrics = new DisplayMetrics();

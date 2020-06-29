@@ -1,9 +1,10 @@
 package com.totsp.crossword.view.recycler;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

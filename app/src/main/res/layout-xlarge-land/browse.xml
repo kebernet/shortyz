@@ -29,7 +29,7 @@
                 android:cacheColorHint="@color/textColorSecondary" />
 
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/puzzleList"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -39,7 +39,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_floating_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

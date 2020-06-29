@@ -9,4 +9,4 @@
 	android:paddingLeft="16dip"
     android:text="Preview"
 	android:textColor="@color/header_text"
-    android:background="@drawable/container_drop_shadow"/>
+    android:background="@color/background_dark"/>

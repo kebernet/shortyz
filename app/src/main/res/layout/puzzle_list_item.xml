@@ -15,7 +15,7 @@
     android:paddingTop="8dp"
     >
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/puzzle_date"
         android:layout_width="70dp"
         android:layout_height="fill_parent"
@@ -45,7 +45,7 @@ Jan 2, 2001"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/puzzle_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@ Jan 2, 2001"
             android:textColor="@color/textColorPrimary"
             android:textSize="25dp" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/puzzle_caption"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

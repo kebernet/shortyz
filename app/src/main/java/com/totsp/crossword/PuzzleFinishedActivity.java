@@ -153,14 +153,14 @@ public class PuzzleFinishedActivity extends ShortyzActivity {
     }
 
     public void doAchievement(int id){
-        if(this.mHelper != null){
-            this.mHelper.getGamesClient().unlockAchievement(getResources().getString(id));
+        if(this.mAchievementsClient != null){
+            this.mAchievementsClient.unlock(getResources().getString(id));
         }
     }
 
     public void incrementAchievement(int id){
-        if(this.mHelper != null){
-            this.mHelper.getGamesClient().incrementAchievement(getResources().getString(id), 1);
+        if(this.mAchievementsClient != null){
+            this.mAchievementsClient.increment(getResources().getString(id), 1);
         }
     }
 }

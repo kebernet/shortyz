@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.totsp.crossword.shortyz"
     android:installLocation="auto"
-    android:versionCode="40403"
+    android:versionCode="40404"
     android:versionName="4.4.3">
 
     <supports-screens
@@ -14,12 +14,11 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-    <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="27" />
+
 
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -80,7 +79,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.totsp.crossword.PreferencesActivity"
+            android:name="com.totsp.crossword.SettingsActivity"
             android:label="Settings"
             android:theme="@style/Theme.Shortyz"
             />
@@ -156,10 +155,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="4d39d433251f1e18f9c088ed8b9ba23da24da28e" />
     </application>
 
 
