@@ -106,19 +106,19 @@ public class Downloaders {
         }
 
         if (prefs.getBoolean("downloadJoseph", true)) {
-            downloaders.add(new KFSDownloader("joseph", "Joseph Crosswords",
-                    "Thomas Joseph", Downloader.DATE_NO_SUNDAY));
+            downloaders.add(new KFSDownloader("Joseph", "Joseph Crosswords",
+                    Downloader.DATE_NO_SUNDAY));
         }
 
         if (prefs.getBoolean("downloadSheffer", true)) {
-            downloaders.add(new KFSDownloader("sheffer", "Sheffer Crosswords",
-                    "Eugene Sheffer", Downloader.DATE_NO_SUNDAY));
+            downloaders.add(new KFSDownloader("Sheffer", "Sheffer Crosswords",
+                    Downloader.DATE_NO_SUNDAY));
         }
 
-//        if (prefs.getBoolean("downloadPremier", true)) {
-//            downloaders.add(new KFSDownloader("premier", "Premier Crosswords",
-//                    "Frank Longo", Downloader.DATE_SUNDAY));
-//        }
+        if (prefs.getBoolean("downloadPremier", true)) {
+            downloaders.add(new KFSDownloader("Premier", "Premier Crosswords",
+                    Downloader.DATE_SUNDAY));
+        }
 
         if (prefs.getBoolean("downloadNewsday", true)) {
             downloaders.add(new BrainsOnlyDownloader(

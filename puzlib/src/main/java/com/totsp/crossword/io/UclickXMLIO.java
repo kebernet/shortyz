@@ -69,23 +69,15 @@ public class UclickXMLIO {
 				if (clueNum > maxClueNum) {
 					maxClueNum = clueNum;
 				}
-				try {
-					acrossNumToClueMap.put(clueNum, URLDecoder.decode(attributes.getValue("c"), CHARSET_NAME));
-				} catch (UnsupportedEncodingException e) {
-					acrossNumToClueMap.put(clueNum, attributes.getValue("c"));
-				}
+				acrossNumToClueMap.put(clueNum, tryDecode(attributes.getValue("c")));
 			} else if (inDown) {
 				int clueNum = Integer.parseInt(attributes.getValue("cn"));
 				if (clueNum > maxClueNum) {
 					maxClueNum = clueNum;
 				}
-				try {
-					downNumToClueMap.put(clueNum, URLDecoder.decode(attributes.getValue("c"), CHARSET_NAME));
-				} catch (UnsupportedEncodingException e) {
-					downNumToClueMap.put(clueNum, attributes.getValue("c"));
-				}
+				downNumToClueMap.put(clueNum, tryDecode(attributes.getValue("c")));
 			} else if (name.equalsIgnoreCase("title")) {
-				puz.setTitle(attributes.getValue("v"));
+				puz.setTitle(tryDecode(attributes.getValue("v")));
 			} else if (name.equalsIgnoreCase("author")) {
 				puz.setAuthor(attributes.getValue("v"));
 			} else if (name.equalsIgnoreCase("width")) {
@@ -110,6 +102,14 @@ public class UclickXMLIO {
 				inAcross = true;
 			} else if (name.equalsIgnoreCase("down")) {
 				inDown = true;
+			}
+		}
+
+		private static String tryDecode(String s) {
+			try {
+				return URLDecoder.decode(s, CHARSET_NAME);
+			} catch (UnsupportedEncodingException e) {
+				return s;
 			}
 		}
 		
