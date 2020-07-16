@@ -781,8 +781,13 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DPAD_DOWN:
 
                 if ((System.currentTimeMillis() - lastKey) > 50) {
-                    previous = getBoard().moveDown();
-                    this.render(previous);
+                    if (prefs.getBoolean("arrowKeysChangeDirection", false) && getBoard().isAcross()) {
+                        previous = getBoard().toggleDirection();
+                        this.render(previous);
+                    } else {
+                        previous = getBoard().moveDown();
+                        this.render(previous);
+                    }
                 }
 
 
@@ -792,8 +797,13 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DPAD_UP:
 
                 if ((System.currentTimeMillis() - lastKey) > 50) {
-                    previous = getBoard().moveUp();
-                    this.render(previous);
+                    if (prefs.getBoolean("arrowKeysChangeDirection", false) && getBoard().isAcross()) {
+                        previous = getBoard().toggleDirection();
+                        this.render(previous);
+                    } else {
+                        previous = getBoard().moveUp();
+                        this.render(previous);
+                    }
                 }
 
                 lastKey = System.currentTimeMillis();
@@ -803,8 +813,13 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DPAD_LEFT:
 
                 if ((System.currentTimeMillis() - lastKey) > 50) {
-                    previous = getBoard().moveLeft();
-                    this.render(previous);
+                    if (prefs.getBoolean("arrowKeysChangeDirection", false) && !getBoard().isAcross()) {
+                        previous = getBoard().toggleDirection();
+                        this.render(previous);
+                    } else {
+                        previous = getBoard().moveLeft();
+                        this.render(previous);
+                    }
                 }
 
                 lastKey = System.currentTimeMillis();
@@ -814,8 +829,13 @@ public class PlayActivity extends ShortyzActivity {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
 
                 if ((System.currentTimeMillis() - lastKey) > 50) {
-                    previous = getBoard().moveRight();
-                    this.render(previous);
+                    if (prefs.getBoolean("arrowKeysChangeDirection", false) && !getBoard().isAcross()) {
+                        previous = getBoard().toggleDirection();
+                        this.render(previous);
+                    } else {
+                        previous = getBoard().moveRight();
+                        this.render(previous);
+                    }
                 }
 
                 lastKey = System.currentTimeMillis();
