@@ -310,6 +310,13 @@
 		android:summary="Enter changes direction rather than moving to the next clue."
 		android:key="enterChangesDirection"
 	/>
+
+	<androidx.preference.CheckBoxPreference
+		android:title="Arrow Keys Change Direction"
+		android:defaultValue="false"
+		android:summary="Arrow keys change direction instead of moving the cursor when you try to move perpendicular to the current direction."
+		android:key="arrowKeysChangeDirection"
+	/>
 	
 	<androidx.preference.CheckBoxPreference
 		android:title="Double Tap Zoom"
