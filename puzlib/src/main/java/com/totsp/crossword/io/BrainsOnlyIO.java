@@ -40,7 +40,8 @@ public class BrainsOnlyIO {
     public static Puzzle parse(InputStream is) throws IOException {
         Puzzle puz = new Puzzle();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        // As of Apr 2017, BrainsOnly is producing files with foreign characters in ISO-8859.
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "ISO-8859-1"));
         String title = readLineAtOffset(reader, 4);
         System.out.println("Title line: "+title);
         int startIndex = title.indexOf(" ") + 1;

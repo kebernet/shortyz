@@ -57,6 +57,14 @@ public class UclickXMLIO {
 		public UclickXMLParser(Puzzle puz) {
 			this.puz = puz;
 		}
+
+		private String tryDecode(String value) {
+			try {
+				return URLDecoder.decode(value, CHARSET_NAME);
+			} catch (UnsupportedEncodingException e) {
+				return value;
+			}
+		}
 		
 		@Override
 		public void startElement(String nsURI, String strippedName,
@@ -69,25 +77,17 @@ public class UclickXMLIO {
 				if (clueNum > maxClueNum) {
 					maxClueNum = clueNum;
 				}
-				try {
-					acrossNumToClueMap.put(clueNum, URLDecoder.decode(attributes.getValue("c"), CHARSET_NAME));
-				} catch (UnsupportedEncodingException e) {
-					acrossNumToClueMap.put(clueNum, attributes.getValue("c"));
-				}
+				acrossNumToClueMap.put(clueNum, tryDecode(attributes.getValue("c")));
 			} else if (inDown) {
 				int clueNum = Integer.parseInt(attributes.getValue("cn"));
 				if (clueNum > maxClueNum) {
 					maxClueNum = clueNum;
 				}
-				try {
-					downNumToClueMap.put(clueNum, URLDecoder.decode(attributes.getValue("c"), CHARSET_NAME));
-				} catch (UnsupportedEncodingException e) {
-					downNumToClueMap.put(clueNum, attributes.getValue("c"));
-				}
+				downNumToClueMap.put(clueNum, tryDecode(attributes.getValue("c")));
 			} else if (name.equalsIgnoreCase("title")) {
-				puz.setTitle(attributes.getValue("v"));
+				puz.setTitle(tryDecode(attributes.getValue("v")));
 			} else if (name.equalsIgnoreCase("author")) {
-				puz.setAuthor(attributes.getValue("v"));
+				puz.setAuthor(tryDecode(attributes.getValue("v")));
 			} else if (name.equalsIgnoreCase("width")) {
 				puz.setWidth(Integer.parseInt(attributes.getValue("v")));
 				System.out.println("Width "+attributes.getValue("v"));
