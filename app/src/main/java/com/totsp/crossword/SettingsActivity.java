@@ -1,6 +1,9 @@
 package com.totsp.crossword;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
 
 import com.totsp.crossword.shortyz.R;
 
@@ -29,5 +32,12 @@ public class SettingsActivity extends ShortyzActivity {
         }
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return false;
+    }
 }
