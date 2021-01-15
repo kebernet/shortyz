@@ -1089,6 +1089,7 @@ public class PlayActivity extends ShortyzActivity {
         this.resumedOn = System.currentTimeMillis();
         getBoard().setSkipCompletedLetters(this.prefs
                 .getBoolean("skipFilled", false));
+        movement = null;
         getBoard().setMovementStrategy(this.getMovementStrategy());
 
         int keyboardType = "CONDENSED_ARROWS".equals(prefs.getString(
