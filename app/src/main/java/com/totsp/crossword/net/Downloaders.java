@@ -72,8 +72,10 @@ public class Downloaders {
             downloaders.add(new WSJSaturdayDownloader());
         }
 
+        // Old WaPo downloader does not work
         if (prefs.getBoolean("downloadWaPoPuzzler", true)) {
-            downloaders.add(new WaPoPuzzlerDownloader());
+            //    downloaders.add(new WaPoPuzzlerDownloader());
+	    downloaders.add(new WaPoAmuseLabsDownloader());
         }
 
 //        if (prefs.getBoolean("downloadNYTClassic", true)) {
@@ -90,8 +92,14 @@ public class Downloaders {
 
         if (prefs.getBoolean("downloadLat", true)) {
 //           downloaders.add(new UclickDownloader("tmcal", "Los Angeles Times", "Rich Norris", Downloader.DATE_NO_SUNDAY));
-            downloaders.add(new LATimesDownloader());
+            // downloaders.add(new LATimesDownloader());
+	    downloaders.add(new LATimesAmuseLabsDownloader());
         }
+
+        if (prefs.getBoolean("downloadAtlantic", true)) {
+            downloaders.add(new AtlanticAmuseLabsDownloader());
+        }
+
 
 //        if (prefs.getBoolean("downloadAvClub", true)) {
 //            downloaders.add(new AVClubDownloader());
@@ -136,9 +144,10 @@ public class Downloaders {
                     "uclick LLC", Downloader.DATE_DAILY));
         }
 
-        if (prefs.getBoolean("downloadLACal", true)) {
-            downloaders.add(new LATSundayDownloader());
-        }
+	//Sunday LATimes loaded same as other days now
+        //if (prefs.getBoolean("downloadLACal", true)) {
+        //    downloaders.add(new LATSundayDownloader());
+        //}
 
 //        if (prefs.getBoolean("downloadISwear", true)) {
 //            downloaders.add(new ISwearDownloader());

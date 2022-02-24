@@ -4,7 +4,7 @@
     package="com.totsp.crossword.shortyz"
     android:installLocation="auto"
     android:versionCode="40404"
-    android:versionName="4.4.3">
+    android:versionName="4.4.4">
 
     <supports-screens
         android:anyDensity="true"
