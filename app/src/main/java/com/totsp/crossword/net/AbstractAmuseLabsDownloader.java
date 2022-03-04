@@ -27,12 +27,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import java.net.URL;
 import java.util.Map.Entry;
-import java.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
+
+// import java.util.Base64; // does not work with old JDKs < 8 - so use apache version
+import org.apache.commons.codec.binary.Base64;
+import cz.jirutka.unidecode.Unidecode;
 
 public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
 
@@ -44,6 +47,28 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
         picker_url = pickerUrl;
     }
 
+
+    public static void LongStringLOG(String message) {
+
+	int _logCharLimit = 2000;
+        // If the message is less than the limit just show
+        if (message.length() < _logCharLimit) {
+            LOG.info(message);
+	    return;
+        }
+        int sections = message.length() / _logCharLimit;
+        for (int i = 0; i <= sections; i++) {
+            int max = _logCharLimit * (i + 1);
+            if (max >= message.length()) {
+                LOG.info(message.substring(_logCharLimit * i));
+            } else {
+                LOG.info(message.substring(_logCharLimit * i, max));
+	    }
+        }
+    }
+
+	 
+    
     protected String getRequestText(URL url, Map<String, String> headers) {
         String s = null;
         OkHttpClient httpclient = new OkHttpClient();
@@ -56,11 +81,11 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
         }
 
         try {
-            LOG.info("AbstractAmuseLabsDownloader getRequestText execute start");
+            //LOG.info("AbstractAmuseLabsDownloader getRequestText execute start");
             Response response = httpclient.newCall(requestBuilder.build()).execute();
-            LOG.info("AbstractAmuseLabsDownloader getRequestText execute complete");
+            // LOG.info("AbstractAmuseLabsDownloader getRequestText execute complete");
             s = response.body().string();
-            LOG.info("AbstractAmuseLabsDownloader getRequestText received body" + s);
+            //LOG.info("AbstractAmuseLabsDownloader getRequestText received body" + s);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,8 +108,9 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
             if (line.contains("pickerParams.rawsps")) {
                 String[] tokens = line.split("\'");
                 String rawps = tokens[1];
-                LOG.info("AbstractAmuseLabsDownloader getPickerTokenSuffix Got rawps: " + rawps);
-                String rawps_decoded = new String(Base64.getDecoder().decode(rawps));
+                // LongStringLOG("AbstractAmuseLabsDownloader getPickerTokenSuffix Got rawps: " + rawps);
+                // String rawps_decoded = new String(Base64.getDecoder().decode(rawps)); // Requires Java 9 or greater
+		String rawps_decoded = new String(Base64.decodeBase64(rawps.getBytes()));
                 //LOG.info("AbstractAmuseLabsDownloader getPickerTokenSuffix Got rawps_decoded: " + rawps_decoded);
                 JsonObject jsonObject = new JsonParser().parse(rawps_decoded).getAsJsonObject();
                 String picker_token = jsonObject.get("pickerToken").getAsString();
@@ -100,15 +126,16 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
 
     protected Puzzle parsePuzzle(JsonObject puzjson) {
         Puzzle puz = new Puzzle();
+	Unidecode ud = Unidecode.toAscii();
         String title = puzjson.get("title").getAsString();
         //LOG.info("AbstractAmuseLabsDownloader parsePuzzle Got title=" + title);
-        puz.setTitle(title);
+        puz.setTitle(ud.decode(title));
         String author = puzjson.get("author").getAsString();
         //LOG.info("AbstractAmuseLabsDownloader parsePuzzle Got author=" + author);
-        puz.setAuthor(author);
+        puz.setAuthor(ud.decode(author));
         String copyright = puzjson.get("copyright").getAsString();
         //LOG.info("AbstractAmuseLabsDownloader parsePuzzle Got copyright=" + copyright);
-        puz.setCopyright(copyright);
+        puz.setCopyright(ud.decode(copyright));
         int w = puzjson.get("w").getAsInt();
         //LOG.info("AbstractAmuseLabsDownloader parsePuzzle Got w=" + w);
         puz.setWidth(w);
@@ -172,12 +199,14 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
             JsonObject wordObj = word.getAsJsonObject();
             int clueNumber = wordObj.get("clueNum").getAsInt();
             JsonObject clueObj = wordObj.get("clue").getAsJsonObject();
-            String clueText = clueObj.get("clue").getAsString();
+            String clueText = ud.decode(clueObj.get("clue").getAsString());
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 clueText = Html.fromHtml(clueText, Html.FROM_HTML_MODE_LEGACY).toString();
             } else {
                 clueText = Html.fromHtml(clueText).toString();
             }
+
+	    //LOG.info("AbstractAmuseLabsDownloader parsePuzzle clueText=" + clueText + " clueNumber=" + clueNumber);
             if (wordObj.get("acrossNotDown").getAsBoolean()) {
                 //LOG.info("AbstractAmuseLabsDownloader parsePuzzle Process placedWords word is across ");
                 acrossWords.add(word);
@@ -195,38 +224,64 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
         int numberOfClues = acrossNumToClueMap.size() + downNumToClueMap.size();
         puz.setNumberOfClues(numberOfClues);
         //LOG.info("AbstractAmuseLabsDownloader parsePuzzle Process set number of clues="+numberOfClues);
+        // LOG.info("AbstractAmuseLabsDownloader parsePuzzle Process max clue number="+maxClueNum);
 
         String[] rawClues = new String[numberOfClues];
+        String[] acrossClues = new String[acrossNumToClueMap.size()];
+        String[] downClues = new String[downNumToClueMap.size()];
         int cnum = 0;
+        int acnum = 0;
+        int dcnum = 0;
         for (int clueNum = 1; clueNum <= maxClueNum; clueNum++) {
             //LOG.info("AbstractAmuseLabsDownloader parsePuzzle Processing clue="+clueNum);
+	    boolean p = false;
             if (acrossNumToClueMap.containsKey(clueNum)) {
                 //LOG.info("parsePuzzle Processing across clue="+clueNum);
                 rawClues[cnum] = acrossNumToClueMap.get(clueNum);
+		acrossClues[acnum] = acrossNumToClueMap.get(clueNum);
+		acnum++;
+                //LOG.info("parsePuzzle Processing across clue text="+rawClues[cnum]);
+		p = true;
                 cnum++;
             }
             if (downNumToClueMap.containsKey(clueNum)) {
                 //LOG.info("AbstractAmuseLabsDownloader parsePuzzle Processing down clue="+clueNum);
                 rawClues[cnum] = downNumToClueMap.get(clueNum);
+		downClues[dcnum] = downNumToClueMap.get(clueNum);
+		dcnum++;
+                //LOG.info("parsePuzzle Processing down clue text="+rawClues[cnum]);
+		p = true;
                 cnum++;
             }
+	    if (!p) {
+                LOG.info("AbstractAmuseLabsDownloader parsePuzzle no value for clue="+clueNum);
+	    }
         }
+	LOG.info("AbstractAmuseLabsDownloader parsePuzzle processed clues="+cnum + " across=" + acnum + " down=" + dcnum);
 
         //LOG.info("AbstractAmuseLabsDownloader parsePuzzle set boxes");
         puz.setBoxes(boxes);
 
         //LOG.info("parsePuzzle set raw clues");
         puz.setRawClues(rawClues);
-
+	puz.setDownClues(downClues);
+	puz.setAcrossClues(acrossClues);
+	
         // verify clue numbers
+	Box[][] pboxes = puz.getBoxes();
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int cn = clueNums[y][x];
                 if (cn != 0) {
-                    if (puz.getBoxes()[y][x].getClueNumber() != cn) {
+		    Box pbox = pboxes[y][x];
+                    if (pbox.getClueNumber() != cn) {
                         LOG.info("AbstractAmuseLabsDownloader parsePuzzle Invalid clue number y=" + y + " x=" + x + " clueNum=" + cn + " found="+puz.getBoxes()[y][x].getClueNumber());
-                    }
-                }
+                    } else {
+			//LOG.info("Box col=" + y + " row=" + x + " char=" + pbox.getSolution());
+		    }
+                } else {
+		    //LOG.info("AbstractAmuseLabsDownloader parsePuzzle No clue number for y=" + y + " x=" + x );
+		}
             }
         }
 
@@ -234,7 +289,6 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
     }
 
     protected File download(Date date, String urlSuffix, Map<String, String> headers) {
-        LOG.info("AbstractAmuseLabsDownloader download start");
         String pickerSuffix = getPickerTokenSuffix(date, headers);
         String dlurl = baseUrl + pickerSuffix + "&id=" + urlSuffix;
         LOG.info("AbstractAmuseLabsDownloader download picker full url="+dlurl);
@@ -253,13 +307,14 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
         Puzzle p = null;
         for (String line: lines) {
             if (line.contains("window.rawc")) {
-                LOG.info("AbstractAmuseLabsDownloader download Got window.rawc in line: " + line);
+                //LOG.info("AbstractAmuseLabsDownloader download Got window.rawc in line: " + line);
                 String[] tokens = line.split("\'");
 
                 String rawc = tokens[1];
 
-                String rawc_decoded = new String(Base64.getDecoder().decode(rawc));
-                //LOG.info("AbstractAmuseLabsDownloader download Got rawc_decoded: " + rawc_decoded);
+                // String rawc_decoded = new String(Base64.getDecoder().decode(rawc)); // Required JDK 8 or above
+		String rawc_decoded = new String(Base64.decodeBase64(rawc.getBytes()));
+                LongStringLOG("AbstractAmuseLabsDownloader download Got rawc_decoded: " + rawc_decoded);
                 JsonObject jsonObject = new JsonParser().parse(rawc_decoded).getAsJsonObject();
                 p = parsePuzzle(jsonObject);
                 LOG.info("AbstractAmuseLabsDownloader download Parsed puzzle ");
@@ -278,6 +333,7 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
             p.setDate(date);
             p.setVersion(IO.VERSION_STRING);
             IO.saveNative(p, dos);
+	    LOG.info("AbstractAmuseLabsDownloader download completed - wrote file");
             return puzFile;
         } catch (FileNotFoundException e) {
             LOG.info("AbstractAmuseLabsDownloader caught FileNotFoundException dir=" + downloadDirectory + " fname=" + fname);
