@@ -288,6 +288,41 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
         return puz;
     }
 
+    static protected String reverseString(String str) {
+	StringBuffer b = new StringBuffer(str).reverse();
+	return b.toString();
+    }
+    
+    protected String decode_rawc(String rawc) {
+	if (! rawc.contains(".")) {
+	    LOG.info("AbstractAmuseLabsDownloader decode_rawc return same rawc");
+	    return new String(Base64.decodeBase64(rawc.getBytes()));
+	}
+	String rawcParts[] = rawc.split("\\.");
+	char buffer[] = rawcParts[0].toCharArray();
+	char key1[] = reverseString(rawcParts[1]).toCharArray();
+	int key[] = new int[key1.length];
+	for (int i = 0; i < key.length; i++) {
+	    key[i] = Character.digit(key1[i], 16) + 2;
+	}
+
+	int i = 0;
+	int sc = 0;
+	while (i < (buffer.length - 1)) {
+	    int sl = Math.min(key[sc % key.length], buffer.length - i);
+	    for (int j = 0; j < Math.floorDiv(sl, 2); j++) {
+		char c = buffer[i+j];
+		buffer[i+j] = buffer[i + sl - j - 1];
+		buffer[i + sl - j - 1] = c;
+	    }
+	    i += sl;
+	    sc++;
+	}
+	String newRawc = new String(buffer);
+	LOG.info("AbstractAmuseLabsDownloader decode_rawc return newRawc=" + newRawc);
+	return new String(Base64.decodeBase64(newRawc.getBytes()));
+    }
+    
     protected File download(Date date, String urlSuffix, Map<String, String> headers) {
         String pickerSuffix = getPickerTokenSuffix(date, headers);
         String dlurl = baseUrl + pickerSuffix + "&id=" + urlSuffix;
@@ -313,7 +348,8 @@ public abstract class AbstractAmuseLabsDownloader extends AbstractDownloader {
                 String rawc = tokens[1];
 
                 // String rawc_decoded = new String(Base64.getDecoder().decode(rawc)); // Required JDK 8 or above
-		String rawc_decoded = new String(Base64.decodeBase64(rawc.getBytes()));
+                LongStringLOG("AbstractAmuseLabsDownloader download Got rawc: " + rawc);
+		String rawc_decoded = decode_rawc(rawc);
                 LongStringLOG("AbstractAmuseLabsDownloader download Got rawc_decoded: " + rawc_decoded);
                 JsonObject jsonObject = new JsonParser().parse(rawc_decoded).getAsJsonObject();
                 p = parsePuzzle(jsonObject);
