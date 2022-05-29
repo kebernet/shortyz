@@ -112,5 +112,8 @@ dependencies {
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
     implementation 'com.google.firebase:firebase-analytics:17.4.3'
+
+    compile 'cz.jirutka.unidecode:unidecode:1.0.1'
+    compile 'commons-codec:commons-codec:1.15'
 }
 

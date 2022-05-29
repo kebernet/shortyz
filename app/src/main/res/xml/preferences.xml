@@ -65,6 +65,10 @@
 			android:defaultValue="true"
 			android:summary="Updates Monday-Saturday"
 			android:key="downloadUSAToday" />
+		<androidx.preference.CheckBoxPreference
+			android:title="The Atlantic"
+			android:defaultValue="false"
+			android:key="downloadAtlantic" />
 	</androidx.preference.PreferenceScreen>
 	<androidx.preference.PreferenceScreen
 		android:title="Weekly Crosswords"
@@ -123,11 +127,11 @@
 				android:defaultValue="true"
 				android:summary="Updates Fridays (Currently Biweekly)"
 				android:key="downloadCHE" />
-			<androidx.preference.CheckBoxPreference
-				android:title="LAT Sunday Calendar"
-				android:defaultValue="true"
-				android:summary="Updates Sundays"
-				android:key="downloadLACal" />
+			<!--<androidx.preference.CheckBoxPreference-->
+				<!--android:title="LAT Sunday Calendar"-->
+				<!--android:defaultValue="true"-->
+				<!--android:summary="Updates Sundays"-->
+				<!--android:key="downloadLACal" /> -->
 			<!--<androidx.preference.CheckBoxPreference-->
 				<!--android:title="Philadelphia Inquirer"-->
 				<!--android:defaultValue="true"-->
