@@ -102,15 +102,15 @@ public class Puzzle implements Serializable{
                 if (!somethingAbove(boxes, row, col)) {
                     if (somethingBelow(boxes, row, col)) {
                         boxes[row][col].setDown(true);
+                        tickedClue = true;
                     }
-                    tickedClue = true;
                 }
 
                 if (!somethingLeftOf(boxes, row, col)) {
                     if (somethingRightOf(boxes, row, col)) {
                         boxes[row][col].setAcross(true);
+                        tickedClue = true;
                     }
-                    tickedClue = true;
                 }
 
                 if (tickedClue) {
